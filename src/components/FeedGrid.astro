@@ -1,0 +1,30 @@
+---
+import type { ContentItem } from '../services/content';
+const { items } = Astro.props as { items: ContentItem[] };
+---
+
+<div class="feed-grid" id="feed-grid">
+  {items.map((item) => item.featured ? (
+    <article class="feed-item featured" data-feed-item data-feed-groups={item.feedCategory}>
+      <div class="feed-item-media"><span class="feed-item-media-label">Imagen · 16:10</span></div>
+      <div class="feed-item-body">
+        <div class="feed-item-meta"><span>{item.source.toUpperCase()}</span><span class="sep">·</span><span>{item.displayDate}</span></div>
+        <h3 class="feed-item-title">{item.title}</h3>
+        <p class="feed-item-excerpt">{item.excerpt}</p>
+        {item.externalUrl && <div class="feed-link"><a href={item.externalUrl} target="_blank" rel="noopener noreferrer" class="link-arrow">Leer nota <span class="arrow">↗</span></a></div>}
+      </div>
+    </article>
+  ) : (
+    <article class="feed-item span-4" data-feed-item data-feed-groups={item.feedCategory}>
+      {item.verified && <div class="feed-item-media square"><span class="feed-item-media-label">Imagen · 1:1</span></div>}
+      {!item.verified && <span class="feed-item-placeholder">Integración pendiente</span>}
+      <div class="feed-item-meta">
+        <span>{item.sourceLabel}</span>
+        {item.displayDate && <><span class="sep">·</span><span>{item.displayDate}</span></>}
+      </div>
+      <h3 class="feed-item-title">{item.title}</h3>
+      <p class="feed-item-excerpt">{item.excerpt}</p>
+      {item.externalUrl && <div class="feed-link"><a href={item.externalUrl} target="_blank" rel="noopener noreferrer" class="link-arrow">Ver <span class="arrow">↗</span></a></div>}
+    </article>
+  ))}
+</div>

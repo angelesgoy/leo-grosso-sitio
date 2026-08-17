@@ -1,0 +1,11 @@
+---
+const { kicker, title, lede, blue = false } = Astro.props;
+---
+
+<section class="page-hero" class:list={{ 'page-hero-blue': blue }}>
+  <div class="container">
+    <span class="kicker">{kicker}</span>
+    <h1 class="t-page page-title">{title}<span class="title-dot">.</span></h1>
+    <p class="page-hero-lede">{lede}</p>
+  </div>
+</section>

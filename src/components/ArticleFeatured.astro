@@ -1,0 +1,15 @@
+---
+const { article } = Astro.props;
+---
+{article && (
+  <article class="article-featured reveal">
+    <div class="thumb"><span class="hero-photo-label">Retrato · 4:5</span></div>
+    <div>
+      <div class="meta">Artículo destacado · {article.publication} · {article.year}</div>
+      <h3>{article.title}</h3>
+      <div class="article-author">{article.author}</div>
+      <p class="excerpt">{article.excerpt}</p>
+      <a href={article.url} target="_blank" rel="noopener noreferrer" class="link-arrow">Leer en El Cohete a la Luna <span class="arrow">↗</span></a>
+    </div>
+  </article>
+)}

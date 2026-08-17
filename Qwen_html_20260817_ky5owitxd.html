@@ -1,0 +1,2026 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leo Grosso · Vecino de San Martín</title>
+<meta name="description" content="Leo Grosso. Vecino de San Martín. Politólogo, dirigente político, exdiputado nacional. Territorio, pensamiento y acción.">
+<meta property="og:title" content="Leo Grosso · Vecino de San Martín">
+<meta property="og:description" content="Territorio, pensamiento y acción. San Martín, Buenos Aires.">
+<meta property="og:type" content="profile">
+<meta name="theme-color" content="#02B9FF">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+
+<style>
+/* =========================================================
+   01. DESIGN TOKENS
+   ========================================================= */
+:root {
+  --bg: #FFFFFF;
+  --text: #0B0D0F;
+  --soft-bg: #F2F2EF;
+  --mid-gray: #B9B9B3;
+  --dim-gray: #6B6E70;
+  --leo-blue: #02B9FF;
+  --border: #E4E4DF;
+  --border-strong: #0B0D0F;
+
+  --font: 'Inter', system-ui, sans-serif;
+
+  --sp-1: 0.5rem;   /* 8 */
+  --sp-2: 1rem;     /* 16 */
+  --sp-3: 1.5rem;   /* 24 */
+  --sp-4: 2rem;     /* 32 */
+  --sp-5: 3rem;     /* 48 */
+  --sp-6: 4.5rem;   /* 72 */
+  --sp-7: 6rem;     /* 96 */
+
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --t: 0.35s var(--ease);
+}
+
+/* =========================================================
+   02. RESET
+   ========================================================= */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; scroll-behavior: smooth; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.55;
+  overflow-x: hidden;
+  font-feature-settings: "ss01", "cv11";
+}
+body.no-scroll { overflow: hidden; }
+a { color: inherit; text-decoration: none; transition: color var(--t); }
+a:hover { color: var(--leo-blue); }
+img, svg { display: block; max-width: 100%; }
+button { font-family: inherit; cursor: pointer; background: none; border: none; color: inherit; }
+::selection { background: var(--leo-blue); color: var(--text); }
+:focus-visible { outline: 2px solid var(--leo-blue); outline-offset: 3px; }
+
+/* =========================================================
+   03. TYPOGRAPHY SCALE (reducida y precisa)
+   ========================================================= */
+.t-display { font-size: clamp(3rem, 7vw, 7rem); font-weight: 900; line-height: 0.88; letter-spacing: -0.035em; }
+.t-page    { font-size: clamp(2.25rem, 5vw, 4.5rem); font-weight: 900; line-height: 0.92; letter-spacing: -0.03em; }
+.t-section { font-size: clamp(1.6rem, 3vw, 2.6rem); font-weight: 800; line-height: 1.02; letter-spacing: -0.02em; }
+.t-h3      { font-size: clamp(1.25rem, 1.8vw, 1.6rem); font-weight: 700; line-height: 1.15; letter-spacing: -0.015em; }
+.t-body    { font-size: 1rem; font-weight: 400; line-height: 1.6; color: #2A2C2E; }
+.t-body-lg { font-size: clamp(1.05rem, 1.4vw, 1.2rem); font-weight: 400; line-height: 1.55; color: #2A2C2E; }
+.t-small   { font-size: 0.8125rem; font-weight: 500; line-height: 1.4; }
+.t-tiny    { font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; }
+.t-mono    { font-size: 0.75rem; font-weight: 500; font-variant-numeric: tabular-nums; letter-spacing: 0.02em; }
+
+.kicker {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dim-gray);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.kicker::before {
+  content: '';
+  display: inline-block;
+  width: 14px;
+  height: 1px;
+  background: var(--leo-blue);
+}
+
+/* =========================================================
+   04. LAYOUT CONTAINER
+   ========================================================= */
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+@media (max-width: 480px) { .container { padding: 0 18px; } }
+
+.section {
+  padding: var(--sp-7) 0;
+  border-bottom: 1px solid var(--border);
+}
+@media (max-width: 768px) { .section { padding: var(--sp-6) 0; } }
+@media (max-width: 480px) { .section { padding: var(--sp-5) 0; } }
+
+/* =========================================================
+   05. GRIDS POR COMPONENTE (evita colisiones de especificidad)
+   ========================================================= */
+.grid-hero {
+  display: grid;
+  grid-template-columns: 7fr 5fr;
+  gap: 3rem;
+  align-items: center;
+}
+.grid-60-40 { display: grid; grid-template-columns: 6fr 4fr; gap: 3rem; }
+.grid-70-30 { display: grid; grid-template-columns: 7fr 3fr; gap: 3rem; }
+.grid-50-50 { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; }
+.grid-3col  { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+.grid-2col  { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+.grid-feed  {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1.5rem;
+}
+
+@media (max-width: 991px) {
+  .grid-hero { grid-template-columns: 1fr; gap: 2rem; }
+  .grid-60-40, .grid-70-30, .grid-50-50 { grid-template-columns: 1fr; gap: 2rem; }
+  .grid-3col { grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .grid-feed { grid-template-columns: repeat(6, 1fr); gap: 1.25rem; }
+}
+@media (max-width: 640px) {
+  .grid-3col, .grid-2col { grid-template-columns: 1fr; gap: 1.25rem; }
+  .grid-feed { grid-template-columns: 1fr; gap: 1rem; }
+}
+
+/* =========================================================
+   06. HEADER
+   ========================================================= */
+.header {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: saturate(180%) blur(14px);
+  -webkit-backdrop-filter: saturate(180%) blur(14px);
+  z-index: 90;
+  border-bottom: 1px solid var(--border);
+}
+.header-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 60px;
+}
+.logo {
+  font-weight: 900;
+  font-size: 1rem;
+  letter-spacing: -0.01em;
+}
+.logo-dot { color: var(--leo-blue); }
+
+.nav-desktop { display: flex; gap: 2rem; }
+.nav-link {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  position: relative;
+  padding: 4px 0;
+}
+.nav-link.active { color: var(--text); }
+.nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 100%; height: 1px;
+  background: var(--leo-blue);
+}
+.nav-link:hover::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 100%; height: 1px;
+  background: var(--text);
+}
+
+.nav-toggle {
+  display: none;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+@media (max-width: 991px) {
+  .nav-desktop { display: none; }
+  .nav-toggle { display: flex; }
+}
+
+/* Mobile menu full-screen */
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 24px 40px;
+  transform: translateX(100%);
+  transition: transform 0.4s var(--ease);
+}
+.mobile-menu.open { transform: translateX(0); }
+.mobile-menu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 40px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 20px;
+  margin-bottom: 40px;
+}
+.mobile-menu-close {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.mobile-menu-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  flex: 1;
+}
+.mobile-menu-link {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: color var(--t);
+}
+.mobile-menu-link:hover { color: var(--leo-blue); }
+.mobile-menu-link::after {
+  content: '→';
+  font-size: 1.5rem;
+  color: var(--mid-gray);
+  transition: transform var(--t), color var(--t);
+}
+.mobile-menu-link:hover::after { color: var(--leo-blue); transform: translateX(6px); }
+.mobile-menu-footer {
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 1.25rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+/* =========================================================
+   07. HERO
+   ========================================================= */
+.hero {
+  padding-top: calc(60px + var(--sp-6));
+  padding-bottom: var(--sp-7);
+}
+@media (max-width: 768px) {
+  .hero { padding-top: calc(60px + var(--sp-4)); padding-bottom: var(--sp-5); }
+}
+
+.hero-title { margin-bottom: 1.5rem; }
+.hero-title-line { display: block; }
+.hero-sub {
+  font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 1.5rem;
+}
+.hero-sub .blue { color: var(--leo-blue); font-weight: 600; }
+.hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.25rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--dim-gray);
+  letter-spacing: 0.02em;
+}
+.hero-meta span { display: inline-flex; align-items: center; gap: 0.4rem; }
+.hero-meta span::before {
+  content: '';
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--mid-gray);
+}
+.hero-meta span:first-child::before { display: none; }
+
+.hero-photo {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  max-height: 640px;
+  background: var(--soft-bg);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding: 1.25rem;
+  position: relative;
+  overflow: hidden;
+}
+.hero-photo-label {
+  position: absolute;
+  bottom: 1rem; left: 1rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--dim-gray);
+  background: rgba(255,255,255,0.8);
+  padding: 4px 8px;
+}
+@media (max-width: 991px) {
+  .hero-photo { max-height: 480px; order: 2; }
+}
+@media (max-width: 480px) {
+  .hero-photo { max-height: 440px; aspect-ratio: 4/5; }
+}
+
+/* =========================================================
+   08. SECTION HEADER + LINK
+   ========================================================= */
+.sec-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+  flex-wrap: wrap;
+}
+.sec-head-title { flex: 1; min-width: 240px; }
+.sec-head-link {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  border-bottom: 1px solid var(--text);
+  padding-bottom: 2px;
+  transition: var(--t);
+}
+.sec-head-link:hover { color: var(--leo-blue); border-color: var(--leo-blue); }
+
+/* =========================================================
+   09. TEXT LINKS
+   ========================================================= */
+.link-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: var(--t);
+}
+.link-arrow .arrow { transition: transform var(--t); }
+.link-arrow:hover { color: var(--leo-blue); }
+.link-arrow:hover .arrow { transform: translateX(4px); }
+
+/* =========================================================
+   10. FEED / LO ÚLTIMO
+   ========================================================= */
+.feed-filters {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+}
+.feed-filters::-webkit-scrollbar { height: 2px; }
+.feed-filters::-webkit-scrollbar-thumb { background: var(--border); }
+
+.filter-btn {
+  flex-shrink: 0;
+  padding: 0.45rem 0.9rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  transition: var(--t);
+  white-space: nowrap;
+}
+.filter-btn:hover { border-color: var(--text); }
+.filter-btn.active {
+  background: var(--leo-blue);
+  border-color: var(--leo-blue);
+  color: var(--text);
+}
+
+.feed-item {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  padding: 1.25rem;
+  transition: border-color var(--t);
+  display: flex;
+  flex-direction: column;
+  min-height: 240px;
+}
+.feed-item:hover { border-color: var(--leo-blue); }
+.feed-item-media {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  background: var(--soft-bg);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding: 0.75rem;
+  position: relative;
+  overflow: hidden;
+}
+.feed-item-media.square { aspect-ratio: 1 / 1; }
+.feed-item-media.portrait { aspect-ratio: 4 / 5; }
+.feed-item-media-label {
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--dim-gray);
+  background: rgba(255,255,255,0.85);
+  padding: 3px 6px;
+}
+.feed-item-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--leo-blue);
+  margin-bottom: 0.75rem;
+}
+.feed-item-meta .sep { color: var(--mid-gray); }
+.feed-item-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  margin-bottom: 0.5rem;
+}
+.feed-item-excerpt {
+  font-size: 0.875rem;
+  color: var(--dim-gray);
+  line-height: 1.5;
+  flex: 1;
+}
+.feed-item-placeholder {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--mid-gray);
+  border: 1px dashed var(--border);
+  padding: 6px 10px;
+  display: inline-block;
+  margin-bottom: 0.75rem;
+}
+
+/* Grid variants del feed */
+.feed-item.span-6  { grid-column: span 6; }
+.feed-item.span-4  { grid-column: span 4; }
+.feed-item.span-8  { grid-column: span 8; }
+.feed-item.span-12 { grid-column: span 12; }
+.feed-item.featured {
+  grid-column: span 12;
+  background: var(--soft-bg);
+  flex-direction: row;
+  gap: 2rem;
+  align-items: stretch;
+  padding: 0;
+}
+.feed-item.featured .feed-item-media {
+  flex: 1;
+  margin: 0;
+  aspect-ratio: auto;
+  min-height: 280px;
+}
+.feed-item.featured .feed-item-body {
+  flex: 1;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.feed-item.featured .feed-item-title {
+  font-size: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+@media (max-width: 991px) {
+  .feed-item.span-6,
+  .feed-item.span-4,
+  .feed-item.span-8 { grid-column: span 3; }
+  .feed-item.featured { flex-direction: column; }
+  .feed-item.featured .feed-item-media { min-height: 220px; }
+  .feed-item.featured .feed-item-body { padding: 1.5rem; }
+}
+@media (max-width: 640px) {
+  .feed-item.span-6,
+  .feed-item.span-4,
+  .feed-item.span-8,
+  .feed-item.span-12 { grid-column: 1 / -1; }
+}
+
+.feed-empty {
+  grid-column: 1 / -1;
+  padding: 3rem 2rem;
+  text-align: center;
+  border: 1px dashed var(--border);
+  color: var(--dim-gray);
+  font-size: 0.875rem;
+}
+
+/* =========================================================
+   11. SAN MARTÍN BLOCK (Home)
+   ========================================================= */
+.sanmartin-block {
+  background: var(--leo-blue);
+  color: var(--text);
+  padding: var(--sp-6) 0;
+}
+@media (max-width: 768px) { .sanmartin-block { padding: var(--sp-5) 0; } }
+.sanmartin-grid {
+  display: grid;
+  grid-template-columns: 6fr 4fr 2fr;
+  gap: 2rem;
+  align-items: center;
+}
+@media (max-width: 991px) { .sanmartin-grid { grid-template-columns: 1fr; gap: 1.5rem; } }
+.sanmartin-title {
+  font-size: clamp(2.5rem, 6vw, 5.5rem);
+  font-weight: 900;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+}
+.sanmartin-sub {
+  font-size: clamp(1rem, 1.4vw, 1.25rem);
+  font-weight: 500;
+  color: rgba(11, 13, 15, 0.75);
+}
+.sanmartin-link {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--text);
+  padding-bottom: 2px;
+  transition: var(--t);
+  align-self: end;
+  justify-self: end;
+}
+.sanmartin-link:hover { color: var(--text); opacity: 0.7; }
+@media (max-width: 991px) { .sanmartin-link { justify-self: start; } }
+
+/* =========================================================
+   12. ARTÍCULOS / ESCRIBE
+   ========================================================= */
+.articles-list { display: flex; flex-direction: column; }
+.article-row {
+  display: grid;
+  grid-template-columns: 100px 160px 1fr 180px 60px;
+  gap: 1.5rem;
+  align-items: baseline;
+  padding: 1.5rem 0;
+  border-top: 1px solid var(--border);
+  transition: var(--t);
+  position: relative;
+}
+.article-row:last-child { border-bottom: 1px solid var(--border); }
+.article-row:hover {
+  background: var(--soft-bg);
+  padding-left: 1rem;
+  padding-right: 1rem;
+  margin-left: -1rem;
+  margin-right: -1rem;
+}
+.article-row .date {
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--dim-gray);
+  letter-spacing: 0.02em;
+}
+.article-row .author {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--leo-blue);
+}
+.article-row .title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+.article-row .pub {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--dim-gray);
+  font-style: italic;
+}
+.article-row .link-arrow { font-size: 0.75rem; justify-self: end; }
+
+@media (max-width: 991px) {
+  .article-row {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    padding: 1.25rem 0;
+  }
+  .article-row:hover { padding-left: 0.75rem; padding-right: 0.75rem; margin-left: -0.75rem; margin-right: -0.75rem; }
+  .article-row .link-arrow { justify-self: start; margin-top: 0.5rem; }
+  .article-row .title { font-size: 1.15rem; }
+}
+
+.article-featured {
+  border: 1px solid var(--border);
+  padding: 2rem;
+  margin-bottom: 3rem;
+  display: grid;
+  grid-template-columns: 5fr 7fr;
+  gap: 2.5rem;
+  align-items: start;
+}
+@media (max-width: 768px) {
+  .article-featured { grid-template-columns: 1fr; gap: 1.5rem; padding: 1.5rem; }
+}
+.article-featured .thumb {
+  aspect-ratio: 4 / 5;
+  background: var(--soft-bg);
+  display: flex;
+  align-items: flex-end;
+  padding: 0.75rem;
+  position: relative;
+}
+.article-featured .meta {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--leo-blue);
+  margin-bottom: 0.75rem;
+}
+.article-featured h3 {
+  font-size: clamp(1.5rem, 2.5vw, 2.25rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+}
+.article-featured .excerpt {
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: #333;
+  margin-bottom: 1.25rem;
+}
+
+/* =========================================================
+   13. TIMELINE
+   ========================================================= */
+.timeline-list { display: flex; flex-direction: column; }
+.timeline-entry {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 2rem;
+  padding: 1.25rem 0;
+  border-top: 1px solid var(--border);
+  transition: var(--t);
+}
+.timeline-entry:last-child { border-bottom: 1px solid var(--border); }
+.timeline-entry:hover { padding-left: 0.5rem; }
+.timeline-year {
+  font-size: 0.9375rem;
+  font-weight: 800;
+  color: var(--leo-blue);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  padding-top: 2px;
+}
+.timeline-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.35rem;
+}
+.timeline-desc {
+  font-size: 0.9375rem;
+  color: #333;
+  line-height: 1.55;
+}
+@media (max-width: 640px) {
+  .timeline-entry { grid-template-columns: 1fr; gap: 0.35rem; padding: 1rem 0; }
+  .timeline-year { font-size: 0.875rem; }
+}
+
+/* =========================================================
+   14. PROJECTS (Gestión)
+   ========================================================= */
+.project-card {
+  border-top: 1px solid var(--border);
+  padding: 1.5rem 0;
+  transition: var(--t);
+  display: grid;
+  grid-template-columns: 60px 1fr auto;
+  gap: 1.5rem;
+  align-items: start;
+}
+.project-card:hover {
+  padding-left: 1rem;
+  border-color: var(--leo-blue);
+}
+.project-num {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--leo-blue);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.08em;
+}
+.project-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.25rem;
+}
+.project-sub {
+  font-size: 0.8125rem;
+  color: var(--dim-gray);
+  line-height: 1.5;
+  margin-bottom: 0.75rem;
+}
+.project-cat {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--mid-gray);
+  margin-bottom: 0.25rem;
+}
+.project-link {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+@media (max-width: 640px) {
+  .project-card { grid-template-columns: 1fr; gap: 0.5rem; }
+  .project-link { justify-self: start; }
+}
+
+/* =========================================================
+   15. IDEAS (con contenido sustantivo)
+   ========================================================= */
+.idea-row {
+  display: grid;
+  grid-template-columns: 80px 3fr 4fr 2fr;
+  gap: 2rem;
+  padding: 2rem 0;
+  border-top: 1px solid var(--border);
+  align-items: start;
+}
+.idea-row:last-child { border-bottom: 1px solid var(--border); }
+.idea-num {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--leo-blue);
+  letter-spacing: 0.08em;
+  padding-top: 6px;
+}
+.idea-head h3 {
+  font-size: clamp(1.4rem, 2vw, 1.85rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin-bottom: 0.75rem;
+}
+.idea-head .idea-lede {
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: #333;
+}
+.idea-body .idea-evidence {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--dim-gray);
+  margin-bottom: 0.5rem;
+}
+.idea-body ul { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+.idea-body li {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #333;
+  padding-left: 0.75rem;
+  position: relative;
+}
+.idea-body li::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0.55rem;
+  width: 8px; height: 1px;
+  background: var(--leo-blue);
+}
+.idea-foot .link-arrow { font-size: 0.8125rem; }
+
+@media (max-width: 991px) {
+  .idea-row {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 1.5rem 0;
+  }
+  .idea-num { padding-top: 0; font-size: 0.6875rem; }
+  .idea-head h3 { font-size: 1.5rem; }
+}
+
+/* =========================================================
+   16. STATS / 12 AÑOS
+   ========================================================= */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--border);
+}
+.stat {
+  padding: 1.75rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.stat + .stat { border-left: 1px solid var(--border); padding-left: 1.5rem; }
+.stat:not(:first-child) { padding-left: 1.5rem; }
+.stat-num {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 900;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  color: var(--leo-blue);
+  margin-bottom: 0.5rem;
+}
+.stat-label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
+}
+.stat-sub {
+  font-size: 0.75rem;
+  color: var(--dim-gray);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+@media (max-width: 768px) {
+  .stats-grid { grid-template-columns: 1fr; }
+  .stat { border-left: none !important; padding-left: 0 !important; }
+  .stat + .stat { border-top: 1px solid var(--border); padding-top: 1.5rem; }
+}
+
+/* =========================================================
+   17. SOBRE MÍ
+   ========================================================= */
+.about-grid {
+  display: grid;
+  grid-template-columns: 5fr 4fr 3fr;
+  gap: 2.5rem;
+  align-items: start;
+}
+@media (max-width: 991px) { .about-grid { grid-template-columns: 1fr; gap: 2rem; } }
+.about-photo {
+  aspect-ratio: 3 / 4;
+  background: var(--soft-bg);
+  border: 1px solid var(--border);
+  max-height: 520px;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  padding: 1rem;
+}
+.about-facts { display: flex; flex-direction: column; gap: 1.25rem; }
+.about-fact-label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--dim-gray);
+  margin-bottom: 0.25rem;
+}
+.about-fact-value {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* =========================================================
+   18. FOOTER
+   ========================================================= */
+.footer {
+  background: var(--text);
+  color: var(--bg);
+  padding: var(--sp-6) 0 var(--sp-4);
+  margin-top: var(--sp-7);
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 5fr 4fr 3fr;
+  gap: 3rem;
+  margin-bottom: var(--sp-5);
+}
+@media (max-width: 768px) {
+  .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+}
+.footer-title {
+  font-size: clamp(2.25rem, 5vw, 4rem);
+  font-weight: 900;
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+}
+.footer-title .dot { color: var(--leo-blue); }
+.footer-col h4 {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--mid-gray);
+  margin-bottom: 1rem;
+}
+.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+.footer-col a { color: rgba(255,255,255,0.75); font-size: 0.9375rem; transition: var(--t); }
+.footer-col a:hover { color: var(--leo-blue); }
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.1);
+  padding-top: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  font-size: 0.75rem;
+  color: var(--mid-gray);
+}
+
+/* =========================================================
+   19. HERO INTERNO
+   ========================================================= */
+.page-hero {
+  padding-top: calc(60px + var(--sp-5));
+  padding-bottom: var(--sp-5);
+  border-bottom: 1px solid var(--border);
+}
+@media (max-width: 768px) { .page-hero { padding-top: calc(60px + var(--sp-4)); padding-bottom: var(--sp-4); } }
+.page-hero .t-page { margin-bottom: 1rem; }
+.page-hero-lede {
+  font-size: clamp(1rem, 1.4vw, 1.2rem);
+  line-height: 1.5;
+  color: #333;
+  max-width: 620px;
+}
+
+/* =========================================================
+   20. ANIMATIONS
+   ========================================================= */
+.reveal { opacity: 0; transform: translateY(12px); transition: opacity 0.6s var(--ease), transform 0.6s var(--ease); }
+.reveal.in { opacity: 1; transform: translateY(0); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============ HEADER ============ -->
+<header class="header">
+  <div class="container header-inner">
+    <a href="#home" class="logo">LEO GROSSO<span class="logo-dot">.</span></a>
+    <nav class="nav-desktop" aria-label="Navegación principal">
+      <a href="#sobre-mi" class="nav-link">Sobre mí</a>
+      <a href="#lo-ultimo" class="nav-link">Lo último</a>
+      <a href="#san-martin" class="nav-link">San Martín</a>
+      <a href="#escribe" class="nav-link">Escribe</a>
+      <a href="#ideas" class="nav-link">Ideas</a>
+      <a href="#trayectoria" class="nav-link">Trayectoria</a>
+    </nav>
+    <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobile-menu">MENÚ</button>
+  </div>
+</header>
+
+<!-- ============ MOBILE MENU ============ -->
+<div class="mobile-menu" id="mobile-menu" role="dialog" aria-modal="true" aria-label="Menú principal" hidden>
+  <div class="mobile-menu-header">
+    <span class="logo">LEO GROSSO<span class="logo-dot">.</span></span>
+    <button class="mobile-menu-close" id="mobile-menu-close">CERRAR</button>
+  </div>
+  <nav class="mobile-menu-nav">
+    <a href="#sobre-mi" class="mobile-menu-link">Sobre mí</a>
+    <a href="#lo-ultimo" class="mobile-menu-link">Lo último</a>
+    <a href="#san-martin" class="mobile-menu-link">San Martín</a>
+    <a href="#escribe" class="mobile-menu-link">Escribe</a>
+    <a href="#ideas" class="mobile-menu-link">Ideas</a>
+    <a href="#trayectoria" class="mobile-menu-link">Trayectoria</a>
+    <a href="#trabajo" class="mobile-menu-link">Trabajo</a>
+  </nav>
+  <div class="mobile-menu-footer">
+    <a href="https://www.instagram.com/leon_grosso/" target="_blank" rel="noopener">Instagram</a>
+    <a href="https://www.tiktok.com/@leo.grosso" target="_blank" rel="noopener">TikTok</a>
+    <a href="https://x.com/Leonardo_Grosso" target="_blank" rel="noopener">X</a>
+    <a href="https://www.facebook.com/grossoleonardo/" target="_blank" rel="noopener">Facebook</a>
+  </div>
+</div>
+
+<main id="app"></main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <h2 class="footer-title">LEO<br>GROSSO<span class="dot">.</span></h2>
+      </div>
+      <div class="footer-col">
+        <h4>Navegación</h4>
+        <ul>
+          <li><a href="#sobre-mi">Sobre mí</a></li>
+          <li><a href="#lo-ultimo">Lo último</a></li>
+          <li><a href="#san-martin">San Martín</a></li>
+          <li><a href="#escribe">Escribe</a></li>
+          <li><a href="#ideas">Ideas</a></li>
+          <li><a href="#trayectoria">Trayectoria</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Canal</h4>
+        <ul>
+          <li><a href="https://www.instagram.com/leon_grosso/" target="_blank" rel="noopener">Instagram ↗</a></li>
+          <li><a href="https://www.tiktok.com/@leo.grosso" target="_blank" rel="noopener">TikTok ↗</a></li>
+          <li><a href="https://x.com/Leonardo_Grosso" target="_blank" rel="noopener">X ↗</a></li>
+          <li><a href="https://www.facebook.com/grossoleonardo/" target="_blank" rel="noopener">Facebook ↗</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>Vecino de San Martín · Buenos Aires · Argentina</span>
+      <span>© <span id="year"></span> Leo Grosso</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* =========================================================
+   DATA LAYER (contenido verificable)
+   ========================================================= */
+const Data = {
+  profile: {
+    name: "Leo Grosso",
+    legal: "Leonardo Grosso",
+    origin: "San Martín, Provincia de Buenos Aires",
+    year: 1983,
+    education: "Licenciado en Ciencias Políticas · Universidad Nacional de San Martín",
+    current: "Administrador General del IDUAR (Moreno)",
+    past: "Diputado Nacional por la Provincia de Buenos Aires (2011–2023)"
+  },
+
+  articles: [
+    {
+      id: "a-las-armas",
+      title: "A las armas las carga el narco",
+      publication: "El Cohete a la Luna",
+      year: "2024",
+      author: "Leonardo Grosso + Vanina Pasik",
+      excerpt: "Análisis sobre el circuito de las armas, el narcotráfico y la violencia en el conurbano. La relación entre mercado ilegal y muertes evitables.",
+      url: "https://www.elcohetealaluna.com/a-las-armas-las-carga-el-narco/",
+      featured: true
+    },
+    {
+      id: "ano-nuevo",
+      title: "Año nuevo, vida vieja",
+      publication: "El Cohete a la Luna",
+      year: "2024",
+      author: "Leonardo Grosso + Vanina Pasik",
+      excerpt: "La persistencia de los homicidios y la ausencia de una política criminal que los tome en serio como problema público.",
+      url: "https://www.elcohetealaluna.com/ano-nuevo-vida-vieja/"
+    },
+    {
+      id: "sillas-vacias",
+      title: "Las sillas vacías",
+      publication: "El Cohete a la Luna",
+      year: "2024",
+      author: "Leonardo Grosso + Vanina Pasik",
+      excerpt: "Las ausencias que dejan los homicidios en las familias y los barrios. La dimensión comunitaria de la violencia letal.",
+      url: "https://www.elcohetealaluna.com/las-sillas-vacias/"
+    },
+    {
+      id: "muertes-anunciadas",
+      title: "Muertes anunciadas",
+      publication: "El Cohete a la Luna",
+      year: "2024",
+      author: "Leonardo Grosso + Vanina Pasik",
+      excerpt: "Los patrones que permiten anticipar homicidios y la responsabilidad del Estado frente a lo previsible.",
+      url: "https://www.elcohetealaluna.com/muertes-anunciadas/"
+    },
+    {
+      id: "laberinto",
+      title: "El laberinto de la violencia",
+      publication: "El Cohete a la Luna",
+      year: "2024",
+      author: "Leonardo Grosso + Vanina Pasik",
+      excerpt: "Las capas del problema: mercado ilegal, territorialidad, desigualdad y ausencia de prevención.",
+      url: "https://www.elcohetealaluna.com/el-laberinto-de-la-violencia/"
+    },
+    {
+      id: "nueva-ola",
+      title: "Una ¿nueva? ola de asesinatos",
+      publication: "El Cohete a la Luna",
+      year: "2024",
+      author: "Leonardo Grosso + Vanina Pasik",
+      excerpt: "Análisis de la escalada reciente de homicidios y sus diferencias con ciclos anteriores.",
+      url: "https://www.elcohetealaluna.com/una-nueva-ola-de-asesinatos/"
+    },
+    {
+      id: "muertes-ii",
+      title: "Muertes que no conmueven (II)",
+      publication: "El Cohete a la Luna",
+      year: "2024",
+      author: "Leonardo Grosso",
+      excerpt: "Continuación del análisis sobre violencia estructural, narcomenudeo y la respuesta del Estado.",
+      url: "https://www.elcohetealaluna.com/muertes-que-no-conmueven-ii/"
+    },
+    {
+      id: "muertes-i",
+      title: "Muertes que no conmueven",
+      publication: "El Cohete a la Luna",
+      year: "2024",
+      author: "Leonardo Grosso",
+      excerpt: "Sobre la desigualdad en la conmoción pública frente a los homicidios y la jerarquía invisible de las víctimas.",
+      url: "https://www.elcohetealaluna.com/muertes-que-no-conmueven/"
+    }
+  ],
+
+  ideas: [
+    {
+      id: "ambiente",
+      num: "01",
+      title: "AMBIENTE",
+      lede: "El ambiente es una cuestión de derechos. La crisis climática y la pérdida de biodiversidad impactan de manera desigual sobre los sectores populares. Planificar el territorio es también proteger el agua, el aire y los humedales.",
+      evidence: "Evidencia en la trayectoria",
+      milestones: [
+        "Presidencia de la Comisión de Recursos Naturales y Conservación del Ambiente Humano (2020–2023)",
+        "Dictamen y debate parlamentario sobre presupuestos mínimos para humedales (2022)",
+        "Trabajo legislativo sobre manejo del fuego",
+        "Distrito Ecológico Roggero (gestión actual, IDUAR)"
+      ]
+    },
+    {
+      id: "ciudad",
+      num: "02",
+      title: "CIUDAD + HÁBITAT",
+      lede: "El acceso al suelo y a la vivienda es un derecho básico. La planificación urbana, la regularización dominial y el control del mercado inmobiliario son herramientas del Estado para construir ciudad con justicia territorial.",
+      evidence: "Evidencia en la trayectoria",
+      milestones: [
+        "Administración General del IDUAR · Instituto de Desarrollo Urbano, Ambiental y Regional de Moreno (2024–presente)",
+        "MUI-MO · Monitoreo Urbano Inmobiliario de Moreno",
+        "Regularización dominial: entrega de 1.174 escrituras en 2026",
+        "Gerencia de Proyectos de Desarrollo Urbano"
+      ]
+    },
+    {
+      id: "derechos",
+      num: "03",
+      title: "DERECHOS",
+      lede: "La democracia se mide por cómo trata a sus mayorías y cómo protege a quienes están en situación de mayor vulnerabilidad. Violencia institucional, seguridad democrática y derechos humanos son ejes inseparables.",
+      evidence: "Evidencia en la trayectoria",
+      milestones: [
+        "Ley 26.811 · Día Nacional de la Lucha contra la Violencia Institucional (8 de mayo)",
+        "Vicepresidencia de la Comisión de Derechos Humanos y Garantías",
+        "Agenda pública sobre seguridad democrática y narcomenudeo en el conurbano"
+      ]
+    },
+    {
+      id: "trabajo",
+      num: "04",
+      title: "TRABAJO + ECONOMÍA POPULAR",
+      lede: "La economía popular es trabajo. Cooperativas, movimientos sociales y redes comunitarias sostienen la vida cotidiana en los barrios. Reconocerlas es reconocer una parte estructural del mundo del trabajo.",
+      evidence: "Evidencia en la trayectoria",
+      milestones: [
+        "Militancia en el Movimiento Evita desde la construcción juvenil (2005)",
+        "Trabajo legislativo sobre emergencia social",
+        "Vinculación con organizaciones sociales y cooperativas de trabajo"
+      ]
+    }
+  ],
+
+  sanMartin: {
+    themes: [
+      { title: "Seguridad y violencia", desc: "Homicidios, narcomenudeo y violencia institucional. Una lectura desde el territorio y la seguridad democrática." },
+      { title: "Territorio", desc: "Calles, barrios, estaciones, industria, espacio público. San Martín como personaje político y como laboratorio de política pública." },
+      { title: "Ambiente", desc: "Contaminación, arbolado, cuencas, acceso al agua. La dimensión ambiental del conurbano como derecho básico." },
+      { title: "Desigualdad", desc: "Acceso, oportunidades, justicia territorial. La ciudad como escenario donde se expresan y se combaten las desigualdades." }
+    ]
+  },
+
+  timeline: [
+    { year: "1983", title: "Nacimiento en San Martín", desc: "Nace en San Martín, Provincia de Buenos Aires." },
+    { year: "1999", title: "Militancia estudiantil", desc: "Inicia su militancia estudiantil y su construcción territorial." },
+    { year: "2005", title: "Movimiento Evita", desc: "Se incorpora a la construcción juvenil del Movimiento Evita." },
+    { year: "2011", title: "Diputado Nacional", desc: "Asume como Diputado Nacional por la Provincia de Buenos Aires." },
+    { year: "2012", title: "Ley 26.811", desc: "Institución del 8 de mayo como Día Nacional de la Lucha contra la Violencia Institucional." },
+    { year: "2020", title: "Recursos Naturales", desc: "Presidencia de la Comisión de Recursos Naturales y Conservación del Ambiente Humano." },
+    { year: "2022", title: "Debate Humedales", desc: "Dictamen del proyecto de presupuestos mínimos de protección de humedales." },
+    { year: "2023", title: "Fin de ciclo legislativo", desc: "Cierre de doce años como Diputado Nacional." },
+    { year: "2024", title: "IDUAR", desc: "Administrador General del Instituto de Desarrollo Urbano, Ambiental y Regional de Moreno." },
+    { year: "HOY", title: "Presente", desc: "Actividad política, gestión pública, escritura y trabajo territorial desde San Martín." }
+  ],
+
+  projects: [
+    {
+      num: "01",
+      cat: "Tecnología · Territorio",
+      title: "MUI-MO",
+      sub: "Monitoreo Urbano Inmobiliario de Moreno. Plataforma de control de urbanizaciones, loteos y prevención de comercializaciones fraudulentas, con tableros y sistemas de información geográfica.",
+      url: "https://iduar.moreno.gob.ar/m-u-i-mo/"
+    },
+    {
+      num: "02",
+      cat: "Ambiente · Urbanismo",
+      title: "Distrito Ecológico Roggero",
+      sub: "Desarrollo urbano, ambiental y turístico asociado al Área Natural Protegida Dique Ing. Roggero. Territorio, paisaje y espacio público.",
+      url: "https://iduar.moreno.gob.ar/distrito-ecologico-roggero/"
+    },
+    {
+      num: "03",
+      cat: "Hábitat · Derechos",
+      title: "Regularización dominial",
+      sub: "Políticas de acceso al suelo y vivienda. Durante la gestión del IDUAR se desarrollaron políticas de regularización dominial, incluyendo la entrega de 1.174 escrituras en 2026.",
+      url: "https://iduar.moreno.gob.ar/"
+    },
+    {
+      num: "04",
+      cat: "Planificación",
+      title: "Gerencia de Proyectos de Desarrollo Urbano",
+      sub: "Proyectos estratégicos articulando Estado, inversión y planificación urbana.",
+      url: "https://iduar.moreno.gob.ar/"
+    }
+  ],
+
+  // FEED: placeholders técnicos. NO contenido inventado.
+  // Cuando se conecten las APIs reales, este array se reemplaza.
+  feed: [
+    { id: "ph-article", source: "article", type: "article", verified: true,
+      title: "A las armas las carga el narco",
+      excerpt: "Análisis sobre el circuito de las armas, el narcotráfico y la violencia en el conurbano.",
+      date: "2024", url: "https://www.elcohetealaluna.com/a-las-armas-las-carga-el-narco/", featured: true },
+
+    { id: "ph-ig", source: "instagram", type: "placeholder", verified: false,
+      title: "FEED Instagram · PENDIENTE DE INTEGRACIÓN",
+      excerpt: "La conexión con la cuenta oficial @leon_grosso se activará en la próxima etapa técnica." },
+
+    { id: "ph-tt", source: "tiktok", type: "placeholder", verified: false,
+      title: "FEED TikTok · PENDIENTE DE INTEGRACIÓN",
+      excerpt: "La integración del canal oficial está prevista en la capa de servicios." },
+
+    { id: "ph-x", source: "x", type: "placeholder", verified: false,
+      title: "FEED X · PENDIENTE DE INTEGRACIÓN",
+      excerpt: "Conexión a la cuenta oficial @Leonardo_Grosso pendiente de configuración." },
+
+    { id: "ph-mgmt", source: "iduar", type: "management", verified: true,
+      title: "IDUAR · Gestión 2024–presente",
+      excerpt: "Instituto de Desarrollo Urbano, Ambiental y Regional de Moreno. MUI-MO, Roggero, regularización dominial.",
+      url: "https://iduar.moreno.gob.ar/" },
+
+    { id: "ph-fb", source: "facebook", type: "placeholder", verified: false,
+      title: "FEED Facebook · PENDIENTE DE INTEGRACIÓN",
+      excerpt: "La integración del perfil público se activará junto con el resto de redes." }
+  ]
+};
+
+/* =========================================================
+   PRESENTATION LAYER
+   ========================================================= */
+const App = {
+  init() {
+    document.getElementById('year').textContent = new Date().getFullYear();
+    this.bindMobileMenu();
+    this.router();
+    window.addEventListener('hashchange', () => this.router());
+    this.initReveal();
+  },
+
+  router() {
+    const hash = (window.location.hash || '#home').replace('#', '');
+    const app = document.getElementById('app');
+    app.innerHTML = '';
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    this.closeMobileMenu();
+    this.updateNav(hash);
+
+    const routes = {
+      'home': this.renderHome,
+      'sobre-mi': this.renderSobreMi,
+      'lo-ultimo': this.renderLoUltimo,
+      'san-martin': this.renderSanMartin,
+      'escribe': this.renderEscribe,
+      'ideas': this.renderIdeas,
+      'trayectoria': this.renderTrayectoria,
+      'trabajo': this.renderTrabajo
+    };
+    (routes[hash] || this.renderHome).call(this, app);
+    this.initReveal();
+  },
+
+  updateNav(hash) {
+    document.querySelectorAll('.nav-link').forEach(l => {
+      l.classList.toggle('active', l.getAttribute('href') === '#' + hash);
+    });
+  },
+
+  bindMobileMenu() {
+    const toggle = document.querySelector('.nav-toggle');
+    const menu = document.getElementById('mobile-menu');
+    const close = document.getElementById('mobile-menu-close');
+    const links = menu.querySelectorAll('.mobile-menu-link');
+
+    const open = () => {
+      menu.hidden = false;
+      requestAnimationFrame(() => {
+        menu.classList.add('open');
+        document.body.classList.add('no-scroll');
+        toggle.setAttribute('aria-expanded', 'true');
+      });
+    };
+    const closeMenu = () => {
+      menu.classList.remove('open');
+      document.body.classList.remove('no-scroll');
+      toggle.setAttribute('aria-expanded', 'false');
+      setTimeout(() => { menu.hidden = true; }, 400);
+    };
+    this.closeMobileMenu = closeMenu;
+
+    toggle.addEventListener('click', () => {
+      const expanded = toggle.getAttribute('aria-expanded') === 'true';
+      if (expanded) closeMenu(); else open();
+    });
+    close.addEventListener('click', closeMenu);
+    links.forEach(l => l.addEventListener('click', closeMenu));
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && menu.classList.contains('open')) closeMenu();
+    });
+  },
+
+  initReveal() {
+    const els = document.querySelectorAll('.reveal');
+    if (!('IntersectionObserver' in window)) {
+      els.forEach(e => e.classList.add('in'));
+      return;
+    }
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }});
+    }, { threshold: 0.1 });
+    els.forEach(e => io.observe(e));
+  },
+
+  /* ============ HOME ============ */
+  renderHome(c) {
+    c.innerHTML = `
+      <section class="hero">
+        <div class="container">
+          <div class="grid-hero">
+            <div class="reveal">
+              <span class="kicker">Vecino de San Martín · Buenos Aires</span>
+              <h1 class="t-display hero-title" style="margin-top: 1rem;">
+                <span class="hero-title-line">LEO</span>
+                <span class="hero-title-line">GROSSO<span style="color: var(--leo-blue)">.</span></span>
+              </h1>
+              <p class="hero-sub">
+                Politólogo. Dirigente político.
+                <span class="blue">Exdiputado nacional.</span>
+              </p>
+              <div class="hero-meta">
+                <span>Nacido en 1983</span>
+                <span>San Martín, PBA</span>
+                <span>UNSAM · Cs. Políticas</span>
+              </div>
+            </div>
+            <div class="reveal">
+              <div class="hero-photo">
+                <span class="hero-photo-label">Fotografía editorial · 4:5</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <div class="grid-60-40 reveal">
+            <p class="t-body-lg">
+              Una trayectoria que conecta organización territorial, trabajo legislativo y gestión pública.
+              Doce años como diputado nacional enfocado en ambiente, derechos humanos y economía popular.
+              Desde 2024, Administrador General del IDUAR en Moreno.
+            </p>
+            <div>
+              <a href="#sobre-mi" class="link-arrow">Leer sobre Leo <span class="arrow">→</span></a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <div class="sec-head reveal">
+            <div class="sec-head-title">
+              <span class="kicker">Actualidad</span>
+              <h2 class="t-section" style="margin-top: 0.5rem;">Lo último</h2>
+            </div>
+            <a href="#lo-ultimo" class="sec-head-link">Ver todo →</a>
+          </div>
+          <div class="feed-grid">
+            ${this._renderFeedItems(Data.feed.slice(0, 4))}
+          </div>
+        </div>
+      </section>
+
+      <section class="sanmartin-block">
+        <div class="container">
+          <div class="sanmartin-grid reveal">
+            <div>
+              <span class="kicker" style="color: rgba(11,13,15,0.6);">Territorio</span>
+              <h2 class="sanmartin-title" style="margin-top: 0.5rem;">SAN<br>MARTÍN</h2>
+            </div>
+            <p class="sanmartin-sub">
+              Seguridad, violencia, ambiente, desigualdad. San Martín atraviesa toda la trayectoria política de Leo y sigue siendo el lugar desde donde observa el presente.
+            </p>
+            <a href="#san-martin" class="sanmartin-link">Ver San Martín →</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <div class="sec-head reveal">
+            <div class="sec-head-title">
+              <span class="kicker">Producción</span>
+              <h2 class="t-section" style="margin-top: 0.5rem;">Escribe</h2>
+            </div>
+            <a href="#escribe" class="sec-head-link">Ver todos los textos →</a>
+          </div>
+          ${this._renderArticleFeatured(Data.articles.find(a => a.featured))}
+          <div class="articles-list">
+            ${Data.articles.slice(1, 4).map(a => this._renderArticleRow(a)).join('')}
+          </div>
+        </div>
+      </section>
+
+      <section class="section" style="background: var(--soft-bg);">
+        <div class="container">
+          <div class="grid-60-40 reveal">
+            <div>
+              <span class="kicker">Archivo legislativo</span>
+              <h2 class="t-section" style="margin-top: 0.5rem;">
+                <span style="color: var(--leo-blue);">12</span> años<br>en Diputados
+              </h2>
+            </div>
+            <div>
+              <p class="t-body" style="margin-bottom: 1rem;">
+                2011 — 2023. Hitos curados en ambiente, derechos humanos, economía popular, hábitat y seguridad democrática.
+              </p>
+              <a href="#trayectoria" class="link-arrow">Explorar trayectoria <span class="arrow">→</span></a>
+            </div>
+          </div>
+          <div class="stats-grid reveal" style="margin-top: 2.5rem;">
+            <div class="stat">
+              <div class="stat-num">12</div>
+              <div class="stat-label">Años en Cámara</div>
+              <div class="stat-sub">2011 — 2023</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num">26.811</div>
+              <div class="stat-label">Ley violencia institucional</div>
+              <div class="stat-sub">8 de mayo</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num">RN</div>
+              <div class="stat-label">Comisión de Recursos Naturales</div>
+              <div class="stat-sub">Presidencia · 2020 — 2023</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <div class="sec-head reveal">
+            <div class="sec-head-title">
+              <span class="kicker">2024 — presente</span>
+              <h2 class="t-section" style="margin-top: 0.5rem;">Gestión · IDUAR</h2>
+            </div>
+            <a href="#trabajo" class="sec-head-link">Ver todo el trabajo →</a>
+          </div>
+          <div class="grid-2col">
+            ${Data.projects.slice(0, 2).map(p => `
+              <article class="project-card reveal">
+                <div class="project-num">${p.num}</div>
+                <div>
+                  <div class="project-cat">${p.cat}</div>
+                  <h3 class="project-title">${p.title}</h3>
+                  <p class="project-sub">${p.sub}</p>
+                </div>
+                <a href="${p.url}" target="_blank" rel="noopener" class="project-link link-arrow">Fuente <span class="arrow">↗</span></a>
+              </article>
+            `).join('')}
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <div class="sec-head reveal">
+            <div class="sec-head-title">
+              <span class="kicker">Áreas de trabajo</span>
+              <h2 class="t-section" style="margin-top: 0.5rem;">Ideas</h2>
+            </div>
+            <a href="#ideas" class="sec-head-link">Ver las cuatro ideas →</a>
+          </div>
+          <div class="grid-2col">
+            ${Data.ideas.map(i => `
+              <article class="reveal" style="border-top: 1px solid var(--border); padding: 1.25rem 0;">
+                <div class="project-cat" style="margin-bottom: 0.35rem;">${i.num}</div>
+                <h3 class="t-h3" style="margin-bottom: 0.6rem;">${i.title}</h3>
+                <p class="t-body" style="font-size: 0.9375rem; color: #444; margin-bottom: 0.75rem;">${i.lede}</p>
+                <a href="#ideas" class="link-arrow">Ver trayectoria vinculada <span class="arrow">→</span></a>
+              </article>
+            `).join('')}
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <div class="grid-70-30 reveal">
+            <div>
+              <span class="kicker">Sobre Leo</span>
+              <h2 class="t-section" style="margin-top: 0.5rem; margin-bottom: 1rem;">Persona antes que cargo.</h2>
+              <p class="t-body">
+                Nació en San Martín en 1983. Politólogo formado en la UNSAM. Su recorrido conecta militancia territorial, trabajo legislativo y gestión pública. San Martín atraviesa toda su historia política.
+              </p>
+            </div>
+            <div style="align-self: end;">
+              <a href="#sobre-mi" class="link-arrow">Leer sobre mí <span class="arrow">→</span></a>
+            </div>
+          </div>
+        </div>
+      </section>
+    `;
+  },
+
+  /* ============ SOBRE MÍ ============ */
+  renderSobreMi(c) {
+    c.innerHTML = `
+      <section class="page-hero">
+        <div class="container">
+          <span class="kicker">Sobre mí</span>
+          <h1 class="t-page" style="margin-top: 0.75rem;">LEO GROSSO<span style="color: var(--leo-blue)">.</span></h1>
+          <p class="page-hero-lede">
+            Nacido en San Martín, 1983. Politólogo (UNSAM). Dirigente político con recorrido territorial, parlamentario y de gestión pública.
+          </p>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <div class="about-grid">
+            <div class="about-photo reveal">
+              <span class="hero-photo-label">Retrato · 3:4</span>
+            </div>
+            <div class="reveal">
+              <h2 class="t-h3" style="margin-bottom: 1rem;">Quién es</h2>
+              <p class="t-body" style="margin-bottom: 1.25rem;">
+                Su recorrido conecta tres momentos: la organización territorial y juvenil en San Martín, doce años de trabajo legislativo en la Cámara de Diputados y la gestión pública actual en desarrollo urbano y ambiental.
+              </p>
+              <p class="t-body" style="margin-bottom: 1.25rem;">
+                Sus áreas de trabajo sostenidas en el tiempo son el ambiente, el hábitat, los derechos humanos y la economía popular.
+              </p>
+              <p class="t-body">
+                San Martín no aparece en su historia como una circunscripción: aparece como el lugar donde comenzó su formación política y donde sigue teniendo raíz.
+              </p>
+            </div>
+            <div class="about-facts reveal">
+              <div>
+                <div class="about-fact-label">Origen</div>
+                <div class="about-fact-value">San Martín · Buenos Aires</div>
+              </div>
+              <div>
+                <div class="about-fact-label">Año</div>
+                <div class="about-fact-value">1983</div>
+              </div>
+              <div>
+                <div class="about-fact-label">Formación</div>
+                <div class="about-fact-value">Lic. en Ciencias Políticas · UNSAM</div>
+              </div>
+              <div>
+                <div class="about-fact-label">Presente</div>
+                <div class="about-fact-value">Administrador General · IDUAR (Moreno)</div>
+              </div>
+              <div>
+                <div class="about-fact-label">Legislativo</div>
+                <div class="about-fact-value">Diputado Nacional · 2011 — 2023</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" style="background: var(--soft-bg);">
+        <div class="container">
+          <div class="grid-60-40 reveal">
+            <div>
+              <span class="kicker">Profundizar</span>
+              <h2 class="t-section" style="margin-top: 0.5rem;">Cronología y archivo.</h2>
+            </div>
+            <div style="align-self: end;">
+              <p class="t-body" style="margin-bottom: 1rem;">
+                La sección de Trayectoria reúne los hitos en orden cronológico. La sección de Ideas organiza su trabajo por áreas temáticas.
+              </p>
+              <a href="#trayectoria" class="link-arrow">Ir a Trayectoria <span class="arrow">→</span></a>
+            </div>
+          </div>
+        </div>
+      </section>
+    `;
+  },
+
+  /* ============ LO ÚLTIMO ============ */
+  renderLoUltimo(c) {
+    c.innerHTML = `
+      <section class="page-hero">
+        <div class="container">
+          <span class="kicker">Actualidad</span>
+          <h1 class="t-page" style="margin-top: 0.75rem;">Lo último<span style="color: var(--leo-blue)">.</span></h1>
+          <p class="page-hero-lede">
+            Flujo público: artículos, gestión, redes y actividad territorial. Cuando se conecten las APIs oficiales, esta sección se alimentará automáticamente de las cuentas verificadas de Leo.
+          </p>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <div class="feed-filters" id="feed-filters" role="tablist">
+            ${['todo', 'artículos', 'gestión', 'redes'].map((f, i) => `
+              <button class="filter-btn ${i === 0 ? 'active' : ''}" data-filter="${f}" role="tab" aria-selected="${i === 0}">${f.toUpperCase()}</button>
+            `).join('')}
+          </div>
+          <div class="feed-grid" id="feed-grid">
+            ${this._renderFeedItems(Data.feed)}
+          </div>
+        </div>
+      </section>
+    `;
+    this.bindFilters();
+  },
+
+  bindFilters() {
+    const buttons = document.querySelectorAll('#feed-filters .filter-btn');
+    const grid = document.getElementById('feed-grid');
+    if (!grid) return;
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        buttons.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+        const f = btn.dataset.filter;
+        const filtered = f === 'todo' ? Data.feed : Data.feed.filter(it => {
+          if (f === 'artículos') return it.source === 'article';
+          if (f === 'gestión') return it.source === 'iduar' || it.type === 'management';
+          if (f === 'redes') return ['instagram', 'tiktok', 'x', 'facebook'].includes(it.source);
+          return true;
+        });
+        grid.innerHTML = filtered.length
+          ? this._renderFeedItems(filtered)
+          : `<div class="feed-empty">Sin contenido para este filtro.</div>`;
+      });
+    });
+  },
+
+  _renderFeedItems(items) {
+    return items.map(it => {
+      if (it.featured) {
+        return `
+          <article class="feed-item featured">
+            <div class="feed-item-media">
+              <span class="feed-item-media-label">Imagen · 16:10</span>
+            </div>
+            <div class="feed-item-body">
+              <div class="feed-item-meta">
+                <span>${it.source.toUpperCase()}</span>
+                <span class="sep">·</span>
+                <span>${it.date}</span>
+              </div>
+              <h3 class="feed-item-title">${it.title}</h3>
+              <p class="feed-item-excerpt">${it.excerpt}</p>
+              <div style="margin-top: 1rem;">
+                ${it.url ? `<a href="${it.url}" target="_blank" rel="noopener" class="link-arrow">Leer nota <span class="arrow">↗</span></a>` : ''}
+              </div>
+            </div>
+          </article>
+        `;
+      }
+
+      const isPlaceholder = !it.verified;
+      const sourceLabel = {
+        'instagram': 'Instagram · @leon_grosso',
+        'tiktok': 'TikTok · @leo.grosso',
+        'x': 'X · @Leonardo_Grosso',
+        'facebook': 'Facebook · grossoleonardo',
+        'iduar': 'IDUAR · Moreno',
+        'article': 'Artículo'
+      }[it.source] || it.source;
+
+      return `
+        <article class="feed-item span-4">
+          ${!isPlaceholder ? `
+            <div class="feed-item-media square">
+              <span class="feed-item-media-label">Imagen · 1:1</span>
+            </div>
+          ` : ''}
+          ${isPlaceholder ? `<span class="feed-item-placeholder">Integración pendiente</span>` : ''}
+          <div class="feed-item-meta">
+            <span>${sourceLabel}</span>
+            ${it.date ? `<span class="sep">·</span><span>${it.date}</span>` : ''}
+          </div>
+          <h3 class="feed-item-title">${it.title}</h3>
+          <p class="feed-item-excerpt">${it.excerpt}</p>
+          ${it.url ? `<div style="margin-top: 0.75rem;"><a href="${it.url}" target="_blank" rel="noopener" class="link-arrow">Ver <span class="arrow">↗</span></a></div>` : ''}
+        </article>
+      `;
+    }).join('');
+  },
+
+  /* ============ SAN MARTÍN ============ */
+  renderSanMartin(c) {
+    c.innerHTML = `
+      <section class="page-hero" style="background: var(--leo-blue);">
+        <div class="container">
+          <span class="kicker" style="color: rgba(11,13,15,0.6);">Territorio</span>
+          <h1 class="t-page" style="margin-top: 0.75rem;">San Martín<span style="color: var(--text)">.</span></h1>
+          <p class="page-hero-lede" style="color: rgba(11,13,15,0.75);">
+            El territorio desde donde Leo observa, escribe y hace política. Seguridad, ambiente, desigualdad y vida cotidiana del conurbano.
+          </p>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <div class="grid-2col">
+            ${Data.sanMartin.themes.map((t, i) => `
+              <article class="reveal" style="border-top: 1px solid var(--border); padding: 1.5rem 0;">
+                <div class="project-cat" style="margin-bottom: 0.35rem;">0${i+1}</div>
+                <h3 class="t-h3" style="margin-bottom: 0.6rem;">${t.title}</h3>
+                <p class="t-body">${t.desc}</p>
+              </article>
+            `).join('')}
+          </div>
+        </div>
+      </section>
+
+      <section class="section" style="background: var(--soft-bg);">
+        <div class="container">
+          <div class="sec-head reveal">
+            <div class="sec-head-title">
+              <span class="kicker">Investigación + análisis</span>
+              <h2 class="t-section" style="margin-top: 0.5rem;">Lo que Leo escribe sobre el territorio</h2>
+            </div>
+            <a href="#escribe" class="sec-head-link">Ver todos los textos →</a>
+          </div>
+          <div class="articles-list">
+            ${Data.articles.slice(0, 5).map(a => this._renderArticleRow(a)).join('')}
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <div class="grid-60-40 reveal">
+            <div>
+              <span class="kicker">Fotografía</span>
+              <h2 class="t-section" style="margin-top: 0.5rem;">San Martín como personaje.</h2>
+            </div>
+            <p class="t-body" style="align-self: end;">
+              Calles, estaciones, barrios, industria, espacio público, arbolado. La ciudad como documento y no como decoración.
+            </p>
+          </div>
+          <div class="grid-3col reveal" style="margin-top: 2rem;">
+            ${['Calles · San Martín', 'Estaciones · FFCC', 'Espacio público', 'Industria', 'Barrios', 'Arbolado'].map(label => `
+              <div style="aspect-ratio: 4/3; background: var(--soft-bg); border: 1px solid var(--border); display: flex; align-items: flex-end; padding: 0.75rem;">
+                <span class="t-tiny" style="color: var(--dim-gray);">${label}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      </section>
+    `;
+  },
+
+  /* ============ ESCRIBE ============ */
+  renderEscribe(c) {
+    c.innerHTML = `
+      <section class="page-hero">
+        <div class="container">
+          <span class="kicker">Producción</span>
+          <h1 class="t-page" style="margin-top: 0.75rem;">Escribe<span style="color: var(--leo-blue)">.</span></h1>
+          <p class="page-hero-lede">
+            Ensayos y análisis publicados principalmente en El Cohete a la Luna. Violencia, narcomenudeo, homicidios, seguridad democrática y territorio.
+          </p>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          ${this._renderArticleFeatured(Data.articles.find(a => a.featured))}
+          <div class="articles-list">
+            ${Data.articles.filter(a => !a.featured).map(a => this._renderArticleRow(a)).join('')}
+          </div>
+        </div>
+      </section>
+    `;
+  },
+
+  _renderArticleFeatured(a) {
+    if (!a) return '';
+    return `
+      <article class="article-featured reveal">
+        <div class="thumb">
+          <span class="hero-photo-label">Retrato · 4:5</span>
+        </div>
+        <div>
+          <div class="meta">Artículo destacado · ${a.publication} · ${a.year}</div>
+          <h3>${a.title}</h3>
+          <div style="font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--leo-blue); margin-bottom: 1rem;">${a.author}</div>
+          <p class="excerpt">${a.excerpt}</p>
+          <a href="${a.url}" target="_blank" rel="noopener" class="link-arrow">Leer en El Cohete a la Luna <span class="arrow">↗</span></a>
+        </div>
+      </article>
+    `;
+  },
+
+  _renderArticleRow(a) {
+    return `
+      <article class="article-row reveal">
+        <div class="date">${a.year}</div>
+        <div class="author">${a.author}</div>
+        <div class="title">${a.title}</div>
+        <div class="pub">${a.publication}</div>
+        <a href="${a.url}" target="_blank" rel="noopener" class="link-arrow" aria-label="Leer ${a.title}"><span class="arrow">↗</span></a>
+      </article>
+    `;
+  },
+
+  /* ============ IDEAS ============ */
+  renderIdeas(c) {
+    c.innerHTML = `
+      <section class="page-hero">
+        <div class="container">
+          <span class="kicker">Áreas de trabajo</span>
+          <h1 class="t-page" style="margin-top: 0.75rem;">Ideas<span style="color: var(--leo-blue)">.</span></h1>
+          <p class="page-hero-lede">
+            Cuatro ejes que atraviesan la trayectoria: no son promesas sino posiciones sostenidas en el tiempo, con evidencia legislativa y de gestión.
+          </p>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          ${Data.ideas.map(i => `
+            <article class="idea-row reveal">
+              <div class="idea-num">${i.num}</div>
+              <div class="idea-head">
+                <h3>${i.title}</h3>
+                <p class="idea-lede">${i.lede}</p>
+              </div>
+              <div class="idea-body">
+                <div class="idea-evidence">${i.evidence}</div>
+                <ul>
+                  ${i.milestones.map(m => `<li>${m}</li>`).join('')}
+                </ul>
+              </div>
+              <div class="idea-foot">
+                <a href="#trayectoria" class="link-arrow">Ver en trayectoria <span class="arrow">→</span></a>
+              </div>
+            </article>
+          `).join('')}
+        </div>
+      </section>
+    `;
+  },
+
+  /* ============ TRAYECTORIA ============ */
+  renderTrayectoria(c) {
+    c.innerHTML = `
+      <section class="page-hero">
+        <div class="container">
+          <span class="kicker">Cronología</span>
+          <h1 class="t-page" style="margin-top: 0.75rem;">Trayectoria<span style="color: var(--leo-blue)">.</span></h1>
+          <p class="page-hero-lede">
+            Hitos seleccionados. Todo lo anterior explica el presente.
+          </p>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <div class="timeline-list">
+            ${Data.timeline.map(t => `
+              <article class="timeline-entry reveal">
+                <div class="timeline-year">${t.year}</div>
+                <div>
+                  <h3 class="timeline-title">${t.title}</h3>
+                  <p class="timeline-desc">${t.desc}</p>
+                </div>
+              </article>
+            `).join('')}
+          </div>
+        </div>
+      </section>
+
+      <section class="section" style="background: var(--soft-bg);">
+        <div class="container">
+          <div class="stats-grid reveal">
+            <div class="stat">
+              <div class="stat-num">12</div>
+              <div class="stat-label">Años en Diputados</div>
+              <div class="stat-sub">2011 — 2023</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num">26.811</div>
+              <div class="stat-label">Ley violencia institucional</div>
+              <div class="stat-sub">8 de mayo</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num">RN</div>
+              <div class="stat-label">Recursos Naturales</div>
+              <div class="stat-sub">Presidencia · 2020 — 2023</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    `;
+  },
+
+  /* ============ TRABAJO ============ */
+  renderTrabajo(c) {
+    c.innerHTML = `
+      <section class="page-hero">
+        <div class="container">
+          <span class="kicker">Gestión · 2024 — presente</span>
+          <h1 class="t-page" style="margin-top: 0.75rem;">Trabajo<span style="color: var(--leo-blue)">.</span></h1>
+          <p class="page-hero-lede">
+            Administración General del IDUAR · Instituto de Desarrollo Urbano, Ambiental y Regional de Moreno. Proyectos y líneas de trabajo.
+          </p>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <div class="articles-list">
+            ${Data.projects.map(p => `
+              <article class="project-card reveal">
+                <div class="project-num">${p.num}</div>
+                <div>
+                  <div class="project-cat">${p.cat}</div>
+                  <h3 class="project-title">${p.title}</h3>
+                  <p class="project-sub">${p.sub}</p>
+                </div>
+                <a href="${p.url}" target="_blank" rel="noopener" class="project-link link-arrow">IDUAR <span class="arrow">↗</span></a>
+              </article>
+            `).join('')}
+          </div>
+        </div>
+      </section>
+
+      <section class="section" style="background: var(--soft-bg);">
+        <div class="container">
+          <div class="grid-60-40 reveal">
+            <div>
+              <span class="kicker">Archivo legislativo</span>
+              <h2 class="t-section" style="margin-top: 0.5rem;">Doce años anteriores<br>en Diputados.</h2>
+            </div>
+            <div style="align-self: end;">
+              <p class="t-body" style="margin-bottom: 1rem;">
+                La experiencia legislativa previa alimenta la gestión actual: ambiente, hábitat, derechos humanos y economía popular.
+              </p>
+              <a href="#trayectoria" class="link-arrow">Ver trayectoria <span class="arrow">→</span></a>
+            </div>
+          </div>
+        </div>
+      </section>
+    `;
+  }
+};
+
+document.addEventListener('DOMContentLoaded', () => App.init());
+</script>
+</body>
+</html>

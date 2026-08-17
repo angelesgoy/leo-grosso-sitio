@@ -1,0 +1,33 @@
+---
+import { navigation, mobileNavigation, social } from '../data/navigation.js';
+const { pathname } = Astro.url;
+const isActive = (href: string) => pathname === href;
+---
+
+<a class="skip-link" href="#contenido">Saltar al contenido</a>
+<header class="header">
+  <div class="container header-inner">
+    <a href="/" class="logo" aria-label="Leo Grosso, inicio">LEO GROSSO<span class="logo-dot">.</span></a>
+    <nav class="nav-desktop" aria-label="Navegación principal">
+      {navigation.map((item) => (
+        <a href={item.href} class:list={['nav-link', { active: isActive(item.href) }]} aria-current={isActive(item.href) ? 'page' : undefined}>{item.label}</a>
+      ))}
+    </nav>
+    <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobile-menu">MENÚ</button>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobile-menu" role="dialog" aria-modal="true" aria-label="Menú principal" hidden>
+  <div class="mobile-menu-header">
+    <span class="logo">LEO GROSSO<span class="logo-dot">.</span></span>
+    <button class="mobile-menu-close" id="mobile-menu-close">CERRAR</button>
+  </div>
+  <nav class="mobile-menu-nav" aria-label="Navegación móvil">
+    {mobileNavigation.map((item) => (
+      <a href={item.href} class="mobile-menu-link" aria-current={isActive(item.href) ? 'page' : undefined}>{item.label}</a>
+    ))}
+  </nav>
+  <div class="mobile-menu-footer">
+    {social.map((item) => <a href={item.href} target="_blank" rel="noopener noreferrer">{item.label}</a>)}
+  </div>
+</div>

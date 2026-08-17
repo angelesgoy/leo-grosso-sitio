@@ -1,0 +1,11 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import ProjectList from '../components/ProjectList.astro';
+import { data } from '../data/content.js';
+---
+<BaseLayout title="Trabajo · Leo Grosso" description="Gestión de Leo Grosso en el Instituto de Desarrollo Urbano, Ambiental y Regional de Moreno.">
+  <PageHero kicker="Gestión · 2024 — presente" title="Trabajo" lede="Administración General del IDUAR · Instituto de Desarrollo Urbano, Ambiental y Regional de Moreno. Proyectos y líneas de trabajo." />
+  <section class="section"><div class="container"><ProjectList projects={data.projects} /></div></section>
+  <section class="section surface-soft"><div class="container"><div class="grid-60-40 reveal"><div><span class="kicker">Archivo legislativo</span><h2 class="t-section section-title">Doce años anteriores<br />en Diputados.</h2></div><div class="align-end"><p class="t-body copy-spaced">La experiencia legislativa previa alimenta la gestión actual: ambiente, hábitat, derechos humanos y economía popular.</p><a href="/trayectoria/" class="link-arrow">Ver trayectoria <span class="arrow">→</span></a></div></div></div></section>
+</BaseLayout>

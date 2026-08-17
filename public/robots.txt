@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+# El sitemap se habilitará cuando se defina el dominio de producción.

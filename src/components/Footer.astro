@@ -1,0 +1,23 @@
+---
+import { navigation, social } from '../data/navigation.js';
+---
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div><h2 class="footer-title">LEO<br />GROSSO<span class="dot">.</span></h2></div>
+      <div class="footer-col">
+        <h4>Navegación</h4>
+        <ul>{navigation.map((item) => <li><a href={item.href}>{item.label}</a></li>)}</ul>
+      </div>
+      <div class="footer-col">
+        <h4>Canal</h4>
+        <ul>{social.map((item) => <li><a href={item.href} target="_blank" rel="noopener noreferrer">{item.label} ↗</a></li>)}</ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>Vecino de San Martín · Buenos Aires · Argentina</span>
+      <span>© {new Date().getFullYear()} Leo Grosso</span>
+    </div>
+  </div>
+</footer>

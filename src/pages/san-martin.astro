@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import ArticleList from '../components/ArticleList.astro';
+import { data } from '../data/content.js';
+const gallery = ['Calles · San Martín', 'Estaciones · FFCC', 'Espacio público', 'Industria', 'Barrios', 'Arbolado'];
+---
+<BaseLayout title="San Martín · Leo Grosso" description="San Martín: territorio, seguridad, ambiente, desigualdad y vida cotidiana del conurbano.">
+  <PageHero kicker="Territorio" title="San Martín" lede="El territorio desde donde Leo observa, escribe y hace política. Seguridad, ambiente, desigualdad y vida cotidiana del conurbano." blue />
+  <section class="section"><div class="container"><div class="grid-2col">
+    {data.sanMartin.themes.map((theme, index) => <article class="reveal summary-card summary-card-roomy"><div class="project-cat">0{index + 1}</div><h3 class="t-h3">{theme.title}</h3><p class="t-body">{theme.desc}</p></article>)}
+  </div></div></section>
+  <section class="section surface-soft"><div class="container">
+    <div class="sec-head reveal"><div class="sec-head-title"><span class="kicker">Investigación + análisis</span><h2 class="t-section section-title">Lo que Leo escribe sobre el territorio</h2></div><a href="/escribe/" class="sec-head-link">Ver todos los textos →</a></div>
+    <ArticleList articles={data.articles.slice(0, 5)} />
+  </div></section>
+  <section class="section"><div class="container">
+    <div class="grid-60-40 reveal"><div><span class="kicker">Fotografía</span><h2 class="t-section section-title">San Martín como personaje.</h2></div><p class="t-body align-end">Calles, estaciones, barrios, industria, espacio público, arbolado. La ciudad como documento y no como decoración.</p></div>
+    <div class="grid-3col reveal gallery-grid">{gallery.map((label) => <div class="gallery-placeholder"><span class="t-tiny">{label}</span></div>)}</div>
+  </div></section>
+</BaseLayout>

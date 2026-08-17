@@ -1,0 +1,63 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import FeedGrid from '../components/FeedGrid.astro';
+import ArticleFeatured from '../components/ArticleFeatured.astro';
+import ArticleList from '../components/ArticleList.astro';
+import ProjectList from '../components/ProjectList.astro';
+import { data } from '../data/content.js';
+import { getFeed } from '../services/content';
+const feed = getFeed();
+---
+
+<BaseLayout>
+  <section class="hero">
+    <div class="container"><div class="grid-hero">
+      <div class="reveal">
+        <span class="kicker">Vecino de San Martín · Buenos Aires</span>
+        <h1 class="t-display hero-title hero-title-spaced"><span class="hero-title-line">LEO</span><span class="hero-title-line">GROSSO<span class="title-dot">.</span></span></h1>
+        <p class="hero-sub">Politólogo. Dirigente político. <span class="blue">Exdiputado nacional.</span></p>
+        <div class="hero-meta"><span>Nacido en 1983</span><span>San Martín, PBA</span><span>UNSAM · Cs. Políticas</span></div>
+      </div>
+      <div class="reveal"><div class="hero-photo"><span class="hero-photo-label">Fotografía editorial · 4:5</span></div></div>
+    </div></div>
+  </section>
+
+  <section class="section"><div class="container"><div class="grid-60-40 reveal">
+    <p class="t-body-lg">Una trayectoria que conecta organización territorial, trabajo legislativo y gestión pública. Doce años como diputado nacional enfocado en ambiente, derechos humanos y economía popular. Desde 2024, Administrador General del IDUAR en Moreno.</p>
+    <div><a href="/sobre-mi/" class="link-arrow">Leer sobre Leo <span class="arrow">→</span></a></div>
+  </div></div></section>
+
+  <section class="section"><div class="container">
+    <div class="sec-head reveal"><div class="sec-head-title"><span class="kicker">Actualidad</span><h2 class="t-section section-title">Lo último</h2></div><a href="/lo-ultimo/" class="sec-head-link">Ver todo →</a></div>
+    <FeedGrid items={feed.slice(0, 4)} />
+  </div></section>
+
+  <section class="sanmartin-block"><div class="container"><div class="sanmartin-grid reveal">
+    <div><span class="kicker kicker-dark">Territorio</span><h2 class="sanmartin-title section-title">SAN<br />MARTÍN</h2></div>
+    <p class="sanmartin-sub">Seguridad, violencia, ambiente, desigualdad. San Martín atraviesa toda la trayectoria política de Leo y sigue siendo el lugar desde donde observa el presente.</p>
+    <a href="/san-martin/" class="sanmartin-link">Ver San Martín →</a>
+  </div></div></section>
+
+  <section class="section"><div class="container">
+    <div class="sec-head reveal"><div class="sec-head-title"><span class="kicker">Producción</span><h2 class="t-section section-title">Escribe</h2></div><a href="/escribe/" class="sec-head-link">Ver todos los textos →</a></div>
+    <ArticleFeatured article={data.articles.find((article) => article.featured)} />
+    <ArticleList articles={data.articles.slice(1, 4)} />
+  </div></section>
+
+  <section class="section surface-soft"><div class="container">
+    <div class="grid-60-40 reveal"><div><span class="kicker">Archivo legislativo</span><h2 class="t-section section-title"><span class="title-dot">12</span> años<br />en Diputados</h2></div><div><p class="t-body copy-spaced">2011 — 2023. Hitos curados en ambiente, derechos humanos, economía popular, hábitat y seguridad democrática.</p><a href="/trayectoria/" class="link-arrow">Explorar trayectoria <span class="arrow">→</span></a></div></div>
+    <div class="stats-grid reveal stats-spaced"><div class="stat"><div class="stat-num">12</div><div class="stat-label">Años en Cámara</div><div class="stat-sub">2011 — 2023</div></div><div class="stat"><div class="stat-num">26.811</div><div class="stat-label">Ley violencia institucional</div><div class="stat-sub">8 de mayo</div></div><div class="stat"><div class="stat-num">RN</div><div class="stat-label">Comisión de Recursos Naturales</div><div class="stat-sub">Presidencia · 2020 — 2023</div></div></div>
+  </div></section>
+
+  <section class="section"><div class="container">
+    <div class="sec-head reveal"><div class="sec-head-title"><span class="kicker">2024 — presente</span><h2 class="t-section section-title">Gestión · IDUAR</h2></div><a href="/trabajo/" class="sec-head-link">Ver todo el trabajo →</a></div>
+    <ProjectList projects={data.projects} limit={2} linkLabel="Fuente" />
+  </div></section>
+
+  <section class="section"><div class="container">
+    <div class="sec-head reveal"><div class="sec-head-title"><span class="kicker">Áreas de trabajo</span><h2 class="t-section section-title">Ideas</h2></div><a href="/ideas/" class="sec-head-link">Ver las cuatro ideas →</a></div>
+    <div class="grid-2col">{data.ideas.map((idea) => <article class="reveal summary-card"><div class="project-cat">{idea.num}</div><h3 class="t-h3">{idea.title}</h3><p class="t-body summary-copy">{idea.lede}</p><a href="/ideas/" class="link-arrow">Ver trayectoria vinculada <span class="arrow">→</span></a></article>)}</div>
+  </div></section>
+
+  <section class="section"><div class="container"><div class="grid-70-30 reveal"><div><span class="kicker">Sobre Leo</span><h2 class="t-section section-title copy-spaced">Persona antes que cargo.</h2><p class="t-body">Nació en San Martín en 1983. Politólogo formado en la UNSAM. Su recorrido conecta militancia territorial, trabajo legislativo y gestión pública. San Martín atraviesa toda su historia política.</p></div><div class="align-end"><a href="/sobre-mi/" class="link-arrow">Leer sobre mí <span class="arrow">→</span></a></div></div></div></section>
+</BaseLayout>
