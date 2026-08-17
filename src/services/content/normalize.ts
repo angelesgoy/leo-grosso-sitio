@@ -22,7 +22,7 @@ export function normalizeLocalRecord(record: LocalContentRecord): ContentItem {
     canonicalUrl: record.canonicalUrl,
     publishedAt: record.publishedAt,
     displayDate: record.displayDate,
-    author: { name: record.authorName || 'Leo Grosso', handle: record.authorHandle || source.handle },
+    author: { name: record.authorName || 'Leon Grosso', handle: record.authorHandle || source.handle },
     media: record.media || [],
     topics: record.topics || [],
     territory: record.territory,

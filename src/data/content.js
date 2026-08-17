@@ -1,6 +1,6 @@
 export const data = {
   profile: {
-    name: "Leo Grosso",
+    name: "Leon Grosso",
     legal: "Leonardo Grosso",
     origin: "San Martín, Provincia de Buenos Aires",
     education: "Licenciado en Ciencias Políticas · Universidad Nacional de San Martín",
@@ -131,7 +131,7 @@ export const data = {
       id: "derechos",
       num: "03",
       title: "DERECHOS",
-      lede: "La democracia se mide por cómo trata a sus mayorías y cómo protege a quienes están en situación de mayor vulnerabilidad. Violencia institucional, seguridad democrática y derechos humanos son ejes inseparables.",
+      lede: "La democracia se mide por cómo trata a sus mayorías y cómo protege a quienes están en situación de mayor vulnerabilidad. Violencia institucional, seguridad democrática y Derechos Humanos son ejes inseparables.",
       evidence: "Evidencia en la trayectoria",
       milestones: [
         "Ley 26.811 · Día Nacional de la Lucha contra la Violencia Institucional (8 de mayo)",

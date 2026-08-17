@@ -1,4 +1,4 @@
-# Leo Grosso · Web personal
+# Leon Grosso · Web personal
 
 Proyecto de producción construido a partir de la maqueta visual aprobada
 `Qwen_html_20260817_ky5owitxd.html`.

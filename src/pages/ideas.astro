@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import { data } from '../data/content.js';
 ---
-<BaseLayout title="Ideas · Leo Grosso" description="Ambiente, ciudad y hábitat, derechos, trabajo y economía popular en la trayectoria de Leo Grosso.">
+<BaseLayout title="Ideas · Leon Grosso" description="Ambiente, ciudad y hábitat, derechos, trabajo y economía popular en la trayectoria de Leon Grosso.">
   <PageHero kicker="Áreas de trabajo" title="Ideas" lede="Cuatro ejes que atraviesan la trayectoria: no son promesas sino posiciones sostenidas en el tiempo, con evidencia legislativa y de gestión." />
   <section class="section"><div class="container">
     {data.ideas.map((idea) => <article class="idea-row reveal"><div class="idea-num">{idea.num}</div><div class="idea-head"><h3>{idea.title}</h3><p class="idea-lede">{idea.lede}</p></div><div class="idea-body"><div class="idea-evidence">{idea.evidence}</div><ul>{idea.milestones.map((milestone) => <li>{milestone}</li>)}</ul></div><div class="idea-foot"><a href="/trayectoria/" class="link-arrow">Ver en trayectoria <span class="arrow">→</span></a></div></article>)}
