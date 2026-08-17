@@ -3,7 +3,11 @@ const { article } = Astro.props;
 ---
 {article && (
   <article class="article-featured reveal">
-    <div class="thumb"><span class="hero-photo-label">Retrato · 4:5</span></div>
+    <div class="thumb">
+      {article.image
+        ? <img src={article.image} alt={article.imageAlt || ''} width="1920" height="1200" loading="lazy" decoding="async" />
+        : <span class="hero-photo-label">Retrato · 4:5</span>}
+    </div>
     <div>
       <div class="meta">Artículo destacado · {article.publication} · {article.year}</div>
       <h3>{article.title}</h3>

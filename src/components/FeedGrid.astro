@@ -6,7 +6,11 @@ const { items } = Astro.props as { items: ContentItem[] };
 <div class="feed-grid" id="feed-grid">
   {items.map((item) => item.featured ? (
     <article class="feed-item featured" data-feed-item data-feed-groups={item.feedCategory}>
-      <div class="feed-item-media"><span class="feed-item-media-label">Imagen · 16:10</span></div>
+      <div class="feed-item-media">
+        {item.media[0]
+          ? <img src={item.media[0].url} alt={item.media[0].alt || ''} width="1920" height="1200" loading="lazy" decoding="async" />
+          : <span class="feed-item-media-label">Imagen · 16:10</span>}
+      </div>
       <div class="feed-item-body">
         <div class="feed-item-meta"><span>{item.source.toUpperCase()}</span><span class="sep">·</span><span>{item.displayDate}</span></div>
         <h3 class="feed-item-title">{item.title}</h3>
@@ -16,7 +20,11 @@ const { items } = Astro.props as { items: ContentItem[] };
     </article>
   ) : (
     <article class="feed-item span-4" data-feed-item data-feed-groups={item.feedCategory}>
-      {item.verified && <div class="feed-item-media square"><span class="feed-item-media-label">Imagen · 1:1</span></div>}
+      {item.verified && <div class="feed-item-media square">
+        {item.media[0]
+          ? <img src={item.media[0].url} alt={item.media[0].alt || ''} width="1200" height="1200" loading="lazy" decoding="async" />
+          : <span class="feed-item-media-label">Imagen · 1:1</span>}
+      </div>}
       {!item.verified && <span class="feed-item-placeholder">Integración pendiente</span>}
       <div class="feed-item-meta">
         <span>{item.sourceLabel}</span>

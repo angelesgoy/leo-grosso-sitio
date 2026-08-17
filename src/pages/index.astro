@@ -16,9 +16,9 @@ const feed = getFeed();
         <span class="kicker">Vecino de San Martín · Buenos Aires</span>
         <h1 class="t-display hero-title hero-title-spaced"><span class="hero-title-line">LEO</span><span class="hero-title-line">GROSSO<span class="title-dot">.</span></span></h1>
         <p class="hero-sub">Politólogo. Dirigente político. <span class="blue">Exdiputado nacional.</span></p>
-        <div class="hero-meta"><span>Nacido en 1983</span><span>San Martín, PBA</span><span>UNSAM · Cs. Políticas</span></div>
+        <div class="hero-meta"><span>San Martín, PBA</span><span>UNSAM · Cs. Políticas</span></div>
       </div>
-      <div class="reveal"><div class="hero-photo"><span class="hero-photo-label">Fotografía editorial · 4:5</span></div></div>
+      <div class="reveal"><div class="hero-photo"><img src="/images/principales/retrato-portada.webp" alt="Retrato editorial de Leo Grosso" width="1280" height="1600" fetchpriority="high" decoding="async" /></div></div>
     </div></div>
   </section>
 
@@ -59,5 +59,5 @@ const feed = getFeed();
     <div class="grid-2col">{data.ideas.map((idea) => <article class="reveal summary-card"><div class="project-cat">{idea.num}</div><h3 class="t-h3">{idea.title}</h3><p class="t-body summary-copy">{idea.lede}</p><a href="/ideas/" class="link-arrow">Ver trayectoria vinculada <span class="arrow">→</span></a></article>)}</div>
   </div></section>
 
-  <section class="section"><div class="container"><div class="grid-70-30 reveal"><div><span class="kicker">Sobre Leo</span><h2 class="t-section section-title copy-spaced">Persona antes que cargo.</h2><p class="t-body">Nació en San Martín en 1983. Politólogo formado en la UNSAM. Su recorrido conecta militancia territorial, trabajo legislativo y gestión pública. San Martín atraviesa toda su historia política.</p></div><div class="align-end"><a href="/sobre-mi/" class="link-arrow">Leer sobre mí <span class="arrow">→</span></a></div></div></div></section>
+  <section class="section"><div class="container"><div class="grid-70-30 reveal"><div><span class="kicker">Sobre Leo</span><h2 class="t-section section-title copy-spaced">Persona antes que cargo.</h2><p class="t-body">Nació en San Martín. Politólogo formado en la UNSAM. Su recorrido conecta militancia territorial, trabajo legislativo y gestión pública. San Martín atraviesa toda su historia política.</p></div><div class="align-end"><a href="/sobre-mi/" class="link-arrow">Leer sobre mí <span class="arrow">→</span></a></div></div></div></section>
 </BaseLayout>

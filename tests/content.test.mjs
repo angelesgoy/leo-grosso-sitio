@@ -6,16 +6,17 @@ import { validateContentItem } from '../src/services/content/validate.ts';
 
 test('normaliza el feed local sin alterar su orden editorial', () => {
   const feed = getFeed();
-  assert.equal(feed.length, 16);
+  assert.equal(feed.length, 12);
   assert.deepEqual(feed.slice(0, 5).map((item) => item.id), [
-    'article-a-las-armas', 'iduar-01', 'iduar-02', 'iduar-03', 'iduar-04'
+    'article-a-las-armas', 'article-ano-nuevo', 'article-sillas-vacias', 'article-muertes-anunciadas', 'article-laberinto'
   ]);
   assert.equal(feed[0].title, 'A las armas las carga el narco');
   assert.equal(feed[0].sourceLabel, 'Artículo');
-  assert.equal(feed[1].sourceLabel, 'IDUAR · Moreno');
+  assert.equal(feed[1].sourceLabel, 'Artículo');
   assert.equal(feed.filter((item) => item.source === 'article').length, 8);
-  assert.equal(feed.filter((item) => item.source === 'iduar').length, 4);
+  assert.equal(feed.filter((item) => item.source === 'iduar').length, 0);
   assert.equal(feed.filter((item) => item.integrationStatus === 'pending').length, 4);
+  assert.equal(feed.filter((item) => item.media.length > 0).length, 8);
 });
 
 test('todos los contenidos tienen autor, procedencia y categoría de interfaz', () => {

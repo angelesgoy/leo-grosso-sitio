@@ -4,6 +4,10 @@ function isHttpsUrl(value: string): boolean {
   try { return new URL(value).protocol === 'https:'; } catch { return false; }
 }
 
+function isSafeMediaUrl(value: string): boolean {
+  return isHttpsUrl(value) || (value.startsWith('/') && !value.startsWith('//') && !value.includes('..'));
+}
+
 function requireText(value: string, field: string, id: string): void {
   if (!value.trim()) throw new Error(`Contenido ${id}: falta ${field}`);
   if (/[<>]/.test(value)) throw new Error(`Contenido ${id}: ${field} no admite HTML`);
@@ -33,7 +37,7 @@ export function validateContentItem(item: ContentItem): void {
   item.topics.forEach((topic) => requireText(topic, 'topics', item.id));
   item.media.forEach((media) => {
     if (!['image', 'video'].includes(media.type)) throw new Error(`Contenido ${item.id}: tipo de medio inválido`);
-    if (!isHttpsUrl(media.url)) throw new Error(`Contenido ${item.id}: medio debe usar HTTPS`);
+    if (!isSafeMediaUrl(media.url)) throw new Error(`Contenido ${item.id}: medio debe usar HTTPS o una ruta local segura`);
     if (media.alt) requireText(media.alt, 'media.alt', item.id);
     if (media.width !== undefined && media.width <= 0) throw new Error(`Contenido ${item.id}: ancho de medio inválido`);
     if (media.height !== undefined && media.height <= 0) throw new Error(`Contenido ${item.id}: alto de medio inválido`);

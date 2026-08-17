@@ -23,7 +23,7 @@ export function normalizeLocalRecord(record: LocalContentRecord): ContentItem {
     publishedAt: record.publishedAt,
     displayDate: record.displayDate,
     author: { name: record.authorName || 'Leo Grosso', handle: record.authorHandle || source.handle },
-    media: [],
+    media: record.media || [],
     topics: record.topics || [],
     territory: record.territory,
     featured: record.featured || false,

@@ -13,6 +13,11 @@ import { navigation, social } from '../data/navigation.js';
       <div class="footer-col">
         <h4>Canal</h4>
         <ul>{social.map((item) => <li><a href={item.href} target="_blank" rel="noopener noreferrer">{item.label} ↗</a></li>)}</ul>
+        <h4 class="footer-legal-title">Privacidad</h4>
+        <ul>
+          <li><a href="/privacidad-y-cookies/">Privacidad y cookies</a></li>
+          <li><button type="button" class="footer-cookie-button" data-cookie-settings>Configurar cookies</button></li>
+        </ul>
       </div>
     </div>
     <div class="footer-bottom">

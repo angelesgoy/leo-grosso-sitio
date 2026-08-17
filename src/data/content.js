@@ -3,7 +3,6 @@ export const data = {
     name: "Leo Grosso",
     legal: "Leonardo Grosso",
     origin: "San Martín, Provincia de Buenos Aires",
-    year: 1983,
     education: "Licenciado en Ciencias Políticas · Universidad Nacional de San Martín",
     current: "Administrador General del IDUAR (Moreno)",
     past: "Diputado Nacional por la Provincia de Buenos Aires (2011–2023)"
@@ -18,6 +17,8 @@ export const data = {
       author: "Leonardo Grosso + Vanina Pasik",
       excerpt: "Análisis sobre el circuito de las armas, el narcotráfico y la violencia en el conurbano. La relación entre mercado ilegal y muertes evitables.",
       url: "https://www.elcohetealaluna.com/a-las-armas-las-carga-el-narco/",
+      image: "/images/principales/articulo-destacado.webp",
+      imageAlt: "Fachada urbana en San Martín, imagen editorial del artículo A las armas las carga el narco",
       featured: true
     },
     {
@@ -27,7 +28,9 @@ export const data = {
       year: "2024",
       author: "Leonardo Grosso + Vanina Pasik",
       excerpt: "La persistencia de los homicidios y la ausencia de una política criminal que los tome en serio como problema público.",
-      url: "https://www.elcohetealaluna.com/ano-nuevo-vida-vieja/"
+      url: "https://www.elcohetealaluna.com/ano-nuevo-vida-vieja/",
+      image: "/images/articulos/ano-nuevo-vida-vieja.webp",
+      imageAlt: "Movilización vecinal con una bandera que reclama justicia"
     },
     {
       id: "sillas-vacias",
@@ -36,7 +39,9 @@ export const data = {
       year: "2024",
       author: "Leonardo Grosso + Vanina Pasik",
       excerpt: "Las ausencias que dejan los homicidios en las familias y los barrios. La dimensión comunitaria de la violencia letal.",
-      url: "https://www.elcohetealaluna.com/las-sillas-vacias/"
+      url: "https://www.elcohetealaluna.com/las-sillas-vacias/",
+      image: "/images/articulos/sillas-vacias.webp",
+      imageAlt: "Sillas vacías iluminadas sobre un fondo oscuro"
     },
     {
       id: "muertes-anunciadas",
@@ -45,7 +50,9 @@ export const data = {
       year: "2024",
       author: "Leonardo Grosso + Vanina Pasik",
       excerpt: "Los patrones que permiten anticipar homicidios y la responsabilidad del Estado frente a lo previsible.",
-      url: "https://www.elcohetealaluna.com/muertes-anunciadas/"
+      url: "https://www.elcohetealaluna.com/muertes-anunciadas/",
+      image: "/images/articulos/muertes-anunciadas.webp",
+      imageAlt: "Ilustración nocturna con figuras y aves bajo un cielo estrellado"
     },
     {
       id: "laberinto",
@@ -54,7 +61,9 @@ export const data = {
       year: "2024",
       author: "Leonardo Grosso + Vanina Pasik",
       excerpt: "Las capas del problema: mercado ilegal, territorialidad, desigualdad y ausencia de prevención.",
-      url: "https://www.elcohetealaluna.com/el-laberinto-de-la-violencia/"
+      url: "https://www.elcohetealaluna.com/el-laberinto-de-la-violencia/",
+      image: "/images/articulos/laberinto-violencia.webp",
+      imageAlt: "Ilustración de figuras recorriendo un laberinto circular"
     },
     {
       id: "nueva-ola",
@@ -63,7 +72,9 @@ export const data = {
       year: "2024",
       author: "Leonardo Grosso + Vanina Pasik",
       excerpt: "Análisis de la escalada reciente de homicidios y sus diferencias con ciclos anteriores.",
-      url: "https://www.elcohetealaluna.com/una-nueva-ola-de-asesinatos/"
+      url: "https://www.elcohetealaluna.com/una-nueva-ola-de-asesinatos/",
+      image: "/images/articulos/nueva-ola-asesinatos.webp",
+      imageAlt: "Operativo policial nocturno frente a una dependencia pública"
     },
     {
       id: "muertes-ii",
@@ -72,7 +83,9 @@ export const data = {
       year: "2024",
       author: "Leonardo Grosso",
       excerpt: "Continuación del análisis sobre violencia estructural, narcomenudeo y la respuesta del Estado.",
-      url: "https://www.elcohetealaluna.com/muertes-que-no-conmueven-ii/"
+      url: "https://www.elcohetealaluna.com/muertes-que-no-conmueven-ii/",
+      image: "/images/articulos/muertes-no-conmueven-ii.webp",
+      imageAlt: "Calle barrial con problemas de infraestructura y agua acumulada"
     },
     {
       id: "muertes-i",
@@ -81,7 +94,9 @@ export const data = {
       year: "2024",
       author: "Leonardo Grosso",
       excerpt: "Sobre la desigualdad en la conmoción pública frente a los homicidios y la jerarquía invisible de las víctimas.",
-      url: "https://www.elcohetealaluna.com/muertes-que-no-conmueven/"
+      url: "https://www.elcohetealaluna.com/muertes-que-no-conmueven/",
+      image: "/images/articulos/muertes-no-conmueven.webp",
+      imageAlt: "Marcha vecinal con una bandera que reclama justicia"
     }
   ],
 

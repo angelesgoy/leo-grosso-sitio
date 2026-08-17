@@ -1,0 +1,46 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+---
+
+<BaseLayout title="Privacidad y cookies · Leo Grosso" description="Información sobre privacidad, almacenamiento local, cookies y servicios externos de la web de Leo Grosso.">
+  <PageHero kicker="Información legal" title="Privacidad y cookies" lede="Qué datos técnicos puede utilizar esta web, con qué finalidad y cómo administrar tus preferencias." />
+  <section class="section"><div class="container legal-copy">
+    <p class="legal-updated">Última actualización: 17 de agosto de 2026.</p>
+
+    <h2>1. Alcance y responsable</h2>
+    <p>Esta política se aplica a la web personal de Leo Grosso y a sus páginas públicas. El responsable editorial es el equipo de Leo Grosso. Las consultas sobre privacidad pueden realizarse mediante los canales oficiales enlazados en el pie del sitio. Antes del lanzamiento definitivo se incorporará un correo específico de privacidad.</p>
+
+    <h2>2. Qué utiliza actualmente la web</h2>
+    <p>En su estado actual, la web no instala herramientas de analítica, publicidad ni seguimiento comercial. Utiliza almacenamiento local estrictamente necesario para recordar la elección de privacidad durante 180 días.</p>
+    <div class="legal-table-wrap"><table class="legal-table">
+      <thead><tr><th>Identificador</th><th>Tipo</th><th>Finalidad</th><th>Duración</th></tr></thead>
+      <tbody><tr><td><code>leo-cookie-consent-v1</code></td><td>Almacenamiento local necesario</td><td>Recordar las categorías aceptadas o rechazadas.</td><td>180 días</td></tr></tbody>
+    </table></div>
+
+    <h2>3. Categorías</h2>
+    <h3>Necesarias</h3>
+    <p>Permiten el funcionamiento, la seguridad y el registro de preferencias. No se utilizan para publicidad y no pueden desactivarse desde el panel.</p>
+    <h3>Analítica</h3>
+    <p>Serviría para comprender de forma agregada qué páginas se visitan y mejorar su funcionamiento. Está desactivada por defecto y no existe un proveedor activo actualmente. Si se incorpora uno, se identificará aquí antes de activarlo.</p>
+    <h3>Contenido externo y redes</h3>
+    <p>Las futuras integraciones con Instagram, TikTok, X, Facebook, video u otros servicios pueden comunicar al proveedor la dirección IP, datos del navegador e interacción con el contenido. Esas conexiones quedarán bloqueadas hasta obtener consentimiento cuando técnicamente corresponda.</p>
+
+    <h2>4. Alojamiento y registros técnicos</h2>
+    <p>El sitio está alojado en Netlify. Como proveedor de infraestructura, Netlify puede procesar datos técnicos —por ejemplo, dirección IP, agente de usuario, fecha, hora y URL solicitada— para entregar el contenido, mantener la seguridad y diagnosticar errores. Ese tratamiento se rige también por la <a href="https://www.netlify.com/privacy/" target="_blank" rel="noopener noreferrer">política de privacidad de Netlify ↗</a>.</p>
+
+    <h2>5. Enlaces externos</h2>
+    <p>La web contiene enlaces a publicaciones, organismos y redes sociales. Al seguirlos, la persona abandona este sitio y se aplican las políticas del servicio de destino. Un enlace común no instala por sí mismo las cookies del sitio enlazado.</p>
+
+    <h2>6. Consentimiento y revocación</h2>
+    <p>Las categorías opcionales se mantienen apagadas hasta que la persona las acepte. Rechazarlas no limita el acceso al contenido principal. El consentimiento puede modificarse o retirarse en cualquier momento.</p>
+    <button class="cookie-btn cookie-btn-primary legal-cookie-button" type="button" data-cookie-settings>Configurar cookies</button>
+
+    <h2>7. Derechos sobre datos personales</h2>
+    <p>Cuando exista tratamiento de datos personales, la persona titular podrá solicitar información, acceso, rectificación, actualización o supresión y revocar su consentimiento, conforme a la Ley argentina 25.326 y la normativa aplicable. También puede presentar un reclamo ante la Agencia de Acceso a la Información Pública.</p>
+
+    <h2>8. Cambios en esta política</h2>
+    <p>La política se actualizará antes de habilitar nuevas herramientas de medición, formularios, contenidos embebidos o integraciones que modifiquen el tratamiento informado. La fecha de la versión vigente se indicará al comienzo de esta página.</p>
+  </div></section>
+</BaseLayout>
+

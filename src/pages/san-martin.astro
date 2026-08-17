@@ -3,7 +3,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import ArticleList from '../components/ArticleList.astro';
 import { data } from '../data/content.js';
-const gallery = ['Calles · San Martín', 'Estaciones · FFCC', 'Espacio público', 'Industria', 'Barrios', 'Arbolado'];
+const gallery = [
+  { label: 'Calles · San Martín', src: '/images/san-martin/calles.webp', alt: 'Vista urbana y espacio cívico de San Martín' },
+  { label: 'Estaciones · FFCC', src: '/images/san-martin/estacion.webp', alt: 'Formación ferroviaria en una estación de San Martín' },
+  { label: 'Espacio público', src: '/images/san-martin/espacio-publico.webp', alt: 'Área peatonal y comercial de San Martín' },
+  { label: 'Industria', src: '/images/san-martin/industria.webp', alt: 'Paisaje industrial del partido de San Martín' },
+  { label: 'Barrios', src: '/images/san-martin/barrio.webp', alt: 'Estación José León Suárez y su entorno urbano' },
+  { label: 'Arbolado', src: '/images/san-martin/arbolado.webp', alt: 'Espacio público rodeado de vegetación en San Martín' }
+];
 ---
 <BaseLayout title="San Martín · Leo Grosso" description="San Martín: territorio, seguridad, ambiente, desigualdad y vida cotidiana del conurbano.">
   <PageHero kicker="Territorio" title="San Martín" lede="El territorio desde donde Leo observa, escribe y hace política. Seguridad, ambiente, desigualdad y vida cotidiana del conurbano." blue />
@@ -16,6 +23,6 @@ const gallery = ['Calles · San Martín', 'Estaciones · FFCC', 'Espacio públic
   </div></section>
   <section class="section"><div class="container">
     <div class="grid-60-40 reveal"><div><span class="kicker">Fotografía</span><h2 class="t-section section-title">San Martín como personaje.</h2></div><p class="t-body align-end">Calles, estaciones, barrios, industria, espacio público, arbolado. La ciudad como documento y no como decoración.</p></div>
-    <div class="grid-3col reveal gallery-grid">{gallery.map((label) => <div class="gallery-placeholder"><span class="t-tiny">{label}</span></div>)}</div>
+    <div class="grid-3col reveal gallery-grid">{gallery.map((item) => <figure class="gallery-placeholder"><img src={item.src} alt={item.alt} width="1200" height="900" loading="lazy" decoding="async" /><figcaption class="t-tiny">{item.label}</figcaption></figure>)}</div>
   </div></section>
 </BaseLayout>

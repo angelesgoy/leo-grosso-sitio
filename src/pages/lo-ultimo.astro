@@ -4,12 +4,15 @@ import PageHero from '../components/PageHero.astro';
 import FeedGrid from '../components/FeedGrid.astro';
 import { getFeed } from '../services/content';
 const feed = getFeed();
+const availableFilters = ['artículos', 'gestión', 'redes'].filter((filter) =>
+  feed.some((item) => item.feedCategory === filter)
+);
 ---
 <BaseLayout title="Lo último · Leo Grosso" description="Actualidad de Leo Grosso: artículos, gestión, redes y actividad territorial.">
   <PageHero kicker="Actualidad" title="Lo último" lede="Flujo público: artículos, gestión, redes y actividad territorial. Cuando se conecten las APIs oficiales, esta sección se alimentará automáticamente de las cuentas verificadas de Leo." />
   <section class="section"><div class="container">
     <div class="feed-filters" aria-label="Filtrar contenidos">
-      {['todo', 'artículos', 'gestión', 'redes'].map((filter, index) => <button class:list={['filter-btn', { active: index === 0 }]} data-feed-filter={filter} aria-pressed={index === 0}>{filter.toUpperCase()}</button>)}
+      {['todo', ...availableFilters].map((filter, index) => <button class:list={['filter-btn', { active: index === 0 }]} data-feed-filter={filter} aria-pressed={index === 0}>{filter.toUpperCase()}</button>)}
     </div>
     <p id="feed-status" class="visually-hidden" aria-live="polite">{feed.length} contenidos visibles</p>
     <FeedGrid items={feed} />

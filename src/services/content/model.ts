@@ -64,6 +64,7 @@ export type LocalContentRecord = {
   displayDate?: string;
   authorName?: string;
   authorHandle?: string;
+  media?: ContentMedia[];
   topics?: string[];
   territory?: string;
   featured?: boolean;

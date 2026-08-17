@@ -125,6 +125,9 @@ button { font-family: inherit; cursor: pointer; background: none; border: none; 
   .grid-3col, .grid-2col { grid-template-columns: 1fr; gap: 1.25rem; }
   .feed-grid { grid-template-columns: 1fr; gap: 1rem; }
 }
+@media (max-width: 768px) {
+  .feed-grid { grid-template-columns: 1fr; gap: 1rem; }
+}
 
 /* =========================================================
    06. HEADER
@@ -305,6 +308,19 @@ button { font-family: inherit; cursor: pointer; background: none; border: none; 
   position: relative;
   overflow: hidden;
 }
+.hero-photo img,
+.about-photo img,
+.article-featured .thumb img,
+.feed-item-media img,
+.gallery-placeholder img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.hero-photo img,
+.about-photo img { object-position: center top; }
 .hero-photo-label {
   position: absolute;
   bottom: 1rem; left: 1rem;
@@ -504,11 +520,12 @@ button { font-family: inherit; cursor: pointer; background: none; border: none; 
   .feed-item.featured .feed-item-media { min-height: 220px; }
   .feed-item.featured .feed-item-body { padding: 1.5rem; }
 }
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .feed-item.span-6,
   .feed-item.span-4,
   .feed-item.span-8,
-  .feed-item.span-12 { grid-column: 1 / -1; }
+  .feed-item.span-12,
+  .feed-item.featured { grid-column: 1 / -1; }
 }
 
 .feed-empty {
@@ -882,6 +899,7 @@ button { font-family: inherit; cursor: pointer; background: none; border: none; 
   display: flex;
   align-items: flex-end;
   padding: 1rem;
+  overflow: hidden;
 }
 .about-facts { display: flex; flex-direction: column; gap: 1.25rem; }
 .about-fact-label {
@@ -934,6 +952,13 @@ button { font-family: inherit; cursor: pointer; background: none; border: none; 
 .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
 .footer-col a { color: rgba(255,255,255,0.75); font-size: 0.9375rem; transition: var(--t); }
 .footer-col a:hover { color: var(--leo-blue); }
+.footer-legal-title { margin-top: 1.75rem; }
+.footer-cookie-button {
+  color: rgba(255,255,255,0.75);
+  font-size: 0.9375rem;
+  text-align: left;
+}
+.footer-cookie-button:hover { color: var(--leo-blue); }
 .footer-bottom {
   border-top: 1px solid rgba(255,255,255,0.1);
   padding-top: 1.5rem;
@@ -1029,13 +1054,125 @@ button { font-family: inherit; cursor: pointer; background: none; border: none; 
   aspect-ratio: 4 / 3;
   background: var(--soft-bg);
   border: 1px solid var(--border);
-  display: flex;
-  align-items: flex-end;
-  padding: 0.75rem;
+  position: relative;
+  overflow: hidden;
 }
-.gallery-placeholder .t-tiny { color: var(--dim-gray); }
+.gallery-placeholder .t-tiny {
+  position: absolute;
+  left: 0.75rem;
+  bottom: 0.75rem;
+  color: var(--text);
+  background: rgba(255,255,255,0.88);
+  padding: 0.25rem 0.4rem;
+}
 .page-hero-blue { background: var(--leo-blue); }
 .page-hero-blue .kicker { color: rgba(11, 13, 15, 0.6); }
 .page-hero-blue .title-dot { color: var(--text); }
 .page-hero-blue .page-hero-lede { color: rgba(11, 13, 15, 0.75); }
 .error-home { margin-top: 1.5rem; }
+
+/* =========================================================
+   22. PRIVACIDAD Y COOKIES
+   ========================================================= */
+.cookie-banner {
+  position: fixed;
+  left: 1rem;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 120;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  background: var(--bg);
+  border: 1px solid var(--border-strong);
+  box-shadow: 0 18px 70px rgba(11,13,15,0.2);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 2rem;
+  align-items: end;
+}
+.cookie-banner[hidden] { display: none; }
+.cookie-banner h2,
+.cookie-dialog h2 { font-size: 1.35rem; line-height: 1.1; margin: 0.45rem 0 0.6rem; }
+.cookie-banner p,
+.cookie-dialog p { color: #3e4143; font-size: 0.9rem; line-height: 1.5; }
+.cookie-banner p a,
+.legal-copy a { text-decoration: underline; text-underline-offset: 0.15em; }
+.cookie-actions,
+.cookie-dialog-actions { display: flex; gap: 0.65rem; flex-wrap: wrap; }
+.cookie-btn {
+  min-height: 42px;
+  padding: 0.65rem 0.9rem;
+  border: 1px solid var(--text);
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.cookie-btn-primary { background: var(--text); color: var(--bg); }
+.cookie-btn-primary:hover { background: var(--leo-blue); color: var(--text); border-color: var(--leo-blue); }
+.cookie-btn-secondary { background: var(--bg); color: var(--text); }
+.cookie-btn-secondary:hover { border-color: var(--leo-blue); }
+
+.cookie-dialog {
+  width: min(680px, calc(100% - 2rem));
+  max-height: calc(100vh - 2rem);
+  padding: 0;
+  border: 1px solid var(--border-strong);
+  background: var(--bg);
+  color: var(--text);
+}
+.cookie-dialog::backdrop { background: rgba(11,13,15,0.55); }
+.cookie-dialog-head,
+.cookie-dialog-intro,
+.cookie-option,
+.cookie-dialog-actions { padding-left: 1.5rem; padding-right: 1.5rem; }
+.cookie-dialog-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 1.5rem;
+}
+.cookie-dialog-close { font-size: 1.75rem; line-height: 1; }
+.cookie-dialog-intro { padding-bottom: 1rem; }
+.cookie-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.5rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  border-top: 1px solid var(--border);
+}
+.cookie-option strong { font-size: 0.95rem; }
+.cookie-option p { margin-top: 0.25rem; }
+.cookie-option input { width: 1.15rem; height: 1.15rem; flex: 0 0 auto; accent-color: var(--leo-blue); }
+.cookie-dialog-actions { padding-top: 1.25rem; padding-bottom: 1.5rem; border-top: 1px solid var(--border); }
+
+.legal-copy { max-width: 880px; }
+.legal-copy h2 { font-size: clamp(1.35rem, 2vw, 1.8rem); margin: 3rem 0 0.75rem; }
+.legal-copy h3 { font-size: 1.05rem; margin: 1.5rem 0 0.35rem; }
+.legal-copy p { color: #2a2c2e; line-height: 1.7; }
+.legal-updated { color: var(--dim-gray) !important; font-size: 0.85rem; }
+.legal-table-wrap { overflow-x: auto; margin-top: 1.5rem; }
+.legal-table { width: 100%; border-collapse: collapse; min-width: 650px; }
+.legal-table th,
+.legal-table td { border: 1px solid var(--border); padding: 0.8rem; text-align: left; vertical-align: top; font-size: 0.85rem; }
+.legal-table th { background: var(--soft-bg); }
+.legal-cookie-button { margin-top: 1.25rem; }
+
+@media (max-width: 768px) {
+  .cookie-banner { grid-template-columns: 1fr; gap: 1.15rem; padding: 1.15rem; }
+  .cookie-actions { display: grid; grid-template-columns: 1fr 1fr; }
+  .cookie-actions .cookie-btn-primary { grid-column: 1 / -1; }
+  .cookie-dialog-actions { display: grid; grid-template-columns: 1fr; }
+}
+@media (max-width: 420px) {
+  .cookie-banner { left: 0.5rem; right: 0.5rem; bottom: 0.5rem; }
+  .cookie-actions { grid-template-columns: 1fr; }
+  .cookie-actions .cookie-btn-primary { grid-column: auto; }
+  .cookie-dialog-head,
+  .cookie-dialog-intro,
+  .cookie-option,
+  .cookie-dialog-actions { padding-left: 1rem; padding-right: 1rem; }
+}

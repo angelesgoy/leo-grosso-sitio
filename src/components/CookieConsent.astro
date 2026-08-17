@@ -1,0 +1,44 @@
+<aside class="cookie-banner" id="cookie-banner" aria-labelledby="cookie-title" hidden>
+  <div class="cookie-banner-copy">
+    <span class="kicker">Privacidad</span>
+    <h2 id="cookie-title">Elegí cómo usamos cookies.</h2>
+    <p>
+      Usamos almacenamiento necesario para recordar tu elección. Las futuras mediciones
+      y conexiones con redes sociales solo se activarán si las autorizás.
+      <a href="/privacidad-y-cookies/">Ver política completa</a>.
+    </p>
+  </div>
+  <div class="cookie-actions">
+    <button class="cookie-btn cookie-btn-secondary" type="button" data-cookie-reject>Rechazar opcionales</button>
+    <button class="cookie-btn cookie-btn-secondary" type="button" data-cookie-configure>Configurar</button>
+    <button class="cookie-btn cookie-btn-primary" type="button" data-cookie-accept>Aceptar todo</button>
+  </div>
+</aside>
+
+<dialog class="cookie-dialog" id="cookie-preferences" aria-labelledby="cookie-preferences-title">
+  <div class="cookie-dialog-head">
+    <div>
+      <span class="kicker">Privacidad</span>
+      <h2 id="cookie-preferences-title">Preferencias de cookies</h2>
+    </div>
+    <button type="button" class="cookie-dialog-close" data-cookie-close aria-label="Cerrar preferencias">×</button>
+  </div>
+  <p class="cookie-dialog-intro">Podés cambiar esta elección cuando quieras desde el pie de la web.</p>
+  <div class="cookie-option">
+    <div><strong>Necesarias</strong><p>Navegación, seguridad y memoria de tu elección. No se pueden desactivar.</p></div>
+    <input type="checkbox" checked disabled aria-label="Cookies necesarias siempre activas" />
+  </div>
+  <label class="cookie-option">
+    <div><strong>Analítica</strong><p>Medición agregada del uso del sitio. Actualmente no hay un proveedor activo.</p></div>
+    <input type="checkbox" data-cookie-category="analytics" />
+  </label>
+  <label class="cookie-option">
+    <div><strong>Contenido externo y redes</strong><p>Futuros contenidos de Instagram, TikTok, X, Facebook u otros servicios externos.</p></div>
+    <input type="checkbox" data-cookie-category="external" />
+  </label>
+  <div class="cookie-dialog-actions">
+    <button class="cookie-btn cookie-btn-secondary" type="button" data-cookie-dialog-reject>Rechazar opcionales</button>
+    <button class="cookie-btn cookie-btn-primary" type="button" data-cookie-save>Guardar selección</button>
+  </div>
+</dialog>
+

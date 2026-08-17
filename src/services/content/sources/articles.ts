@@ -13,6 +13,7 @@ export const articleRecords: LocalContentRecord[] = data.articles.map((article) 
   canonicalUrl: article.url,
   displayDate: article.year,
   authorName: article.author,
+  media: article.image ? [{ type: 'image', url: article.image, alt: article.imageAlt }] : [],
   featured: article.featured || false,
   verified: true,
   editorialStatus: article.featured ? 'selected' : 'reviewed',

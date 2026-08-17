@@ -43,10 +43,11 @@ El resultado se genera en `dist/`. Netlify usa la configuración declarada en
 - `src/types`: contratos internos del contenido.
 - `public`: archivos estáticos.
 
-## Pendiente antes de publicar
+## Pendiente antes del lanzamiento oficial
 
 - Definir dominio canónico.
 - Incorporar favicon e imagen social aprobados.
-- Incorporar fotografías con derechos de uso y textos alternativos.
+- Reemplazar las fotografías provisorias por los originales aprobados por Leo y su equipo.
 - Verificar editorialmente afirmaciones, fechas y enlaces externos.
-- Configurar el proyecto de Netlify y conectar el repositorio de GitHub.
+- Conectar el repositorio de GitHub a Netlify cuando la cuenta permita habilitar el despliegue continuo.
+- Habilitar la indexación en `BaseLayout.astro` y `public/robots.txt`.
