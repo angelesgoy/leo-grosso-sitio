@@ -26,51 +26,96 @@ const remainingArticles = featuredArticle
     </div>
   </section>
 
-  <!-- SINCRONIZACIÓN EN TIEMPO REAL DEL ARTÍCULO DESTACADO SELECCIONADO EN EL PANEL -->
+  <!-- SINCRONIZACIÓN COMPLETA EN TIEMPO REAL DESDE SANITY EN ESCRIBO -->
   <script is:inline>
-    (async function syncFeaturedArticle() {
+    (async function syncAllArticlesEscribe() {
       try {
-        const query = encodeURIComponent('*[_type == "article" && featured == true][0]');
+        const query = encodeURIComponent(`*[_type == "article" && !(_id in path("drafts.**")) && (status == "published" || !defined(status))] | order(publishedAt desc) {
+          _id, title, "slug": slug.current, publication, publishedAt, authors, excerpt, externalUrl, featured, image
+        }`);
+
         const res = await fetch(`https://j4xtzihv.api.sanity.io/v2024-01-01/data/query/production?query=${query}`);
         if (!res.ok) return;
+
         const json = await res.json();
-        const featured = json.result;
-        if (!featured || !featured.title) return;
+        const articles = json.result || [];
+        if (articles.length === 0) return;
 
-        const container = document.querySelector('.article-featured');
-        if (!container) return;
-
-        const titleEl = container.querySelector('h3');
-        if (titleEl && titleEl.textContent !== featured.title) {
-          titleEl.textContent = featured.title;
-          
-          const metaEl = container.querySelector('.meta');
-          if (metaEl) {
-            const parts = featured.publishedAt ? featured.publishedAt.split('T')[0].split('-') : [];
-            const dateStr = parts.length === 3 ? `${parts[2]}/${parts[1]}/${parts[0]}` : '';
-            metaEl.innerHTML = `Artículo destacado · ${featured.publication || 'El Cohete a la Luna'} · <time datetime="${featured.publishedAt || ''}">${dateStr}</time>`;
-          }
-
-          const authorEl = container.querySelector('.article-author');
-          if (authorEl) authorEl.textContent = featured.authors || 'Leonardo Grosso';
-
-          const excerptEl = container.querySelector('.excerpt');
-          if (excerptEl) excerptEl.textContent = featured.excerpt || '';
-
-          const linkEl = container.querySelector('.link-arrow');
-          if (linkEl) {
-            if (featured.externalUrl) linkEl.href = featured.externalUrl;
-            linkEl.innerHTML = `Leer en ${featured.publication || 'El Cohete a la Luna'} <span class="arrow">↗</span>`;
-          }
-
-          const imgEl = container.querySelector('.thumb img');
-          if (imgEl && featured.image?.asset?._ref) {
-            const match = featured.image.asset._ref.match(/^image-([a-fA-F0-9]+)-(\d+x\d+)-(\w+)$/);
+        // Formatear artículos devueltos por Sanity
+        const formatted = articles.map(art => {
+          const parts = art.publishedAt ? art.publishedAt.split('T')[0].split('-') : [];
+          const displayDate = parts.length === 3 ? `${parts[2]}/${parts[1]}/${parts[0]}` : '';
+          let imgUrl = '';
+          if (typeof art.image === 'string') {
+            imgUrl = art.image;
+          } else if (art.image?.asset?._ref) {
+            const match = art.image.asset._ref.match(/^image-([a-fA-F0-9]+)-(\d+x\d+)-(\w+)$/);
             if (match) {
-              imgEl.src = `https://cdn.sanity.io/images/j4xtzihv/production/${match[1]}-${match[2]}.${match[3]}`;
+              imgUrl = `https://cdn.sanity.io/images/j4xtzihv/production/${match[1]}-${match[2]}.${match[3]}`;
             }
           }
+
+          return {
+            id: art.slug || art._id.replace(/^article-/, ''),
+            title: art.title || '',
+            publication: art.publication || 'El Cohete a la Luna',
+            date: art.publishedAt || '',
+            displayDate: displayDate,
+            author: art.authors || 'Leonardo Grosso',
+            excerpt: art.excerpt || '',
+            url: art.externalUrl || '#',
+            image: imgUrl,
+            featured: Boolean(art.featured)
+          };
+        });
+
+        // Separar destacada y secundarias
+        const featured = formatted.find(a => a.featured) || formatted[0];
+        const listArticles = formatted.filter(a => a.id !== featured.id);
+
+        // 1. Sincronizar Tarjeta Destacada
+        const featuredContainer = document.querySelector('.article-featured');
+        if (featuredContainer && featured) {
+          const titleEl = featuredContainer.querySelector('h3');
+          if (titleEl) titleEl.textContent = featured.title;
+
+          const metaEl = featuredContainer.querySelector('.meta');
+          if (metaEl) {
+            metaEl.innerHTML = `Artículo destacado · ${featured.publication} · <time datetime="${featured.date}">${featured.displayDate}</time>`;
+          }
+
+          const authorEl = featuredContainer.querySelector('.article-author');
+          if (authorEl) authorEl.textContent = featured.author;
+
+          const excerptEl = featuredContainer.querySelector('.excerpt');
+          if (excerptEl) excerptEl.textContent = featured.excerpt;
+
+          const linkEl = featuredContainer.querySelector('.link-arrow');
+          if (linkEl) {
+            linkEl.href = featured.url;
+            linkEl.innerHTML = `Leer en ${featured.publication} <span class="arrow">↗</span>`;
+          }
+
+          const imgEl = featuredContainer.querySelector('.thumb img');
+          if (imgEl && featured.image) {
+            imgEl.src = featured.image;
+          }
         }
+
+        // 2. Sincronizar Lista Secundaria de Artículos
+        const listContainer = document.querySelector('.articles-list');
+        if (listContainer && listArticles.length > 0) {
+          listContainer.innerHTML = listArticles.map(art => `
+            <article class="article-row in">
+              <time class="date" datetime="${art.date}">${art.displayDate}</time>
+              <div class="author">${art.author}</div>
+              <div class="title">${art.title}</div>
+              <div class="pub">${art.publication}</div>
+              <a href="${art.url}" target="_blank" rel="noopener noreferrer" class="link-arrow" aria-label="Leer ${art.title}"><span class="arrow">↗</span></a>
+            </article>
+          `).join('');
+        }
+
       } catch (e) {
         // Fallback silencioso
       }
