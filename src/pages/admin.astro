@@ -1,0 +1,79 @@
+---
+const projectId = import.meta.env.PUBLIC_SANITY_PROJECT_ID || 'j4xtzihv';
+const dataset = import.meta.env.PUBLIC_SANITY_DATASET || 'production';
+---
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Panel de Administración · Leon Grosso</title>
+    <style>
+      html, body, #sanity-studio {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+        font-family: system-ui, -apple-system, sans-serif;
+        background: #0b0d0f;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="sanity-studio"></div>
+    <script type="module" is:inline define:vars={{ projectId, dataset }}>
+      import { renderStudio, defineConfig, defineType } from 'https://esm.sh/sanity@3.76.0/studio?bundle-all';
+
+      const articleType = defineType({
+        name: 'article',
+        title: 'Artículo',
+        type: 'document',
+        fields: [
+          { name: 'title', title: 'Título', type: 'string', validation: (Rule) => Rule.required() },
+          { name: 'slug', title: 'Slug (URL id)', type: 'slug', options: { source: 'title' }, validation: (Rule) => Rule.required() },
+          { name: 'authors', title: 'Autor / Coautores', type: 'string', initialValue: 'Leonardo Grosso' },
+          { name: 'publication', title: 'Medio / Publicación', type: 'string', initialValue: 'El Cohete a la Luna' },
+          { name: 'publishedAt', title: 'Fecha de Publicación', type: 'date', validation: (Rule) => Rule.required() },
+          { name: 'excerpt', title: 'Bajada / Resumen', type: 'text', rows: 3 },
+          {
+            name: 'image',
+            title: 'Imagen del artículo',
+            type: 'image',
+            options: { hotspot: true },
+            fields: [{ name: 'alt', type: 'string', title: 'Texto alternativo' }]
+          },
+          { name: 'externalUrl', title: 'URL externa al artículo', type: 'url', validation: (Rule) => Rule.required() },
+          { name: 'featured', title: '¿Destacar en la portada?', type: 'boolean', initialValue: false },
+          {
+            name: 'status',
+            title: 'Estado',
+            type: 'string',
+            options: {
+              list: [
+                { title: 'Publicado', value: 'published' },
+                { title: 'Borrador', value: 'draft' },
+                { title: 'Archivado', value: 'archived' }
+              ],
+              layout: 'radio'
+            },
+            initialValue: 'published'
+          }
+        ]
+      });
+
+      const config = defineConfig({
+        name: 'default',
+        title: 'Leon Grosso · Web Personal',
+        projectId: projectId,
+        dataset: dataset,
+        basePath: '/admin',
+        schema: {
+          types: [articleType]
+        }
+      });
+
+      renderStudio(document.getElementById('sanity-studio'), config);
+    </script>
+  </body>
+</html>
