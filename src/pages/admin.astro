@@ -5,6 +5,7 @@ const projectId = import.meta.env.PUBLIC_SANITY_PROJECT_ID || 'j4xtzihv';
 const dataset = import.meta.env.PUBLIC_SANITY_DATASET || 'production';
 const token = import.meta.env.SANITY_API_TOKEN || 'sk806I9qenm35RbkEJX0XlX4VSndFEu6DPy9fbgQEBLBfyXWygkFGNvH4QHa29WYYnMaEVvwwQhXOg6J9jcrJgn3X1IgOOOEEIRbjGBSzNwYok4M0GBSKFVvf8KUwKrXr0hRISeijyWToqHacho1TddhuRtyOBl6nUpoyB9L2VP8lL71JJFX';
 const teamPassword = 'WebEquipoGrosso2026';
+const netlifyBuildHook = 'https://api.netlify.com/build_hooks/6a84d5aa629b44809436de94';
 const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
 ---
 
@@ -217,7 +218,8 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
     }
   </style>
 
-  <script define:vars={{ projectId, dataset, token, teamPassword, fallbackArticlesJSON }}>
+  <script define:vars={{ projectId, dataset, token, teamPassword, netlifyBuildHook, fallbackArticlesJSON }}>
+    window.__NETLIFY_BUILD_HOOK__ = netlifyBuildHook;
     const AUTH_SESSION_KEY = 'leo_admin_session';
     const loginSection = document.getElementById('login-section');
     const adminContent = document.getElementById('admin-panel-content');
