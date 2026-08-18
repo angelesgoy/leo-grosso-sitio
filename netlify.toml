@@ -2,6 +2,9 @@
   publish = "dist"
   command = "pnpm run build"
 
+[build.environment]
+  NODE_VERSION = "22"
+
 [[redirects]]
   from = "/sanity-api/*"
   to = "https://j4xtzihv.api.sanity.io/:splat"
