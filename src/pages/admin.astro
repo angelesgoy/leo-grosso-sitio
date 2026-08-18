@@ -10,7 +10,7 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
 
 <BaseLayout title="Administración Editorial · Leon Grosso" description="Panel privado de gestión de contenidos editoriales para el equipo de prensa.">
   
-  <!-- PANTALLA 1: LOGIN SEGURO CON DISEÑO INSTITUCIONAL Y CONMUTADOR SVG -->
+  <!-- PANTALLA 1: LOGIN SEGURO CON DISEÑO INSTITUCIONAL Y CONMUTADOR TEXTUAL -->
   <section id="login-section" class="section" style="min-height: 70vh; display: flex; align-items: center;">
     <div class="container" style="max-width: 440px;">
       <div style="background: var(--soft-bg); padding: 2.5rem; border: 1px solid var(--border); text-align: left;">
@@ -228,6 +228,14 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
     const loginAlert = document.getElementById('login-alert');
     const logoutBtn = document.getElementById('logout-btn');
 
+    // USAR PROXY MISMO-DOMINIO (/sanity-api/) EN NETLIFY PARA EVITAR BLOQUEOS CORS Y AD-BLOCKERS
+    const getApiBase = () => {
+      if (window.location.hostname.includes('netlify.app')) {
+        return '/sanity-api';
+      }
+      return `https://${projectId}.api.sanity.io`;
+    };
+
     const defaultFallbackArticles = JSON.parse(fallbackArticlesJSON).map(art => ({
       _id: `article-${art.id}`,
       title: art.title,
@@ -334,7 +342,8 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
 
     async function uploadImage(file) {
       if (!file) return null;
-      const uploadUrl = `https://${projectId}.api.sanity.io/v2024-01-01/assets/images/${dataset}`;
+      const apiBase = getApiBase();
+      const uploadUrl = `${apiBase}/v2024-01-01/assets/images/${dataset}`;
       const res = await fetch(uploadUrl, {
         method: 'POST',
         headers: {
@@ -399,7 +408,8 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
           ...(finalImage ? { image: finalImage } : {})
         };
 
-        const mutateUrl = `https://${projectId}.api.sanity.io/v2024-01-01/data/mutate/${dataset}`;
+        const apiBase = getApiBase();
+        const mutateUrl = `${apiBase}/v2024-01-01/data/mutate/${dataset}`;
         const res = await fetch(mutateUrl, {
           method: 'POST',
           headers: {
@@ -436,7 +446,8 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
         }
       }));
 
-      const mutateUrl = `https://${projectId}.api.sanity.io/v2024-01-01/data/mutate/${dataset}`;
+      const apiBase = getApiBase();
+      const mutateUrl = `${apiBase}/v2024-01-01/data/mutate/${dataset}`;
       await fetch(mutateUrl, {
         method: 'POST',
         headers: {
@@ -455,7 +466,8 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
       const query = encodeURIComponent(`*[_type == "article"] | order(publishedAt desc) {
         _id, title, publication, publishedAt, authors, excerpt, externalUrl, featured, image
       }`);
-      const url = `https://${projectId}.api.sanity.io/v2024-01-01/data/query/${dataset}?query=${query}`;
+      const apiBase = getApiBase();
+      const url = `${apiBase}/v2024-01-01/data/query/${dataset}?query=${query}`;
 
       try {
         const res = await fetch(url);
@@ -511,7 +523,8 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
         await unsetOtherFeatured(id);
       }
 
-      const mutateUrl = `https://${projectId}.api.sanity.io/v2024-01-01/data/mutate/${dataset}`;
+      const apiBase = getApiBase();
+      const mutateUrl = `${apiBase}/v2024-01-01/data/mutate/${dataset}`;
       const res = await fetch(mutateUrl, {
         method: 'POST',
         headers: {
@@ -578,7 +591,8 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
     window.deleteArticle = async function(id) {
       if (!confirm('¿Confirma la eliminación permanente de esta entrada?')) return;
 
-      const mutateUrl = `https://${projectId}.api.sanity.io/v2024-01-01/data/mutate/${dataset}`;
+      const apiBase = getApiBase();
+      const mutateUrl = `${apiBase}/v2024-01-01/data/mutate/${dataset}`;
       const res = await fetch(mutateUrl, {
         method: 'POST',
         headers: {
