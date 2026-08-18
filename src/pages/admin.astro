@@ -6,7 +6,7 @@ const token = import.meta.env.SANITY_API_TOKEN || 'sk806I9qenm35RbkEJX0XlX4VSndF
 const teamPassword = 'WebEquipoGrosso2026';
 ---
 
-<BaseLayout title="Panel de Gestión · Leon Grosso" description="Panel iterativo de gestión de notas para el equipo de prensa.">
+<BaseLayout title="Acceso Equipo · Leon Grosso" description="Panel privado de gestión para el equipo de prensa.">
   
   <!-- PANTALLA 1: LOGIN SEGURO DE EQUIPO -->
   <section id="login-section" class="section" style="min-height: 70vh; display: flex; align-items: center;">
@@ -315,7 +315,6 @@ const teamPassword = 'WebEquipoGrosso2026';
           imageAsset = await uploadImage(imageFile);
         }
 
-        // Si es destacada, des-destacar las demás primero
         if (isFeatured) {
           await unsetOtherFeatured(docId);
         }
@@ -370,7 +369,6 @@ const teamPassword = 'WebEquipoGrosso2026';
       }
     });
 
-    // Des-destacar otras notas
     async function unsetOtherFeatured(currentId) {
       const featuredArticles = currentArticles.filter(a => a.featured && a._id !== currentId);
       if (featuredArticles.length === 0) return;
@@ -393,7 +391,6 @@ const teamPassword = 'WebEquipoGrosso2026';
       });
     }
 
-    // Cargar la lista lateral de notas
     async function loadArticlesList() {
       const container = document.getElementById('articles-sidebar-list');
       const countBadge = document.getElementById('articles-count');
@@ -405,7 +402,9 @@ const teamPassword = 'WebEquipoGrosso2026';
       const url = `https://${projectId}.api.sanity.io/v2024-01-01/data/query/${dataset}?query=${query}`;
 
       try {
-        const res = await fetch(url);
+        const res = await fetch(url, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
         const json = await res.json();
         currentArticles = json.result || [];
 
@@ -422,13 +421,13 @@ const teamPassword = 'WebEquipoGrosso2026';
           const starTitle = isFeatured ? 'Artículo destacado' : 'Hacer destacado';
           
           return `
-            <div style="background: var(--soft-bg); padding: 0.85rem; border: 1px solid ${isFeatured ? 'var(--leo-blue)' : 'var(--border)'}; display: flex; flex-direction: column; gap: 0.5rem; position: relative;">
+            <div style="background: var(--bg); padding: 0.85rem; border: 1px solid ${isFeatured ? 'var(--leo-blue)' : 'var(--border)'}; display: flex; flex-direction: column; gap: 0.5rem; position: relative;">
               <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem;">
                 <button onclick="toggleStar('${art._id}', ${!isFeatured})" title="${starTitle}" style="background: transparent; border: none; font-size: 1.2rem; cursor: pointer; padding: 0;">
                   ${starIcon}
                 </button>
                 <div style="flex: 1;">
-                  <h4 style="font-size: 0.9rem; font-weight: 700; margin: 0 0 0.2rem; line-height: 1.25;">${art.title}</h4>
+                  <h4 style="font-size: 0.88rem; font-weight: 700; margin: 0 0 0.2rem; line-height: 1.25;">${art.title}</h4>
                   <span style="font-size: 0.72rem; color: var(--dim-gray); display: block;">
                     ${art.publication || 'Medio'} · ${art.publishedAt || ''}
                   </span>
@@ -436,7 +435,7 @@ const teamPassword = 'WebEquipoGrosso2026';
               </div>
 
               <div style="display: flex; gap: 0.5rem; justify-content: flex-end; margin-top: 0.25rem; border-top: 1px solid var(--border); padding-top: 0.4rem;">
-                <button onclick="editArticle('${art._id}')" style="background: var(--bg); border: 1px solid var(--border); padding: 0.3rem 0.6rem; font-size: 0.72rem; font-weight: 700; cursor: pointer;">
+                <button onclick="editArticle('${art._id}')" style="background: var(--soft-bg); border: 1px solid var(--border); padding: 0.3rem 0.6rem; font-size: 0.72rem; font-weight: 700; cursor: pointer;">
                   ✏️ Editar
                 </button>
                 <button onclick="deleteArticle('${art._id}')" style="background: #dc3545; color: white; border: none; padding: 0.3rem 0.6rem; font-size: 0.72rem; font-weight: 700; cursor: pointer; border-radius: 2px;">
@@ -451,7 +450,6 @@ const teamPassword = 'WebEquipoGrosso2026';
       }
     }
 
-    // Toggle de Estrellita (Marcar como destacado con 1 clic)
     window.toggleStar = async function(id, setFeatured) {
       if (setFeatured) {
         await unsetOtherFeatured(id);
@@ -479,7 +477,6 @@ const teamPassword = 'WebEquipoGrosso2026';
       }
     };
 
-    // Editar artículo (llena el formulario de la izquierda con los datos)
     window.editArticle = function(id) {
       const art = currentArticles.find(a => a._id === id);
       if (!art) return;
@@ -497,7 +494,6 @@ const teamPassword = 'WebEquipoGrosso2026';
       document.getElementById('externalUrl').value = art.externalUrl || '';
       document.getElementById('featured').checked = Boolean(art.featured);
 
-      // Mostrar foto si la nota tiene
       if (art.image) {
         if (imagePreviewContainer) imagePreviewContainer.style.display = 'flex';
         if (imagePreview) {
@@ -518,7 +514,6 @@ const teamPassword = 'WebEquipoGrosso2026';
       window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    // Eliminar artículo
     window.deleteArticle = async function(id) {
       if (!confirm('¿Estás seguro de eliminar este artículo?')) return;
 
