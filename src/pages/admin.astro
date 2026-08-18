@@ -2,18 +2,20 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 const projectId = import.meta.env.PUBLIC_SANITY_PROJECT_ID || 'j4xtzihv';
 const dataset = import.meta.env.PUBLIC_SANITY_DATASET || 'production';
+const token = import.meta.env.SANITY_API_TOKEN || 'sk806I9qenm35RbkEJX0XlX4VSndFEu6DPy9fbgQEBLBfyXWygkFGNvH4QHa29WYYnMaEVvwwQhXOg6J9jcrJgn3X1IgOOOEEIRbjGBSzNwYok4M0GBSKFVvf8KUwKrXr0hRISeijyWToqHacho1TddhuRtyOBl6nUpoyB9L2VP8lL71JJFX';
+const teamPassword = 'WebEquipoGrosso2026';
 ---
 
 <BaseLayout title="Acceso Equipo · Leon Grosso" description="Panel privado de gestión para el equipo de prensa.">
   
-  <!-- PANTALLA 1: LOGIN SEGURO (Visible si no está autenticado) -->
+  <!-- PANTALLA 1: LOGIN CON CLAVE SIMPLE DE EQUIPO -->
   <section id="login-section" class="section" style="min-height: 70vh; display: flex; align-items: center;">
     <div class="container" style="max-width: 460px;">
       <div style="background: var(--soft-bg); padding: 2.5rem; border: 1px solid var(--border); text-align: center;">
         <span class="kicker">Área Privada</span>
         <h1 class="t-section" style="margin: 0.75rem 0 0.5rem; font-size: 1.75rem;">Acceso Equipo</h1>
         <p class="t-body" style="font-size: 0.875rem; color: var(--dim-gray); margin-bottom: 2rem;">
-          Ingresá la clave de autorización para administrar los artículos de la web.
+          Ingresá la contraseña del equipo para administrar las notas de la web.
         </p>
 
         <div id="login-alert" style="display: none; padding: 0.75rem; margin-bottom: 1.25rem; background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; font-size: 0.85rem; font-weight: 600;"></div>
@@ -23,7 +25,7 @@ const dataset = import.meta.env.PUBLIC_SANITY_DATASET || 'production';
             type="password"
             id="password-input"
             required
-            placeholder="Clave de acceso..."
+            placeholder="Contraseña del equipo..."
             style="width: 100%; padding: 0.9rem 1rem; border: 1px solid var(--border); font-size: 1rem; background: var(--bg); color: var(--text);"
           />
           <button
@@ -37,7 +39,7 @@ const dataset = import.meta.env.PUBLIC_SANITY_DATASET || 'production';
     </div>
   </section>
 
-  <!-- PANTALLA 2: FORMULARIO DE CARGA (Visible solo cuando la clave es correcta) -->
+  <!-- PANTALLA 2: FORMULARIO DE CARGA SIMPLIFICADO -->
   <div id="admin-panel-content" style="display: none;">
     <section class="page-hero">
       <div class="container" style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem;">
@@ -131,8 +133,8 @@ const dataset = import.meta.env.PUBLIC_SANITY_DATASET || 'production';
     </section>
   </div>
 
-  <script define:vars={{ projectId, dataset }}>
-    const AUTH_KEY = 'sanity_team_write_token';
+  <script define:vars={{ projectId, dataset, token, teamPassword }}>
+    const AUTH_SESSION_KEY = 'leo_admin_session';
     const loginSection = document.getElementById('login-section');
     const adminContent = document.getElementById('admin-panel-content');
     const loginForm = document.getElementById('login-form');
@@ -140,32 +142,13 @@ const dataset = import.meta.env.PUBLIC_SANITY_DATASET || 'production';
     const loginAlert = document.getElementById('login-alert');
     const logoutBtn = document.getElementById('logout-btn');
 
-    let currentToken = localStorage.getItem(AUTH_KEY) || '';
-
-    // Validar si un token funciona contra Sanity
-    async function testToken(token) {
-      if (!token) return false;
-      try {
-        const url = `https://${projectId}.api.sanity.io/v2024-01-01/data/query/${dataset}?query=count(*[_type == "article"])`;
-        const res = await fetch(url, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        return res.ok;
-      } catch {
-        return false;
+    function checkAuth() {
+      const session = localStorage.getItem(AUTH_SESSION_KEY);
+      if (session === 'authenticated') {
+        showAdminPanel();
+      } else {
+        showLoginScreen();
       }
-    }
-
-    // Inicializar vista según estado de autenticación
-    async function initAuth() {
-      if (currentToken) {
-        const isValid = await testToken(currentToken);
-        if (isValid) {
-          showAdminPanel();
-          return;
-        }
-      }
-      showLoginScreen();
     }
 
     function showLoginScreen() {
@@ -179,35 +162,28 @@ const dataset = import.meta.env.PUBLIC_SANITY_DATASET || 'production';
       loadArticlesList();
     }
 
-    // Login Form Submit
-    loginForm?.addEventListener('submit', async (e) => {
+    // Submit de Login
+    loginForm?.addEventListener('submit', (e) => {
       e.preventDefault();
-      const enteredToken = passwordInput.value.trim();
-      if (!enteredToken) return;
-
-      if (loginAlert) loginAlert.style.display = 'none';
-
-      const isValid = await testToken(enteredToken);
-      if (isValid) {
-        currentToken = enteredToken;
-        localStorage.setItem(AUTH_KEY, currentToken);
+      const enteredPassword = passwordInput.value.trim();
+      if (enteredPassword === teamPassword) {
+        localStorage.setItem(AUTH_SESSION_KEY, 'authenticated');
         showAdminPanel();
       } else {
         if (loginAlert) {
           loginAlert.style.display = 'block';
-          loginAlert.textContent = '❌ Clave incorrecta o no autorizada. Verificá tu clave de equipo.';
+          loginAlert.textContent = '❌ Contraseña incorrecta. Verificá la clave del equipo.';
         }
       }
     });
 
     // Logout
     logoutBtn?.addEventListener('click', () => {
-      localStorage.removeItem(AUTH_KEY);
-      currentToken = '';
+      localStorage.removeItem(AUTH_SESSION_KEY);
       showLoginScreen();
     });
 
-    // Formulario de publicación
+    // Formulario de carga
     const dateInput = document.getElementById('publishedAt');
     if (dateInput) dateInput.value = new Date().toISOString().split('T')[0];
 
@@ -230,7 +206,7 @@ const dataset = import.meta.env.PUBLIC_SANITY_DATASET || 'production';
       const res = await fetch(uploadUrl, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${currentToken}`,
+          'Authorization': `Bearer ${token}`,
           'Content-Type': file.type
         },
         body: file
@@ -245,10 +221,6 @@ const dataset = import.meta.env.PUBLIC_SANITY_DATASET || 'production';
 
     articleForm?.addEventListener('submit', async (e) => {
       e.preventDefault();
-      if (!currentToken) {
-        showLoginScreen();
-        return;
-      }
 
       submitBtn.disabled = true;
       submitBtn.textContent = '⏳ Publicando...';
@@ -284,7 +256,7 @@ const dataset = import.meta.env.PUBLIC_SANITY_DATASET || 'production';
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${currentToken}`
+            'Authorization': `Bearer ${token}`
           },
           body: JSON.stringify({ mutations: [{ createOrReplace: doc }] })
         });
@@ -296,7 +268,7 @@ const dataset = import.meta.env.PUBLIC_SANITY_DATASET || 'production';
           loadArticlesList();
         } else {
           const errData = await res.json();
-          showAlert(`❌ Error al publicar: ${errData.error?.description || 'Verifica la clave de autorización.'}`, false);
+          showAlert(`❌ Error al publicar: ${errData.error?.description || 'Ocurrió un inconveniente al guardar.'}`, false);
         }
       } catch (err) {
         showAlert(`❌ Error: ${err.message}`, false);
@@ -347,7 +319,7 @@ const dataset = import.meta.env.PUBLIC_SANITY_DATASET || 'production';
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${currentToken}`
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({ mutations: [{ delete: { id } }] })
       });
@@ -360,6 +332,6 @@ const dataset = import.meta.env.PUBLIC_SANITY_DATASET || 'production';
       }
     };
 
-    initAuth();
+    checkAuth();
   </script>
 </BaseLayout>
