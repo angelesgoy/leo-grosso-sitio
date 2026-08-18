@@ -4,120 +4,214 @@ const projectId = import.meta.env.PUBLIC_SANITY_PROJECT_ID || 'j4xtzihv';
 const dataset = import.meta.env.PUBLIC_SANITY_DATASET || 'production';
 ---
 
-<BaseLayout title="Cargar Artículo · Leon Grosso" description="Panel de carga rápida de artículos para el equipo.">
-  <section class="page-hero">
-    <div class="container">
-      <span class="kicker">Gestión de Prensa</span>
-      <h1 class="t-page page-title">Publicar Artículo<span class="title-dot">.</span></h1>
-      <p class="page-hero-lede">Formulario simplificado para cargar o despublicar notas sin salir de la web.</p>
-    </div>
-  </section>
+<BaseLayout title="Acceso Equipo · Leon Grosso" description="Panel privado de gestión para el equipo de prensa.">
+  
+  <!-- PANTALLA 1: LOGIN SEGURO (Visible si no está autenticado) -->
+  <section id="login-section" class="section" style="min-height: 70vh; display: flex; align-items: center;">
+    <div class="container" style="max-width: 460px;">
+      <div style="background: var(--soft-bg); padding: 2.5rem; border: 1px solid var(--border); text-align: center;">
+        <span class="kicker">Área Privada</span>
+        <h1 class="t-section" style="margin: 0.75rem 0 0.5rem; font-size: 1.75rem;">Acceso Equipo</h1>
+        <p class="t-body" style="font-size: 0.875rem; color: var(--dim-gray); margin-bottom: 2rem;">
+          Ingresá la clave de autorización para administrar los artículos de la web.
+        </p>
 
-  <section class="section">
-    <div class="container" style="max-width: 800px;">
-      
-      <!-- Mensaje de estado -->
-      <div id="status-alert" style="display: none; padding: 1rem 1.5rem; margin-bottom: 2rem; border-radius: 4px; font-weight: 600;"></div>
+        <div id="login-alert" style="display: none; padding: 0.75rem; margin-bottom: 1.25rem; background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; font-size: 0.85rem; font-weight: 600;"></div>
 
-      <!-- Formulario de carga rápida -->
-      <form id="article-form" style="display: flex; flex-direction: column; gap: 1.5rem; background: var(--soft-bg); padding: 2rem; border: 1px solid var(--border);">
-        
-        <div>
-          <label style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; color: var(--text);">
-            Título del artículo *
-          </label>
-          <input type="text" id="title" required placeholder="Ej: A las armas las carga el narco" style="width: 100%; padding: 0.85rem 1rem; border: 1px solid var(--border); font-size: 1rem; background: var(--bg); color: var(--text);" />
-        </div>
-
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
-          <div>
-            <label style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; color: var(--text);">
-              Medio / Diario *
-            </label>
-            <input type="text" id="publication" required value="El Cohete a la Luna" style="width: 100%; padding: 0.85rem 1rem; border: 1px solid var(--border); font-size: 1rem; background: var(--bg); color: var(--text);" />
-          </div>
-          <div>
-            <label style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; color: var(--text);">
-              Fecha de publicación *
-            </label>
-            <input type="date" id="publishedAt" required style="width: 100%; padding: 0.85rem 1rem; border: 1px solid var(--border); font-size: 1rem; background: var(--bg); color: var(--text);" />
-          </div>
-        </div>
-
-        <div>
-          <label style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; color: var(--text);">
-            Autor / Coautores *
-          </label>
-          <input type="text" id="authors" required value="Leonardo Grosso" placeholder="Ej: Leonardo Grosso + Vanina Pasik" style="width: 100%; padding: 0.85rem 1rem; border: 1px solid var(--border); font-size: 1rem; background: var(--bg); color: var(--text);" />
-        </div>
-
-        <div>
-          <label style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; color: var(--text);">
-            Bajada / Resumen *
-          </label>
-          <textarea id="excerpt" rows="3" required placeholder="Breve resumen del artículo que se mostrará en el listado..." style="width: 100%; padding: 0.85rem 1rem; border: 1px solid var(--border); font-size: 1rem; background: var(--bg); color: var(--text); resize: vertical;"></textarea>
-        </div>
-
-        <div>
-          <label style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; color: var(--text);">
-            URL externa a la nota original *
-          </label>
-          <input type="url" id="externalUrl" required placeholder="https://www.elcohetealaluna.com/..." style="width: 100%; padding: 0.85rem 1rem; border: 1px solid var(--border); font-size: 1rem; background: var(--bg); color: var(--text);" />
-        </div>
-
-        <div>
-          <label style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; color: var(--text);">
-            Imagen del artículo (Opcional)
-          </label>
-          <input type="file" id="imageFile" accept="image/*" style="width: 100%; padding: 0.5rem; border: 1px dashed var(--border); background: var(--bg);" />
-        </div>
-
-        <div style="display: flex; align-items: center; gap: 0.75rem; margin-top: 0.5rem;">
-          <input type="checkbox" id="featured" style="width: 20px; height: 20px; accent-color: var(--leo-blue);" />
-          <label for="featured" style="font-size: 0.9375rem; font-weight: 600; cursor: pointer;">
-            ⭐ Marcar como artículo destacado (aparecerá arriba en portada y en Escribe)
-          </label>
-        </div>
-
-        <div style="margin-top: 1rem; padding-top: 1.5rem; border-top: 1px solid var(--border);">
-          <label style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; color: var(--text);">
-            Clave de autorización del equipo *
-          </label>
-          <input type="password" id="apiToken" required placeholder="Pegá aquí el Token de escritura de Sanity (sk...)" style="width: 100%; padding: 0.85rem 1rem; border: 1px solid var(--border); font-size: 1rem; background: var(--bg); color: var(--text);" />
-          <p style="font-size: 0.75rem; color: var(--dim-gray); margin-top: 0.35rem;">
-            Esta clave se guarda automáticamente en tu navegador para que no tengas que escribirla cada vez.
-          </p>
-        </div>
-
-        <button type="submit" id="submit-btn" style="padding: 1.15rem 2rem; background: var(--leo-blue); color: #000; font-weight: 800; border: none; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.05em; cursor: pointer; transition: var(--t); margin-top: 1rem;">
-          🚀 Publicar Artículo en la Web
-        </button>
-      </form>
-
-      <!-- Lista de artículos publicados -->
-      <div style="margin-top: 4rem;">
-        <h2 class="t-h3" style="margin-bottom: 1.5rem;">Artículos Publicados</h2>
-        <div id="articles-manage-list">Cargando artículos...</div>
+        <form id="login-form" style="display: flex; flex-direction: column; gap: 1rem;">
+          <input
+            type="password"
+            id="password-input"
+            required
+            placeholder="Clave de acceso..."
+            style="width: 100%; padding: 0.9rem 1rem; border: 1px solid var(--border); font-size: 1rem; background: var(--bg); color: var(--text);"
+          />
+          <button
+            type="submit"
+            style="padding: 1rem; background: var(--leo-blue); color: #000; font-weight: 800; border: none; font-size: 0.9375rem; text-transform: uppercase; letter-spacing: 0.05em; cursor: pointer;"
+          >
+            🔒 Entrar al Panel
+          </button>
+        </form>
       </div>
-
     </div>
   </section>
+
+  <!-- PANTALLA 2: FORMULARIO DE CARGA (Visible solo cuando la clave es correcta) -->
+  <div id="admin-panel-content" style="display: none;">
+    <section class="page-hero">
+      <div class="container" style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <span class="kicker">Gestión de Prensa</span>
+          <h1 class="t-page page-title">Publicar Artículo<span class="title-dot">.</span></h1>
+          <p class="page-hero-lede">Formulario simplificado para cargar o eliminar notas de la web.</p>
+        </div>
+        <button id="logout-btn" style="padding: 0.5rem 1rem; background: transparent; border: 1px solid var(--border); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; cursor: pointer; color: var(--dim-gray);">
+          🔒 Cerrar sesión
+        </button>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container" style="max-width: 800px;">
+        
+        <div id="status-alert" style="display: none; padding: 1rem 1.5rem; margin-bottom: 2rem; border-radius: 4px; font-weight: 600;"></div>
+
+        <form id="article-form" style="display: flex; flex-direction: column; gap: 1.5rem; background: var(--soft-bg); padding: 2rem; border: 1px solid var(--border);">
+          
+          <div>
+            <label style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; color: var(--text);">
+              Título del artículo *
+            </label>
+            <input type="text" id="title" required placeholder="Ej: A las armas las carga el narco" style="width: 100%; padding: 0.85rem 1rem; border: 1px solid var(--border); font-size: 1rem; background: var(--bg); color: var(--text);" />
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+            <div>
+              <label style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; color: var(--text);">
+                Medio / Diario *
+              </label>
+              <input type="text" id="publication" required value="El Cohete a la Luna" style="width: 100%; padding: 0.85rem 1rem; border: 1px solid var(--border); font-size: 1rem; background: var(--bg); color: var(--text);" />
+            </div>
+            <div>
+              <label style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; color: var(--text);">
+                Fecha de publicación *
+              </label>
+              <input type="date" id="publishedAt" required style="width: 100%; padding: 0.85rem 1rem; border: 1px solid var(--border); font-size: 1rem; background: var(--bg); color: var(--text);" />
+            </div>
+          </div>
+
+          <div>
+            <label style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; color: var(--text);">
+              Autor / Coautores *
+            </label>
+            <input type="text" id="authors" required value="Leonardo Grosso" placeholder="Ej: Leonardo Grosso + Vanina Pasik" style="width: 100%; padding: 0.85rem 1rem; border: 1px solid var(--border); font-size: 1rem; background: var(--bg); color: var(--text);" />
+          </div>
+
+          <div>
+            <label style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; color: var(--text);">
+              Bajada / Resumen *
+            </label>
+            <textarea id="excerpt" rows="3" required placeholder="Breve resumen del artículo que se mostrará en el listado..." style="width: 100%; padding: 0.85rem 1rem; border: 1px solid var(--border); font-size: 1rem; background: var(--bg); color: var(--text); resize: vertical;"></textarea>
+          </div>
+
+          <div>
+            <label style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; color: var(--text);">
+              URL externa a la nota original *
+            </label>
+            <input type="url" id="externalUrl" required placeholder="https://www.elcohetealaluna.com/..." style="width: 100%; padding: 0.85rem 1rem; border: 1px solid var(--border); font-size: 1rem; background: var(--bg); color: var(--text);" />
+          </div>
+
+          <div>
+            <label style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; color: var(--text);">
+              Imagen del artículo (Opcional)
+            </label>
+            <input type="file" id="imageFile" accept="image/*" style="width: 100%; padding: 0.5rem; border: 1px dashed var(--border); background: var(--bg);" />
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 0.75rem; margin-top: 0.5rem;">
+            <input type="checkbox" id="featured" style="width: 20px; height: 20px; accent-color: var(--leo-blue);" />
+            <label for="featured" style="font-size: 0.9375rem; font-weight: 600; cursor: pointer;">
+              ⭐ Marcar como artículo destacado (aparecerá arriba en portada y en Escribe)
+            </label>
+          </div>
+
+          <button type="submit" id="submit-btn" style="padding: 1.15rem 2rem; background: var(--leo-blue); color: #000; font-weight: 800; border: none; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.05em; cursor: pointer; transition: var(--t); margin-top: 1rem;">
+            🚀 Publicar Artículo en la Web
+          </button>
+        </form>
+
+        <!-- Lista de artículos publicados -->
+        <div style="margin-top: 4rem;">
+          <h2 class="t-h3" style="margin-bottom: 1.5rem;">Artículos Publicados</h2>
+          <div id="articles-manage-list">Cargando artículos...</div>
+        </div>
+
+      </div>
+    </section>
+  </div>
 
   <script define:vars={{ projectId, dataset }}>
-    // Autocompletar la fecha de hoy por defecto
+    const AUTH_KEY = 'sanity_team_write_token';
+    const loginSection = document.getElementById('login-section');
+    const adminContent = document.getElementById('admin-panel-content');
+    const loginForm = document.getElementById('login-form');
+    const passwordInput = document.getElementById('password-input');
+    const loginAlert = document.getElementById('login-alert');
+    const logoutBtn = document.getElementById('logout-btn');
+
+    let currentToken = localStorage.getItem(AUTH_KEY) || '';
+
+    // Validar si un token funciona contra Sanity
+    async function testToken(token) {
+      if (!token) return false;
+      try {
+        const url = `https://${projectId}.api.sanity.io/v2024-01-01/data/query/${dataset}?query=count(*[_type == "article"])`;
+        const res = await fetch(url, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        return res.ok;
+      } catch {
+        return false;
+      }
+    }
+
+    // Inicializar vista según estado de autenticación
+    async function initAuth() {
+      if (currentToken) {
+        const isValid = await testToken(currentToken);
+        if (isValid) {
+          showAdminPanel();
+          return;
+        }
+      }
+      showLoginScreen();
+    }
+
+    function showLoginScreen() {
+      if (loginSection) loginSection.style.display = 'flex';
+      if (adminContent) adminContent.style.display = 'none';
+    }
+
+    function showAdminPanel() {
+      if (loginSection) loginSection.style.display = 'none';
+      if (adminContent) adminContent.style.display = 'block';
+      loadArticlesList();
+    }
+
+    // Login Form Submit
+    loginForm?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const enteredToken = passwordInput.value.trim();
+      if (!enteredToken) return;
+
+      if (loginAlert) loginAlert.style.display = 'none';
+
+      const isValid = await testToken(enteredToken);
+      if (isValid) {
+        currentToken = enteredToken;
+        localStorage.setItem(AUTH_KEY, currentToken);
+        showAdminPanel();
+      } else {
+        if (loginAlert) {
+          loginAlert.style.display = 'block';
+          loginAlert.textContent = '❌ Clave incorrecta o no autorizada. Verificá tu clave de equipo.';
+        }
+      }
+    });
+
+    // Logout
+    logoutBtn?.addEventListener('click', () => {
+      localStorage.removeItem(AUTH_KEY);
+      currentToken = '';
+      showLoginScreen();
+    });
+
+    // Formulario de publicación
     const dateInput = document.getElementById('publishedAt');
-    if (dateInput) {
-      dateInput.value = new Date().toISOString().split('T')[0];
-    }
+    if (dateInput) dateInput.value = new Date().toISOString().split('T')[0];
 
-    // Cargar el token guardado si existe
-    const tokenInput = document.getElementById('apiToken');
-    const savedToken = localStorage.getItem('sanity_write_token');
-    if (savedToken && tokenInput) {
-      tokenInput.value = savedToken;
-    }
-
-    const form = document.getElementById('article-form');
+    const articleForm = document.getElementById('article-form');
     const statusAlert = document.getElementById('status-alert');
     const submitBtn = document.getElementById('submit-btn');
 
@@ -130,14 +224,13 @@ const dataset = import.meta.env.PUBLIC_SANITY_DATASET || 'production';
       statusAlert.textContent = msg;
     }
 
-    // Subir imagen a Sanity (si hay archivo)
-    async function uploadImage(file, token) {
+    async function uploadImage(file) {
       if (!file) return null;
       const uploadUrl = `https://${projectId}.api.sanity.io/v2024-01-01/assets/images/${dataset}`;
       const res = await fetch(uploadUrl, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${token}`,
+          'Authorization': `Bearer ${currentToken}`,
           'Content-Type': file.type
         },
         body: file
@@ -146,24 +239,16 @@ const dataset = import.meta.env.PUBLIC_SANITY_DATASET || 'production';
       const data = await res.json();
       return {
         _type: 'image',
-        asset: {
-          _type: 'reference',
-          _ref: data.document._id
-        }
+        asset: { _type: 'reference', _ref: data.document._id }
       };
     }
 
-    // Guardar artículo
-    form?.addEventListener('submit', async (e) => {
+    articleForm?.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const token = tokenInput?.value?.trim();
-      if (!token) {
-        showAlert('Por favor ingresá la Clave de autorización (Token de Sanity)', false);
+      if (!currentToken) {
+        showLoginScreen();
         return;
       }
-
-      // Guardar token localmente para comodidad del usuario
-      localStorage.setItem('sanity_write_token', token);
 
       submitBtn.disabled = true;
       submitBtn.textContent = '⏳ Publicando...';
@@ -176,7 +261,7 @@ const dataset = import.meta.env.PUBLIC_SANITY_DATASET || 'production';
         let imageAsset = null;
 
         if (imageFile) {
-          imageAsset = await uploadImage(imageFile, token);
+          imageAsset = await uploadImage(imageFile);
         }
 
         const doc = {
@@ -199,17 +284,16 @@ const dataset = import.meta.env.PUBLIC_SANITY_DATASET || 'production';
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${currentToken}`
           },
           body: JSON.stringify({ mutations: [{ createOrReplace: doc }] })
         });
 
         if (res.ok) {
           showAlert('✅ ¡Artículo publicado exitosamente! La web se actualizará en unos segundos.', true);
-          form.reset();
+          articleForm.reset();
           if (dateInput) dateInput.value = new Date().toISOString().split('T')[0];
-          if (tokenInput) tokenInput.value = token;
-          loadArticlesList(token);
+          loadArticlesList();
         } else {
           const errData = await res.json();
           showAlert(`❌ Error al publicar: ${errData.error?.description || 'Verifica la clave de autorización.'}`, false);
@@ -222,8 +306,7 @@ const dataset = import.meta.env.PUBLIC_SANITY_DATASET || 'production';
       }
     });
 
-    // Cargar listado para administrar
-    async function loadArticlesList(token) {
+    async function loadArticlesList() {
       const container = document.getElementById('articles-manage-list');
       if (!container) return;
 
@@ -257,11 +340,6 @@ const dataset = import.meta.env.PUBLIC_SANITY_DATASET || 'production';
     }
 
     window.deleteArticle = async function(id) {
-      const token = tokenInput?.value?.trim();
-      if (!token) {
-        alert('Ingresá la clave de autorización para eliminar');
-        return;
-      }
       if (!confirm('¿Estás seguro de eliminar este artículo?')) return;
 
       const mutateUrl = `https://${projectId}.api.sanity.io/v2024-01-01/data/mutate/${dataset}`;
@@ -269,19 +347,19 @@ const dataset = import.meta.env.PUBLIC_SANITY_DATASET || 'production';
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          'Authorization': `Bearer ${currentToken}`
         },
         body: JSON.stringify({ mutations: [{ delete: { id } }] })
       });
 
       if (res.ok) {
         alert('Artículo eliminado.');
-        loadArticlesList(token);
+        loadArticlesList();
       } else {
         alert('Error al eliminar el artículo.');
       }
     };
 
-    loadArticlesList(savedToken || '');
+    initAuth();
   </script>
 </BaseLayout>
