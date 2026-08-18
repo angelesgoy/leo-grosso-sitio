@@ -21,20 +21,24 @@ const dataset = import.meta.env.PUBLIC_SANITY_DATASET || 'production';
     </style>
   </head>
   <body>
-    <div id="sanity-studio"></div>
-    <script type="module" is:inline define:vars={{ projectId, dataset }}>
+    <div id="sanity-studio" data-project-id={projectId} data-dataset={dataset}></div>
+    <script type="module">
       import { renderStudio, defineConfig, defineType } from 'https://esm.sh/sanity@3.76.0/studio?bundle-all';
+
+      const container = document.getElementById('sanity-studio');
+      const projectId = container?.dataset.projectId || 'j4xtzihv';
+      const dataset = container?.dataset.dataset || 'production';
 
       const articleType = defineType({
         name: 'article',
         title: 'Artículo',
         type: 'document',
         fields: [
-          { name: 'title', title: 'Título', type: 'string', validation: (Rule) => Rule.required() },
-          { name: 'slug', title: 'Slug (URL id)', type: 'slug', options: { source: 'title' }, validation: (Rule) => Rule.required() },
+          { name: 'title', title: 'Título', type: 'string' },
+          { name: 'slug', title: 'Slug (URL id)', type: 'slug', options: { source: 'title' } },
           { name: 'authors', title: 'Autor / Coautores', type: 'string', initialValue: 'Leonardo Grosso' },
           { name: 'publication', title: 'Medio / Publicación', type: 'string', initialValue: 'El Cohete a la Luna' },
-          { name: 'publishedAt', title: 'Fecha de Publicación', type: 'date', validation: (Rule) => Rule.required() },
+          { name: 'publishedAt', title: 'Fecha de Publicación', type: 'date' },
           { name: 'excerpt', title: 'Bajada / Resumen', type: 'text', rows: 3 },
           {
             name: 'image',
@@ -43,7 +47,7 @@ const dataset = import.meta.env.PUBLIC_SANITY_DATASET || 'production';
             options: { hotspot: true },
             fields: [{ name: 'alt', type: 'string', title: 'Texto alternativo' }]
           },
-          { name: 'externalUrl', title: 'URL externa al artículo', type: 'url', validation: (Rule) => Rule.required() },
+          { name: 'externalUrl', title: 'URL externa al artículo', type: 'url' },
           { name: 'featured', title: '¿Destacar en la portada?', type: 'boolean', initialValue: false },
           {
             name: 'status',
@@ -73,7 +77,9 @@ const dataset = import.meta.env.PUBLIC_SANITY_DATASET || 'production';
         }
       });
 
-      renderStudio(document.getElementById('sanity-studio'), config);
+      if (container) {
+        renderStudio(container, config);
+      }
     </script>
   </body>
 </html>

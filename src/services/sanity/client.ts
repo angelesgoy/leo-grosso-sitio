@@ -1,9 +1,9 @@
 import { data as fallbackData } from '../../data/content.js';
 import type { Article } from '../../types/content.ts';
 
-const PROJECT_ID = import.meta.env.PUBLIC_SANITY_PROJECT_ID || process.env.PUBLIC_SANITY_PROJECT_ID || process.env.SANITY_PROJECT_ID || '';
-const DATASET = import.meta.env.PUBLIC_SANITY_DATASET || process.env.PUBLIC_SANITY_DATASET || process.env.SANITY_DATASET || 'production';
-const API_VERSION = import.meta.env.PUBLIC_SANITY_API_VERSION || process.env.PUBLIC_SANITY_API_VERSION || 'v2024-01-01';
+const PROJECT_ID = (import.meta.env?.PUBLIC_SANITY_PROJECT_ID as string) || 'j4xtzihv';
+const DATASET = (import.meta.env?.PUBLIC_SANITY_DATASET as string) || 'production';
+const API_VERSION = (import.meta.env?.PUBLIC_SANITY_API_VERSION as string) || 'v2024-01-01';
 
 /**
  * Convierte una fecha ISO (YYYY-MM-DD) al formato editorial de la web (DD/MM/YYYY).
@@ -28,7 +28,6 @@ export function buildSanityImageUrl(image: any): { url?: string; alt?: string } 
   const ref = image?.asset?._ref || image?.asset?._id;
   if (!ref || !PROJECT_ID) return {};
 
-  // Formato _ref: image-3a87d6...-1920x1080-webp
   const pattern = /^image-([a-fA-F0-9]+)-(\d+x\d+)-(\w+)$/;
   const match = ref.match(pattern);
 
@@ -73,7 +72,6 @@ export async function getArticlesFromSanity(): Promise<Article[]> {
     });
 
     if (!res.ok) {
-      console.warn(`[Sanity] Respuesta HTTP ${res.status}. Usando fallback local.`);
       return fallbackData.articles as Article[];
     }
 
@@ -102,7 +100,6 @@ export async function getArticlesFromSanity(): Promise<Article[]> {
       };
     });
   } catch (err) {
-    console.warn('[Sanity] Error al conectar con Sanity API. Usando fallback local.', err);
     return fallbackData.articles as Article[];
   }
 }
