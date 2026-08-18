@@ -1,31 +1,287 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-const projectId = 'j4xtzihv';
-const sanityStudioUrl = `https://manage.sanity.io/projects/${projectId}`;
+const projectId = import.meta.env.PUBLIC_SANITY_PROJECT_ID || 'j4xtzihv';
+const dataset = import.meta.env.PUBLIC_SANITY_DATASET || 'production';
 ---
 
-<BaseLayout title="Administración · Leon Grosso" description="Panel de gestión de contenidos y artículos.">
-  <section class="section" style="min-height: 70vh; display: flex; align-items: center;">
-    <div class="container" style="max-width: 600px; text-align: center;">
-      <span class="kicker">Gestión de Contenidos</span>
-      <h1 class="t-section" style="margin: 1rem 0;">Panel de Control</h1>
-      <p class="t-body" style="margin-bottom: 2rem; color: var(--dim-gray);">
-        Ingresá al panel oficial de Sanity para crear, editar, cargar imágenes y publicar artículos en la web.
-      </p>
-
-      <a
-        href={sanityStudioUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="cookie-btn cookie-btn-primary"
-        style="display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 1rem 2rem; font-size: 1rem; text-decoration: none;"
-      >
-        Ingresar al Sanity Studio ↗
-      </a>
-
-      <div style="margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); font-size: 0.8125rem; color: var(--dim-gray);">
-        Project ID: <code>{projectId}</code> · Dataset: <code>production</code>
-      </div>
+<BaseLayout title="Cargar Artículo · Leon Grosso" description="Panel de carga rápida de artículos para el equipo.">
+  <section class="page-hero">
+    <div class="container">
+      <span class="kicker">Gestión de Prensa</span>
+      <h1 class="t-page page-title">Publicar Artículo<span class="title-dot">.</span></h1>
+      <p class="page-hero-lede">Formulario simplificado para cargar o despublicar notas sin salir de la web.</p>
     </div>
   </section>
+
+  <section class="section">
+    <div class="container" style="max-width: 800px;">
+      
+      <!-- Mensaje de estado -->
+      <div id="status-alert" style="display: none; padding: 1rem 1.5rem; margin-bottom: 2rem; border-radius: 4px; font-weight: 600;"></div>
+
+      <!-- Formulario de carga rápida -->
+      <form id="article-form" style="display: flex; flex-direction: column; gap: 1.5rem; background: var(--soft-bg); padding: 2rem; border: 1px solid var(--border);">
+        
+        <div>
+          <label style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; color: var(--text);">
+            Título del artículo *
+          </label>
+          <input type="text" id="title" required placeholder="Ej: A las armas las carga el narco" style="width: 100%; padding: 0.85rem 1rem; border: 1px solid var(--border); font-size: 1rem; background: var(--bg); color: var(--text);" />
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+          <div>
+            <label style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; color: var(--text);">
+              Medio / Diario *
+            </label>
+            <input type="text" id="publication" required value="El Cohete a la Luna" style="width: 100%; padding: 0.85rem 1rem; border: 1px solid var(--border); font-size: 1rem; background: var(--bg); color: var(--text);" />
+          </div>
+          <div>
+            <label style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; color: var(--text);">
+              Fecha de publicación *
+            </label>
+            <input type="date" id="publishedAt" required style="width: 100%; padding: 0.85rem 1rem; border: 1px solid var(--border); font-size: 1rem; background: var(--bg); color: var(--text);" />
+          </div>
+        </div>
+
+        <div>
+          <label style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; color: var(--text);">
+            Autor / Coautores *
+          </label>
+          <input type="text" id="authors" required value="Leonardo Grosso" placeholder="Ej: Leonardo Grosso + Vanina Pasik" style="width: 100%; padding: 0.85rem 1rem; border: 1px solid var(--border); font-size: 1rem; background: var(--bg); color: var(--text);" />
+        </div>
+
+        <div>
+          <label style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; color: var(--text);">
+            Bajada / Resumen *
+          </label>
+          <textarea id="excerpt" rows="3" required placeholder="Breve resumen del artículo que se mostrará en el listado..." style="width: 100%; padding: 0.85rem 1rem; border: 1px solid var(--border); font-size: 1rem; background: var(--bg); color: var(--text); resize: vertical;"></textarea>
+        </div>
+
+        <div>
+          <label style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; color: var(--text);">
+            URL externa a la nota original *
+          </label>
+          <input type="url" id="externalUrl" required placeholder="https://www.elcohetealaluna.com/..." style="width: 100%; padding: 0.85rem 1rem; border: 1px solid var(--border); font-size: 1rem; background: var(--bg); color: var(--text);" />
+        </div>
+
+        <div>
+          <label style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; color: var(--text);">
+            Imagen del artículo (Opcional)
+          </label>
+          <input type="file" id="imageFile" accept="image/*" style="width: 100%; padding: 0.5rem; border: 1px dashed var(--border); background: var(--bg);" />
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 0.75rem; margin-top: 0.5rem;">
+          <input type="checkbox" id="featured" style="width: 20px; height: 20px; accent-color: var(--leo-blue);" />
+          <label for="featured" style="font-size: 0.9375rem; font-weight: 600; cursor: pointer;">
+            ⭐ Marcar como artículo destacado (aparecerá arriba en portada y en Escribe)
+          </label>
+        </div>
+
+        <div style="margin-top: 1rem; padding-top: 1.5rem; border-top: 1px solid var(--border);">
+          <label style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; color: var(--text);">
+            Clave de autorización del equipo *
+          </label>
+          <input type="password" id="apiToken" required placeholder="Pegá aquí el Token de escritura de Sanity (sk...)" style="width: 100%; padding: 0.85rem 1rem; border: 1px solid var(--border); font-size: 1rem; background: var(--bg); color: var(--text);" />
+          <p style="font-size: 0.75rem; color: var(--dim-gray); margin-top: 0.35rem;">
+            Esta clave se guarda automáticamente en tu navegador para que no tengas que escribirla cada vez.
+          </p>
+        </div>
+
+        <button type="submit" id="submit-btn" style="padding: 1.15rem 2rem; background: var(--leo-blue); color: #000; font-weight: 800; border: none; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.05em; cursor: pointer; transition: var(--t); margin-top: 1rem;">
+          🚀 Publicar Artículo en la Web
+        </button>
+      </form>
+
+      <!-- Lista de artículos publicados -->
+      <div style="margin-top: 4rem;">
+        <h2 class="t-h3" style="margin-bottom: 1.5rem;">Artículos Publicados</h2>
+        <div id="articles-manage-list">Cargando artículos...</div>
+      </div>
+
+    </div>
+  </section>
+
+  <script define:vars={{ projectId, dataset }}>
+    // Autocompletar la fecha de hoy por defecto
+    const dateInput = document.getElementById('publishedAt');
+    if (dateInput) {
+      dateInput.value = new Date().toISOString().split('T')[0];
+    }
+
+    // Cargar el token guardado si existe
+    const tokenInput = document.getElementById('apiToken');
+    const savedToken = localStorage.getItem('sanity_write_token');
+    if (savedToken && tokenInput) {
+      tokenInput.value = savedToken;
+    }
+
+    const form = document.getElementById('article-form');
+    const statusAlert = document.getElementById('status-alert');
+    const submitBtn = document.getElementById('submit-btn');
+
+    function showAlert(msg, isSuccess) {
+      if (!statusAlert) return;
+      statusAlert.style.display = 'block';
+      statusAlert.style.background = isSuccess ? '#d4edda' : '#f8d7da';
+      statusAlert.style.color = isSuccess ? '#155724' : '#721c24';
+      statusAlert.style.border = isSuccess ? '1px solid #c3e6cb' : '1px solid #f5c6cb';
+      statusAlert.textContent = msg;
+    }
+
+    // Subir imagen a Sanity (si hay archivo)
+    async function uploadImage(file, token) {
+      if (!file) return null;
+      const uploadUrl = `https://${projectId}.api.sanity.io/v2024-01-01/assets/images/${dataset}`;
+      const res = await fetch(uploadUrl, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': file.type
+        },
+        body: file
+      });
+      if (!res.ok) throw new Error('Error al subir la imagen');
+      const data = await res.json();
+      return {
+        _type: 'image',
+        asset: {
+          _type: 'reference',
+          _ref: data.document._id
+        }
+      };
+    }
+
+    // Guardar artículo
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const token = tokenInput?.value?.trim();
+      if (!token) {
+        showAlert('Por favor ingresá la Clave de autorización (Token de Sanity)', false);
+        return;
+      }
+
+      // Guardar token localmente para comodidad del usuario
+      localStorage.setItem('sanity_write_token', token);
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = '⏳ Publicando...';
+      showAlert('Procesando y publicando artículo...', true);
+
+      try {
+        const title = document.getElementById('title').value.trim();
+        const slugStr = title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
+        const imageFile = document.getElementById('imageFile')?.files?.[0];
+        let imageAsset = null;
+
+        if (imageFile) {
+          imageAsset = await uploadImage(imageFile, token);
+        }
+
+        const doc = {
+          _type: 'article',
+          _id: `article-${Date.now()}`,
+          title: title,
+          slug: { _type: 'slug', current: slugStr },
+          publication: document.getElementById('publication').value.trim(),
+          publishedAt: document.getElementById('publishedAt').value,
+          authors: document.getElementById('authors').value.trim(),
+          excerpt: document.getElementById('excerpt').value.trim(),
+          externalUrl: document.getElementById('externalUrl').value.trim(),
+          featured: document.getElementById('featured').checked,
+          status: 'published',
+          ...(imageAsset ? { image: imageAsset } : {})
+        };
+
+        const mutateUrl = `https://${projectId}.api.sanity.io/v2024-01-01/data/mutate/${dataset}`;
+        const res = await fetch(mutateUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ mutations: [{ createOrReplace: doc }] })
+        });
+
+        if (res.ok) {
+          showAlert('✅ ¡Artículo publicado exitosamente! La web se actualizará en unos segundos.', true);
+          form.reset();
+          if (dateInput) dateInput.value = new Date().toISOString().split('T')[0];
+          if (tokenInput) tokenInput.value = token;
+          loadArticlesList(token);
+        } else {
+          const errData = await res.json();
+          showAlert(`❌ Error al publicar: ${errData.error?.description || 'Verifica la clave de autorización.'}`, false);
+        }
+      } catch (err) {
+        showAlert(`❌ Error: ${err.message}`, false);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = '🚀 Publicar Artículo en la Web';
+      }
+    });
+
+    // Cargar listado para administrar
+    async function loadArticlesList(token) {
+      const container = document.getElementById('articles-manage-list');
+      if (!container) return;
+
+      const query = encodeURIComponent(`*[_type == "article"] | order(publishedAt desc)`);
+      const url = `https://${projectId}.api.sanity.io/v2024-01-01/data/query/${dataset}?query=${query}`;
+
+      try {
+        const res = await fetch(url);
+        const json = await res.json();
+        const articles = json.result || [];
+
+        if (articles.length === 0) {
+          container.innerHTML = '<p style="color: var(--dim-gray);">No hay artículos cargados en el CMS aún.</p>';
+          return;
+        }
+
+        container.innerHTML = articles.map(art => `
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; border-bottom: 1px solid var(--border); gap: 1rem;">
+            <div>
+              <strong>${art.featured ? '⭐ ' : ''}${art.title}</strong>
+              <div style="font-size: 0.75rem; color: var(--dim-gray);">${art.publication || ''} · ${art.publishedAt || ''}</div>
+            </div>
+            <button onclick="deleteArticle('${art._id}')" style="background: #dc3545; color: white; border: none; padding: 0.5rem 0.85rem; font-size: 0.75rem; cursor: pointer; border-radius: 3px;">
+              Eliminar
+            </button>
+          </div>
+        `).join('');
+      } catch (err) {
+        container.innerHTML = '<p style="color: var(--dim-gray);">No se pudo cargar la lista de artículos.</p>';
+      }
+    }
+
+    window.deleteArticle = async function(id) {
+      const token = tokenInput?.value?.trim();
+      if (!token) {
+        alert('Ingresá la clave de autorización para eliminar');
+        return;
+      }
+      if (!confirm('¿Estás seguro de eliminar este artículo?')) return;
+
+      const mutateUrl = `https://${projectId}.api.sanity.io/v2024-01-01/data/mutate/${dataset}`;
+      const res = await fetch(mutateUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ mutations: [{ delete: { id } }] })
+      });
+
+      if (res.ok) {
+        alert('Artículo eliminado.');
+        loadArticlesList(token);
+      } else {
+        alert('Error al eliminar el artículo.');
+      }
+    };
+
+    loadArticlesList(savedToken || '');
+  </script>
 </BaseLayout>
