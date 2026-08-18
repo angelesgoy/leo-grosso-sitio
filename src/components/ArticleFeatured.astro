@@ -5,15 +5,15 @@ const { article } = Astro.props;
   <article class="article-featured reveal">
     <div class="thumb">
       {article.image
-        ? <img src={article.image} alt={article.imageAlt || ''} width="1920" height="1200" loading="lazy" decoding="async" />
-        : <span class="hero-photo-label">Retrato · 4:5</span>}
+        ? <img src={article.image} alt={article.imageAlt || article.title} width="1920" height="1200" loading="lazy" decoding="async" />
+        : <span class="hero-photo-label">{article.publication || 'Artículo'}</span>}
     </div>
     <div>
       <div class="meta">Artículo destacado · {article.publication} · <time datetime={article.date}>{article.displayDate}</time></div>
       <h3>{article.title}</h3>
       <div class="article-author">{article.author}</div>
       <p class="excerpt">{article.excerpt}</p>
-      <a href={article.url} target="_blank" rel="noopener noreferrer" class="link-arrow">Leer en El Cohete a la Luna <span class="arrow">↗</span></a>
+      <a href={article.url} target="_blank" rel="noopener noreferrer" class="link-arrow">Leer en {article.publication || 'El Cohete a la Luna'} <span class="arrow">↗</span></a>
     </div>
   </article>
 )}

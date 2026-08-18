@@ -5,8 +5,15 @@ import ArticleFeatured from '../components/ArticleFeatured.astro';
 import ArticleList from '../components/ArticleList.astro';
 import ProjectList from '../components/ProjectList.astro';
 import { data } from '../data/content.js';
-import { getFeed } from '../services/content';
-const feed = getFeed();
+import { getArticles, getFeed } from '../services/content';
+
+const articles = await getArticles();
+const feed = await getFeed(articles);
+
+const featuredArticle = articles.find((article) => article.featured) || (articles.length > 0 ? articles[0] : null);
+const homeListArticles = featuredArticle
+  ? articles.filter((article) => article.id !== featuredArticle.id).slice(0, 3)
+  : articles.slice(0, 3);
 ---
 
 <BaseLayout>
@@ -40,8 +47,8 @@ const feed = getFeed();
 
   <section class="section"><div class="container">
     <div class="sec-head reveal"><div class="sec-head-title"><span class="kicker">Producción</span><h2 class="t-section section-title">Escribo</h2></div><a href="/escribe/" class="sec-head-link">Ver todos los textos →</a></div>
-    <ArticleFeatured article={data.articles.find((article) => article.featured)} />
-    <ArticleList articles={data.articles.slice(1, 4)} />
+    {featuredArticle && <ArticleFeatured article={featuredArticle} />}
+    {homeListArticles.length > 0 && <ArticleList articles={homeListArticles} />}
   </div></section>
 
   <section class="section surface-soft"><div class="container">

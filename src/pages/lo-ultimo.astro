@@ -3,7 +3,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import FeedGrid from '../components/FeedGrid.astro';
 import { getFeed } from '../services/content';
-const feed = getFeed();
+
+const feed = await getFeed();
 const availableFilters = ['artículos', 'gestión', 'redes'].filter((filter) =>
   feed.some((item) => item.feedCategory === filter)
 );
