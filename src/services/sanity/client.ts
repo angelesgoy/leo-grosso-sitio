@@ -5,6 +5,17 @@ const PROJECT_ID = (import.meta.env?.PUBLIC_SANITY_PROJECT_ID as string) || 'j4x
 const DATASET = (import.meta.env?.PUBLIC_SANITY_DATASET as string) || 'production';
 const API_VERSION = (import.meta.env?.PUBLIC_SANITY_API_VERSION as string) || 'v2024-01-01';
 
+const fallbackImageMap: Record<string, { image: string; alt?: string }> = {
+  'a-las-armas': { image: '/images/principales/articulo-destacado.webp', alt: 'Fachada urbana en San Martín, imagen editorial del artículo A las armas las carga el narco' },
+  'ano-nuevo': { image: '/images/articulos/ano-nuevo-vida-vieja.webp', alt: 'Movilización vecinal con una bandera que reclama justicia' },
+  'sillas-vacias': { image: '/images/articulos/sillas-vacias.webp', alt: 'Sillas vacías iluminadas sobre un fondo oscuro' },
+  'muertes-anunciadas': { image: '/images/articulos/muertes-anunciadas.webp', alt: 'Ilustración nocturna con figuras y aves bajo un cielo estrellado' },
+  'laberinto': { image: '/images/articulos/laberinto-violencia.webp', alt: 'Ilustración de figuras recorriendo un laberinto circular' },
+  'nueva-ola': { image: '/images/articulos/nueva-ola-asesinatos.webp', alt: 'Operativo policial nocturno frente a una dependencia pública' },
+  'muertes-ii': { image: '/images/articulos/muertes-no-conmueven-ii.webp', alt: 'Calle barrial con problemas de infraestructura y agua acumulada' },
+  'muertes-i': { image: '/images/articulos/muertes-no-conmueven.webp', alt: 'Marcha vecinal con una bandera que reclama justicia' }
+};
+
 /**
  * Convierte una fecha ISO (YYYY-MM-DD) al formato editorial de la web (DD/MM/YYYY).
  */
@@ -83,10 +94,16 @@ export async function getArticlesFromSanity(): Promise<Article[]> {
     }
 
     return rawArticles.map((item: any) => {
+      const slugKey = item.slug || item._id.replace(/^article-/, '');
+      const localFallback = fallbackImageMap[slugKey] || fallbackImageMap[item._id] || {};
       const imgData = buildSanityImageUrl(item.image);
+
+      const finalImageUrl = imgData.url || localFallback.image;
+      const finalImageAlt = imgData.alt || localFallback.alt || item.title;
       const publishedDate = item.publishedAt ? item.publishedAt.split('T')[0] : '';
+
       return {
-        id: item.slug || item._id,
+        id: slugKey,
         title: item.title || '',
         publication: item.publication || 'El Cohete a la Luna',
         date: publishedDate,
@@ -94,8 +111,8 @@ export async function getArticlesFromSanity(): Promise<Article[]> {
         author: item.authors || 'Leonardo Grosso',
         excerpt: item.excerpt || '',
         url: item.externalUrl || '',
-        image: imgData.url,
-        imageAlt: imgData.alt || item.title,
+        image: finalImageUrl,
+        imageAlt: finalImageAlt,
         featured: Boolean(item.featured)
       };
     });
