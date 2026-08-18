@@ -2,7 +2,7 @@ export const navigation = [
   { href: '/sobre-mi/', label: 'Sobre mí' },
   { href: '/lo-ultimo/', label: 'Lo último' },
   { href: '/san-martin/', label: 'San Martín' },
-  { href: '/escribe/', label: 'Escribe' },
+  { href: '/escribe/', label: 'Escribo' },
   { href: '/ideas/', label: 'Ideas' },
   { href: '/trayectoria/', label: 'Trayectoria' }
 ];

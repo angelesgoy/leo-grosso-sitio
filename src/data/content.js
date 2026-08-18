@@ -156,22 +156,22 @@ export const data = {
   sanMartin: {
     themes: [
       { title: "Seguridad y violencia", desc: "Homicidios, narcomenudeo y violencia institucional. Una lectura desde el territorio y la seguridad democrática." },
-      { title: "Territorio", desc: "Calles, barrios, estaciones, industria, espacio público. San Martín como personaje político y como laboratorio de política pública." },
+      { title: "Territorio", desc: "Calles, barrios, estaciones, industria y espacio público. San Martín como territorio político y laboratorio de política pública." },
       { title: "Ambiente", desc: "Contaminación, arbolado, cuencas, acceso al agua. La dimensión ambiental del conurbano como derecho básico." },
       { title: "Desigualdad", desc: "Acceso, oportunidades, justicia territorial. La ciudad como escenario donde se expresan y se combaten las desigualdades." }
     ]
   },
 
   timeline: [
-    { year: "1983", title: "Nacimiento en San Martín", desc: "Nace en San Martín, Provincia de Buenos Aires." },
-    { year: "1999", title: "Militancia estudiantil", desc: "Inicia su militancia estudiantil y su construcción territorial." },
-    { year: "2005", title: "Movimiento Evita", desc: "Se incorpora a la construcción juvenil del Movimiento Evita." },
-    { year: "2011", title: "Diputado Nacional", desc: "Asume como Diputado Nacional por la Provincia de Buenos Aires." },
+    { year: "1983", title: "Nacimiento en San Martín", desc: "Nací en San Martín, Provincia de Buenos Aires." },
+    { year: "1999", title: "Militancia estudiantil", desc: "Inicié mi militancia estudiantil y mi construcción territorial." },
+    { year: "2005", title: "Movimiento Evita", desc: "Me incorporé a la construcción juvenil del Movimiento Evita." },
+    { year: "2011", title: "Diputado Nacional", desc: "Asumí como Diputado Nacional por la Provincia de Buenos Aires." },
     { year: "2012", title: "Ley 26.811", desc: "Institución del 8 de mayo como Día Nacional de la Lucha contra la Violencia Institucional." },
-    { year: "2020", title: "Recursos Naturales", desc: "Presidencia de la Comisión de Recursos Naturales y Conservación del Ambiente Humano." },
+    { year: "2020", title: "Recursos Naturales", desc: "Presidí la Comisión de Recursos Naturales y Conservación del Ambiente Humano." },
     { year: "2022", title: "Debate Humedales", desc: "Dictamen del proyecto de presupuestos mínimos de protección de humedales." },
-    { year: "2023", title: "Fin de ciclo legislativo", desc: "Cierre de doce años como Diputado Nacional." },
-    { year: "2024", title: "IDUAR", desc: "Administrador General del Instituto de Desarrollo Urbano, Ambiental y Regional de Moreno." },
+    { year: "2023", title: "Fin de ciclo legislativo", desc: "Cerré doce años de trabajo como Diputado Nacional." },
+    { year: "2024", title: "IDUAR", desc: "Asumí como Administrador General del Instituto de Desarrollo Urbano, Ambiental y Regional de Moreno." },
     { year: "HOY", title: "Presente", desc: "Actividad política, gestión pública, escritura y trabajo territorial desde San Martín." }
   ],
 

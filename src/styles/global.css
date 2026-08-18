@@ -128,6 +128,7 @@ button { font-family: inherit; cursor: pointer; background: none; border: none; 
 @media (max-width: 768px) {
   .feed-grid { grid-template-columns: 1fr; gap: 1rem; }
 }
+.feed-item[hidden] { display: none; }
 
 /* =========================================================
    06. HEADER
@@ -311,8 +312,7 @@ button { font-family: inherit; cursor: pointer; background: none; border: none; 
 .hero-photo img,
 .about-photo img,
 .article-featured .thumb img,
-.feed-item-media img,
-.gallery-placeholder img {
+.feed-item-media img {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -577,6 +577,10 @@ button { font-family: inherit; cursor: pointer; background: none; border: none; 
 }
 .sanmartin-link:hover { color: var(--text); opacity: 0.7; }
 @media (max-width: 991px) { .sanmartin-link { justify-self: start; } }
+.sanmartin-block .kicker,
+.page-hero-blue .kicker { color: #fff; }
+.sanmartin-block .kicker::before,
+.page-hero-blue .kicker::before { background: #fff; }
 
 /* =========================================================
    12. ARTÍCULOS / ESCRIBE
@@ -1033,7 +1037,6 @@ button { font-family: inherit; cursor: pointer; background: none; border: none; 
 .paragraph-spaced { margin-bottom: 1.25rem; }
 .stats-spaced { margin-top: 2.5rem; }
 .align-end { align-self: end; }
-.kicker-dark { color: rgba(11, 13, 15, 0.6); }
 .summary-card { border-top: 1px solid var(--border); padding: 1.25rem 0; }
 .summary-card-roomy { padding: 1.5rem 0; }
 .summary-card .project-cat { margin-bottom: 0.35rem; }
@@ -1049,24 +1052,7 @@ button { font-family: inherit; cursor: pointer; background: none; border: none; 
 }
 .feed-link { margin-top: 0.75rem; }
 .feed-item.featured .feed-link { margin-top: 1rem; }
-.gallery-grid { margin-top: 2rem; }
-.gallery-placeholder {
-  aspect-ratio: 4 / 3;
-  background: var(--soft-bg);
-  border: 1px solid var(--border);
-  position: relative;
-  overflow: hidden;
-}
-.gallery-placeholder .t-tiny {
-  position: absolute;
-  left: 0.75rem;
-  bottom: 0.75rem;
-  color: var(--text);
-  background: rgba(255,255,255,0.88);
-  padding: 0.25rem 0.4rem;
-}
 .page-hero-blue { background: var(--leo-blue); }
-.page-hero-blue .kicker { color: rgba(11, 13, 15, 0.6); }
 .page-hero-blue .title-dot { color: var(--text); }
 .page-hero-blue .page-hero-lede { color: rgba(11, 13, 15, 0.75); }
 .error-home { margin-top: 1.5rem; }

@@ -5,7 +5,7 @@ import ArticleFeatured from '../components/ArticleFeatured.astro';
 import ArticleList from '../components/ArticleList.astro';
 import { data } from '../data/content.js';
 ---
-<BaseLayout title="Escribe · Leon Grosso" description="Ensayos y análisis de Leon Grosso sobre violencia, seguridad democrática y territorio.">
-  <PageHero kicker="Producción" title="Escribe" lede="Ensayos y análisis publicados principalmente en El Cohete a la Luna. Violencia, narcomenudeo, homicidios, seguridad democrática y territorio." />
+<BaseLayout title="Escribo · Leon Grosso" description="Mis ensayos y análisis sobre violencia, seguridad democrática y territorio.">
+  <PageHero kicker="Producción" title="Escribo" lede="Ensayos y análisis que publiqué principalmente en El Cohete a la Luna. Violencia, narcomenudeo, homicidios, seguridad democrática y territorio." />
   <section class="section"><div class="container"><ArticleFeatured article={data.articles.find((article) => article.featured)} /><ArticleList articles={data.articles.filter((article) => !article.featured)} /></div></section>
 </BaseLayout>

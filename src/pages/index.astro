@@ -23,8 +23,8 @@ const feed = getFeed();
   </section>
 
   <section class="section"><div class="container"><div class="grid-60-40 reveal">
-    <p class="t-body-lg">Una trayectoria que conecta organización territorial, trabajo legislativo y gestión pública. Doce años como diputado nacional enfocado en ambiente, Derechos Humanos y economía popular. Desde 2024, Administrador General del IDUAR en Moreno.</p>
-    <div><a href="/sobre-mi/" class="link-arrow">Leer sobre Leo <span class="arrow">→</span></a></div>
+    <p class="t-body-lg">Mi trayectoria conecta organización territorial, trabajo legislativo y gestión pública. Fui diputado nacional durante doce años, enfocado en ambiente, Derechos Humanos y economía popular. Desde 2024, soy Administrador General del IDUAR en Moreno.</p>
+    <div><a href="/sobre-mi/" class="link-arrow">Leer sobre mí <span class="arrow">→</span></a></div>
   </div></div></section>
 
   <section class="section"><div class="container">
@@ -33,13 +33,13 @@ const feed = getFeed();
   </div></section>
 
   <section class="sanmartin-block"><div class="container"><div class="sanmartin-grid reveal">
-    <div><span class="kicker kicker-dark">Territorio</span><h2 class="sanmartin-title section-title">SAN<br />MARTÍN</h2></div>
-    <p class="sanmartin-sub">Seguridad, violencia, ambiente, desigualdad. San Martín atraviesa toda la trayectoria política de Leo y sigue siendo el lugar desde donde observa el presente.</p>
+    <div><span class="kicker">Territorio</span><h2 class="sanmartin-title section-title">SAN<br />MARTÍN</h2></div>
+    <p class="sanmartin-sub">Seguridad, violencia, ambiente, desigualdad. San Martín atraviesa toda mi trayectoria política y sigue siendo el lugar desde donde observo el presente.</p>
     <a href="/san-martin/" class="sanmartin-link">Ver San Martín →</a>
   </div></div></section>
 
   <section class="section"><div class="container">
-    <div class="sec-head reveal"><div class="sec-head-title"><span class="kicker">Producción</span><h2 class="t-section section-title">Escribe</h2></div><a href="/escribe/" class="sec-head-link">Ver todos los textos →</a></div>
+    <div class="sec-head reveal"><div class="sec-head-title"><span class="kicker">Producción</span><h2 class="t-section section-title">Escribo</h2></div><a href="/escribe/" class="sec-head-link">Ver todos los textos →</a></div>
     <ArticleFeatured article={data.articles.find((article) => article.featured)} />
     <ArticleList articles={data.articles.slice(1, 4)} />
   </div></section>
@@ -59,5 +59,5 @@ const feed = getFeed();
     <div class="grid-2col">{data.ideas.map((idea) => <article class="reveal summary-card"><div class="project-cat">{idea.num}</div><h3 class="t-h3">{idea.title}</h3><p class="t-body summary-copy">{idea.lede}</p><a href="/ideas/" class="link-arrow">Ver trayectoria vinculada <span class="arrow">→</span></a></article>)}</div>
   </div></section>
 
-  <section class="section"><div class="container"><div class="grid-70-30 reveal"><div><span class="kicker">Sobre Leo</span><h2 class="t-section section-title copy-spaced">Persona antes que cargo.</h2><p class="t-body">Nació en San Martín. Politólogo formado en la UNSAM. Su recorrido conecta militancia territorial, trabajo legislativo y gestión pública. San Martín atraviesa toda su historia política.</p></div><div class="align-end"><a href="/sobre-mi/" class="link-arrow">Leer sobre mí <span class="arrow">→</span></a></div></div></div></section>
+  <section class="section"><div class="container"><div class="grid-70-30 reveal"><div><span class="kicker">Sobre mí</span><h2 class="t-section section-title copy-spaced">Persona antes que cargo.</h2><p class="t-body">Nací en San Martín y me formé como politólogo en la UNSAM. Mi recorrido conecta militancia territorial, trabajo legislativo y gestión pública. San Martín atraviesa toda mi historia política.</p></div><div class="align-end"><a href="/sobre-mi/" class="link-arrow">Leer sobre mí <span class="arrow">→</span></a></div></div></div></section>
 </BaseLayout>
