@@ -1,9 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { data as fallbackData } from '../data/content.js';
-const projectId = import.meta.env.PUBLIC_SANITY_PROJECT_ID || 'j4xtzihv';
-const dataset = import.meta.env.PUBLIC_SANITY_DATASET || 'production';
-const token = import.meta.env.SANITY_API_TOKEN || 'sk806I9qenm35RbkEJX0XlX4VSndFEu6DPy9fbgQEBLBfyXWygkFGNvH4QHa29WYYnMaEVvwwQhXOg6J9jcrJgn3X1IgOOOEEIRbjGBSzNwYok4M0GBSKFVvf8KUwKrXr0hRISeijyWToqHacho1TddhuRtyOBl6nUpoyB9L2VP8lL71JJFX';
 const teamPassword = 'WebEquipoGrosso2026';
 const netlifyBuildHook = 'https://api.netlify.com/build_hooks/6a84d5aa629b44809436de94';
 const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
@@ -218,9 +215,43 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
     }
   </style>
 
-  <script define:vars={{ projectId, dataset, token, teamPassword, netlifyBuildHook, fallbackArticlesJSON }}>
+  <script define:vars={{ teamPassword, netlifyBuildHook, fallbackArticlesJSON }}>
     window.__NETLIFY_BUILD_HOOK__ = netlifyBuildHook;
     const AUTH_SESSION_KEY = 'leo_admin_session';
+
+    // Contraseña guardada en memoria (nunca en localStorage ni en el HTML)
+    let sessionPassword = '';
+
+    // ── CAPA SEGURA DE API ───────────────────────────────────────────────────
+    // Todas las escrituras van al servidor (Netlify Function), nunca directo a Sanity
+    async function callMutate(mutations) {
+      return fetch('/.netlify/functions/sanity-mutate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: sessionPassword, action: 'mutate', mutations })
+      });
+    }
+
+    async function callUpload(file) {
+      const arrayBuffer = await file.arrayBuffer();
+      const uint8 = new Uint8Array(arrayBuffer);
+      let binary = '';
+      for (let i = 0; i < uint8.byteLength; i++) binary += String.fromCharCode(uint8[i]);
+      const imageData = btoa(binary);
+      const res = await fetch('/.netlify/functions/sanity-mutate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: sessionPassword, action: 'upload', contentType: file.type, imageData })
+      });
+      if (!res.ok) throw new Error('Error al subir imagen al servidor.');
+      const data = await res.json();
+      return { _type: 'image', asset: { _type: 'reference', _ref: data.document._id } };
+    }
+
+    // Sanity público (solo lectura, sin token)
+    const SANITY_PUBLIC_URL = 'https://j4xtzihv.api.sanity.io';
+    const dataset = 'production';
+
     const loginSection = document.getElementById('login-section');
     const adminContent = document.getElementById('admin-panel-content');
     const loginForm = document.getElementById('login-form');
@@ -228,13 +259,6 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
     const togglePasswordBtn = document.getElementById('toggle-password-btn');
     const loginAlert = document.getElementById('login-alert');
     const logoutBtn = document.getElementById('logout-btn');
-
-    const getApiBase = () => {
-      if (window.location.hostname.includes('netlify.app')) {
-        return '/sanity-api';
-      }
-      return `https://${projectId}.api.sanity.io`;
-    };
 
     const defaultFallbackArticles = JSON.parse(fallbackArticlesJSON).map(art => ({
       _id: `article-${art.id}`,
@@ -285,6 +309,7 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
       e.preventDefault();
       const enteredPassword = passwordInput.value.trim();
       if (enteredPassword === teamPassword) {
+        sessionPassword = enteredPassword; // guardar en memoria para llamadas a la API
         localStorage.setItem(AUTH_SESSION_KEY, 'authenticated');
         showAdminPanel();
       } else {
@@ -296,6 +321,7 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
     });
 
     logoutBtn?.addEventListener('click', () => {
+      sessionPassword = ''; // limpiar de memoria
       localStorage.removeItem(AUTH_SESSION_KEY);
       showLoginScreen();
     });
@@ -341,22 +367,7 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
 
     async function uploadImage(file) {
       if (!file) return null;
-      const apiBase = getApiBase();
-      const uploadUrl = `${apiBase}/v2024-01-01/assets/images/${dataset}`;
-      const res = await fetch(uploadUrl, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': file.type
-        },
-        body: file
-      });
-      if (!res.ok) throw new Error('Error al procesar la imagen enviada.');
-      const data = await res.json();
-      return {
-        _type: 'image',
-        asset: { _type: 'reference', _ref: data.document._id }
-      };
+      return callUpload(file);
     }
 
     articleForm?.addEventListener('submit', async (e) => {
@@ -407,24 +418,20 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
           ...(finalImage ? { image: finalImage } : {})
         };
 
-        const apiBase = getApiBase();
-        const mutateUrl = `${apiBase}/v2024-01-01/data/mutate/${dataset}`;
-        const res = await fetch(mutateUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify({ mutations: [{ createOrReplace: doc }] })
-        });
+        const res = await callMutate([{ createOrReplace: doc }]);
 
         if (res.ok) {
           showAlert(isEditing ? 'Publicación actualizada correctamente.' : 'Artículo registrado y publicado correctamente.', true);
           resetForm();
           await loadArticlesList();
+
+          const buildHook = window.__NETLIFY_BUILD_HOOK__;
+          if (buildHook) {
+            fetch(buildHook, { method: 'POST' }).catch(() => {});
+          }
         } else {
           const errData = await res.json();
-          showAlert(`Error al guardar: ${errData.error?.description || 'Verifique los permisos de acceso.'}`, false);
+          showAlert(`Error al guardar: ${errData.error || errData.message || 'Verifique los permisos de acceso.'}`, false);
         }
       } catch (err) {
         showAlert(`Error: ${err.message}`, false);
@@ -445,16 +452,7 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
         }
       }));
 
-      const apiBase = getApiBase();
-      const mutateUrl = `${apiBase}/v2024-01-01/data/mutate/${dataset}`;
-      await fetch(mutateUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({ mutations })
-      });
+      await callMutate(mutations);
     }
 
     // CARGAR Y RENDERIZAR LA LISTA LATERAL CON RESPUESTA VISUAL INSTANTÁNEA
@@ -511,8 +509,7 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
       const query = encodeURIComponent(`*[_type == "article"] | order(publishedAt desc) {
         _id, title, publication, publishedAt, authors, excerpt, externalUrl, featured, image
       }`);
-      const apiBase = getApiBase();
-      const url = `${apiBase}/v2024-01-01/data/query/${dataset}?query=${query}`;
+      const url = `${SANITY_PUBLIC_URL}/v2024-01-01/data/query/${dataset}?query=${query}`;
 
       try {
         const res = await fetch(url);
@@ -552,7 +549,7 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
         featuredCheck.checked = setFeatured;
       }
 
-      // 2. ENVIAR TODAS LAS MUTACIONES EN UN SOLO LOTE A SANITY
+      // 2. ENVIAR TODAS LAS MUTACIONES EN UN SOLO LOTE A SANITY VÍA SERVIDOR
       try {
         const mutations = [];
 
@@ -566,13 +563,7 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
         // Activar/desactivar la seleccionada
         mutations.push({ patch: { id, set: { featured: setFeatured } } });
 
-        const apiBase = getApiBase();
-        const mutateUrl = `${apiBase}/v2024-01-01/data/mutate/${dataset}`;
-        await fetch(mutateUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-          body: JSON.stringify({ mutations })
-        });
+        await callMutate(mutations);
 
         // Disparar reconstrucción del sitio en Netlify si hay un Build Hook configurado
         const buildHook = window.__NETLIFY_BUILD_HOOK__;
@@ -615,7 +606,7 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
             const ref = art.image.asset._ref;
             const match = ref.match(/^image-([a-fA-F0-9]+)-(\d+x\d+)-(\w+)$/);
             if (match) {
-              imagePreview.src = `https://cdn.sanity.io/images/${projectId}/${dataset}/${match[1]}-${match[2]}.${match[3]}`;
+              imagePreview.src = `https://cdn.sanity.io/images/j4xtzihv/${dataset}/${match[1]}-${match[2]}.${match[3]}`;
             }
           }
         }
@@ -629,23 +620,23 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
     window.deleteArticle = async function(id) {
       if (!confirm('¿Confirma la eliminación permanente de esta entrada?')) return;
 
-      const apiBase = getApiBase();
-      const mutateUrl = `${apiBase}/v2024-01-01/data/mutate/${dataset}`;
-      const res = await fetch(mutateUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({ mutations: [{ delete: { id } }] })
-      });
+      try {
+        const res = await callMutate([{ delete: { id } }]);
+        if (res.ok) {
+          if (editingDocId.value === id) resetForm();
+          currentArticles = currentArticles.filter(a => a._id !== id);
+          renderSidebarList();
 
-      if (res.ok) {
-        if (editingDocId.value === id) resetForm();
-        currentArticles = currentArticles.filter(a => a._id !== id);
-        renderSidebarList();
-      } else {
-        alert('Ocurrió un inconveniente al eliminar la publicación.');
+          const buildHook = window.__NETLIFY_BUILD_HOOK__;
+          if (buildHook) {
+            fetch(buildHook, { method: 'POST' }).catch(() => {});
+          }
+          showAlert('Entrada eliminada correctamente.', true);
+        } else {
+          showAlert('Ocurrió un inconveniente al eliminar la publicación.', false);
+        }
+      } catch (err) {
+        showAlert(`Error: ${err.message}`, false);
       }
     };
 
