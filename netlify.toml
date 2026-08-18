@@ -1,18 +1,9 @@
 [build]
-  command = "npm run build"
   publish = "dist"
-
-[build.environment]
-  NODE_VERSION = "22"
-
-[[headers]]
-  for = "/*"
-  [headers.values]
-    X-Content-Type-Options = "nosniff"
-    Referrer-Policy = "strict-origin-when-cross-origin"
-    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+  command = "pnpm run build"
 
 [[redirects]]
-  from = "/index.html"
-  to = "/"
-  status = 301
+  from = "/sanity-api/*"
+  to = "https://j4xtzihv.api.sanity.io/:splat"
+  status = 200
+  force = true
