@@ -1,6 +1,10 @@
 [build]
   publish = "dist"
-  command = "pnpm run build"
+  command = "npm install --legacy-peer-deps && npm run build"
+
+[build.environment]
+  NODE_VERSION = "20"
+  NPM_FLAGS = "--legacy-peer-deps"
 
 [[redirects]]
   from = "/sanity-api/*"
