@@ -61,7 +61,7 @@ const homeListArticles = featuredArticle
     <ProjectList items={data.projects.slice(0, 3)} />
   </div></section>
 
-  <!-- SINCRONIZACIÓN EN TIEMPO REAL DEL FEED Y ARTÍCULO DESTACADO -->
-  <script src="../scripts/feed.js"></script>
-  <script src="../scripts/escribe-sync.js"></script>
+  <!-- SINCRONIZACIÓN EN TIEMPO REAL CON SCRIPTS ESTÁTICOS PUBLICOS -->
+  <script is:inline src="/scripts/feed.js"></script>
+  <script is:inline src="/scripts/escribe-sync.js"></script>
 </BaseLayout>
