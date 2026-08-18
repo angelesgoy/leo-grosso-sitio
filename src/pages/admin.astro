@@ -8,61 +8,66 @@ const teamPassword = 'WebEquipoGrosso2026';
 const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
 ---
 
-<BaseLayout title="Acceso Equipo · Leon Grosso" description="Panel privado de gestión para el equipo de prensa.">
+<BaseLayout title="Administración Editorial · Leon Grosso" description="Panel privado de gestión de contenidos editoriales para el equipo de prensa.">
   
-  <!-- PANTALLA 1: LOGIN SEGURO DE EQUIPO CON OJITO PARA MOSTRAR/OCULTAR CONTRASEÑA -->
+  <!-- PANTALLA 1: LOGIN SEGURO CON DISEÑO INSTITUCIONAL Y CONMUTADOR SVG -->
   <section id="login-section" class="section" style="min-height: 70vh; display: flex; align-items: center;">
-    <div class="container" style="max-width: 460px;">
-      <div style="background: var(--soft-bg); padding: 2.5rem; border: 1px solid var(--border); text-align: center;">
+    <div class="container" style="max-width: 440px;">
+      <div style="background: var(--soft-bg); padding: 2.5rem; border: 1px solid var(--border); text-align: left;">
         <span class="kicker">Área Privada</span>
-        <h1 class="t-section" style="margin: 0.75rem 0 0.5rem; font-size: 1.75rem;">Acceso Equipo</h1>
-        <p class="t-body" style="font-size: 0.875rem; color: var(--dim-gray); margin-bottom: 2rem;">
-          Ingresá la contraseña del equipo para gestionar los artículos de la web.
+        <h1 class="t-section" style="margin: 0.75rem 0 0.5rem; font-size: 1.6rem; letter-spacing: -0.02em;">Acceso Editorial</h1>
+        <p class="t-body" style="font-size: 0.875rem; color: var(--dim-gray); margin-bottom: 2rem; line-height: 1.5;">
+          Ingrese las credenciales de autorización del equipo para gestionar las publicaciones del sitio.
         </p>
 
-        <div id="login-alert" style="display: none; padding: 0.75rem; margin-bottom: 1.25rem; background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; font-size: 0.85rem; font-weight: 600;"></div>
+        <div id="login-alert" style="display: none; padding: 0.85rem 1rem; margin-bottom: 1.25rem; background: rgba(220, 53, 69, 0.1); color: #dc3545; border: 1px solid rgba(220, 53, 69, 0.3); font-size: 0.8125rem; font-weight: 600;"></div>
 
-        <form id="login-form" style="display: flex; flex-direction: column; gap: 1rem;">
-          <div style="position: relative; display: flex; align-items: center;">
-            <input
-              type="password"
-              id="password-input"
-              required
-              placeholder="Contraseña del equipo..."
-              style="width: 100%; padding: 0.9rem 2.8rem 0.9rem 1rem; border: 1px solid var(--border); font-size: 1rem; background: var(--bg); color: var(--text);"
-            />
-            <button
-              type="button"
-              id="toggle-password-btn"
-              title="Mostrar u ocultar contraseña"
-              style="position: absolute; right: 0.75rem; background: transparent; border: none; font-size: 1.15rem; cursor: pointer; padding: 0.2rem; display: flex; align-items: center; justify-content: center; color: var(--dim-gray);"
-            >
-              👁️
-            </button>
+        <form id="login-form" style="display: flex; flex-direction: column; gap: 1.25rem;">
+          <div>
+            <label for="password-input" style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; color: var(--text);">
+              Clave de acceso
+            </label>
+            <div style="position: relative; display: flex; align-items: center;">
+              <input
+                type="password"
+                id="password-input"
+                required
+                placeholder="Introduzca la clave asignada..."
+                style="width: 100%; padding: 0.85rem 3.5rem 0.85rem 1rem; border: 1px solid var(--border); font-size: 0.95rem; background: var(--bg); color: var(--text); border-radius: 0;"
+              />
+              <button
+                type="button"
+                id="toggle-password-btn"
+                aria-label="Mostrar u ocultar contraseña"
+                style="position: absolute; right: 0.75rem; background: transparent; border: none; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; cursor: pointer; color: var(--dim-gray); padding: 0.25rem 0.5rem;"
+              >
+                MOSTRAR
+              </button>
+            </div>
           </div>
 
           <button
             type="submit"
-            style="padding: 1rem; background: var(--leo-blue); color: #000; font-weight: 800; border: none; font-size: 0.9375rem; text-transform: uppercase; letter-spacing: 0.05em; cursor: pointer;"
+            style="padding: 1rem 1.5rem; background: var(--leo-blue); color: #000; font-weight: 800; border: none; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.08em; cursor: pointer; transition: var(--t); margin-top: 0.5rem;"
           >
-            🔒 Entrar al Panel
+            Ingresar al panel
           </button>
         </form>
       </div>
     </div>
   </section>
 
-  <!-- PANTALLA 2: DASHBOARD ITERATIVO EN 2 COLUMNAS -->
+  <!-- PANTALLA 2: DASHBOARD EDITORIAL PROFESIONAL Y GUÍA DE IMÁGENES -->
   <div id="admin-panel-content" style="display: none;">
     <section class="page-hero" style="padding-bottom: 1.5rem;">
-      <div class="container" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+      <div class="container" style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem;">
         <div>
-          <span class="kicker">Gestión Editorial</span>
-          <h1 class="t-page page-title" style="margin-bottom: 0.25rem;">Panel de Artículos<span class="title-dot">.</span></h1>
-          <p class="page-hero-lede" style="font-size: 0.95rem;">Cargá, editá, cambiá fotos y destacá notas en tiempo real.</p>
+          <span class="kicker">Administración</span>
+          <h1 class="t-page page-title" style="margin-bottom: 0.25rem;">Gestión de Artículos<span class="title-dot">.</span></h1>
+          <p class="page-hero-lede" style="font-size: 0.95rem; color: var(--dim-gray);">Carga, edición y administración de artículos editoriales en tiempo real.</p>
         </div>
-        <button id="logout-btn" style="padding: 0.5rem 1rem; background: transparent; border: 1px solid var(--border); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; cursor: pointer; color: var(--dim-gray);">
-          🔒 Cerrar sesión
+        <button id="logout-btn" style="padding: 0.6rem 1.25rem; background: transparent; border: 1px solid var(--border); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; cursor: pointer; color: var(--dim-gray); transition: var(--t);">
+          Cerrar sesión
         </button>
       </div>
     </section>
@@ -71,40 +76,40 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
       <div class="container">
         
         <!-- ALERTA DE ESTADO GLOBAL -->
-        <div id="status-alert" style="display: none; padding: 1rem 1.5rem; margin-bottom: 2rem; border-radius: 4px; font-weight: 600;"></div>
+        <div id="status-alert" style="display: none; padding: 1rem 1.5rem; margin-bottom: 2rem; font-size: 0.875rem; font-weight: 600; border: 1px solid transparent;"></div>
 
-        <!-- GRID DE 2 COLUMNAS: FORMULARIO A LA IZQUIERDA + BARRA DE NOTAS A LA DERECHA -->
-        <div style="display: grid; grid-template-columns: 7fr 5fr; gap: 2.5rem; align-items: start;" class="admin-grid">
+        <!-- GRID PRINCIPAL -->
+        <div style="display: grid; grid-template-columns: 7fr 5fr; gap: 3rem; align-items: start;" class="admin-grid">
           
-          <!-- COLUMNA IZQUIERDA: FORMULARIO DE CREACIÓN / EDICIÓN -->
+          <!-- COLUMNA IZQUIERDA: FORMULARIO EDITORIAL -->
           <div>
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border);">
-              <h2 id="form-mode-title" class="t-h3" style="font-size: 1.25rem; font-weight: 800; margin: 0;">➕ Crear nuevo artículo</h2>
-              <button id="cancel-edit-btn" style="display: none; background: transparent; border: none; color: var(--leo-blue); font-size: 0.8125rem; font-weight: 700; cursor: pointer; text-decoration: underline;">
-                ✖ Cancelar edición
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border);">
+              <h2 id="form-mode-title" class="t-h3" style="font-size: 1.15rem; font-weight: 800; margin: 0; text-transform: uppercase; letter-spacing: 0.04em;">Nuevo artículo</h2>
+              <button id="cancel-edit-btn" style="display: none; background: transparent; border: none; color: var(--leo-blue); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; cursor: pointer; text-decoration: underline;">
+                Cancelar edición
               </button>
             </div>
 
-            <form id="article-form" style="display: flex; flex-direction: column; gap: 1.25rem; background: var(--soft-bg); padding: 1.75rem; border: 1px solid var(--border);">
+            <form id="article-form" style="display: flex; flex-direction: column; gap: 1.25rem; background: var(--soft-bg); padding: 2rem; border: 1px solid var(--border);">
               
               <input type="hidden" id="editing-doc-id" value="" />
 
               <div>
-                <label style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.4rem; color: var(--text);">
+                <label for="title" style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.4rem; color: var(--text);">
                   Título del artículo *
                 </label>
                 <input type="text" id="title" required placeholder="Ej: A las armas las carga el narco" style="width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--border); font-size: 0.95rem; background: var(--bg); color: var(--text);" />
               </div>
 
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
                 <div>
-                  <label style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.4rem; color: var(--text);">
-                    Medio / Diario *
+                  <label for="publication" style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.4rem; color: var(--text);">
+                    Medio o publicación *
                   </label>
                   <input type="text" id="publication" required value="El Cohete a la Luna" style="width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--border); font-size: 0.95rem; background: var(--bg); color: var(--text);" />
                 </div>
                 <div>
-                  <label style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.4rem; color: var(--text);">
+                  <label for="publishedAt" style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.4rem; color: var(--text);">
                     Fecha de publicación *
                   </label>
                   <input type="date" id="publishedAt" required style="width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--border); font-size: 0.95rem; background: var(--bg); color: var(--text);" />
@@ -112,75 +117,90 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
               </div>
 
               <div>
-                <label style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.4rem; color: var(--text);">
-                  Autor / Coautores *
+                <label for="authors" style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.4rem; color: var(--text);">
+                  Autoría *
                 </label>
                 <input type="text" id="authors" required value="Leonardo Grosso" placeholder="Ej: Leonardo Grosso + Vanina Pasik" style="width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--border); font-size: 0.95rem; background: var(--bg); color: var(--text);" />
               </div>
 
               <div>
-                <label style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.4rem; color: var(--text);">
-                  Bajada / Resumen *
+                <label for="excerpt" style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.4rem; color: var(--text);">
+                  Bajada / Resumen editorial *
                 </label>
-                <textarea id="excerpt" rows="3" required placeholder="Breve resumen del artículo..." style="width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--border); font-size: 0.95rem; background: var(--bg); color: var(--text); resize: vertical;"></textarea>
+                <textarea id="excerpt" rows="3" required placeholder="Síntesis sustantiva del contenido..." style="width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--border); font-size: 0.95rem; background: var(--bg); color: var(--text); resize: vertical; line-height: 1.5;"></textarea>
               </div>
 
               <div>
-                <label style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.4rem; color: var(--text);">
-                  URL externa a la nota original *
+                <label for="externalUrl" style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.4rem; color: var(--text);">
+                  Enlace externo (URL de publicación original) *
                 </label>
                 <input type="url" id="externalUrl" required placeholder="https://www.elcohetealaluna.com/..." style="width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--border); font-size: 0.95rem; background: var(--bg); color: var(--text);" />
               </div>
 
-              <!-- GESTIÓN DE IMAGEN CON VISTA PREVIA Y BOTÓN DE QUITAR -->
-              <div style="border-top: 1px dashed var(--border); padding-top: 1rem;">
+              <!-- SECCIÓN DE GESTIÓN Y RECOMENDACIÓN DE IMÁGENES -->
+              <div style="border-top: 1px solid var(--border); padding-top: 1.25rem; margin-top: 0.5rem;">
+                
+                <!-- GUÍA INSTITUCIONAL DE IMÁGENES -->
+                <div style="background: var(--bg); padding: 1.25rem; border: 1px solid var(--border); margin-bottom: 1.25rem;">
+                  <h4 style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 0.5rem; color: var(--leo-blue);">
+                    Guía de optimización de imágenes
+                  </h4>
+                  <ul style="font-size: 0.8125rem; line-height: 1.6; color: var(--dim-gray); padding-left: 1.1rem; margin: 0 0 0.75rem;">
+                    <li><strong>Formato recomendado:</strong> WebP (preferido) o JPG/JPEG.</li>
+                    <li><strong>Proporción y resolución:</strong> 4:5 vertical (1200 × 1500 px) o 16:9 horizontal (1200 × 800 px).</li>
+                    <li><strong>Peso sugerido:</strong> Entre 80 KB y 250 KB (máximo absoluto 500 KB por archivo).</li>
+                  </ul>
+                  <p style="font-size: 0.75rem; color: var(--dim-gray); margin: 0; line-height: 1.4;">
+                    Herramientas externas de compresión rápida:
+                    <a href="https://tinypng.com" target="_blank" rel="noopener noreferrer" style="color: var(--text); font-weight: 600; text-decoration: underline;">TinyPNG.com ↗</a> o
+                    <a href="https://squoosh.app" target="_blank" rel="noopener noreferrer" style="color: var(--text); font-weight: 600; text-decoration: underline;">Squoosh.app ↗</a>.
+                  </p>
+                </div>
+
                 <label style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.4rem; color: var(--text);">
-                  Fotografía del artículo
+                  Fotografía de portada
                 </label>
 
                 <!-- Vista previa si existe foto -->
-                <div id="image-preview-container" style="display: none; align-items: center; gap: 1rem; margin-bottom: 0.75rem; background: var(--bg); padding: 0.5rem; border: 1px solid var(--border);">
-                  <img id="image-preview" src="" alt="Vista previa" style="width: 60px; height: 60px; object-fit: cover;" />
+                <div id="image-preview-container" style="display: none; align-items: center; gap: 1rem; margin-bottom: 0.75rem; background: var(--bg); padding: 0.75rem; border: 1px solid var(--border);">
+                  <img id="image-preview" src="" alt="Vista previa" style="width: 56px; height: 56px; object-fit: cover;" />
                   <div style="flex: 1;">
-                    <span style="font-size: 0.75rem; color: var(--dim-gray); display: block;">Foto actual asignada</span>
-                    <button type="button" id="remove-image-btn" style="background: transparent; border: none; color: #dc3545; font-size: 0.75rem; font-weight: 700; cursor: pointer; padding: 0; margin-top: 0.2rem;">
-                      🗑️ Quitar foto
+                    <span style="font-size: 0.75rem; color: var(--dim-gray); display: block;">Imagen asignada al artículo</span>
+                    <button type="button" id="remove-image-btn" style="background: transparent; border: none; color: #dc3545; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; cursor: pointer; padding: 0; margin-top: 0.25rem;">
+                      Quitar imagen
                     </button>
                   </div>
                 </div>
 
-                <input type="file" id="imageFile" accept="image/*" style="width: 100%; padding: 0.5rem; border: 1px dashed var(--border); background: var(--bg);" />
-                <span style="font-size: 0.7rem; color: var(--dim-gray); display: block; margin-top: 0.25rem;">
-                  Podés reemplazar la foto seleccionando un nuevo archivo de tu equipo.
-                </span>
+                <input type="file" id="imageFile" accept="image/*" style="width: 100%; padding: 0.5rem; border: 1px dashed var(--border); background: var(--bg); font-size: 0.8125rem;" />
               </div>
 
               <div style="display: flex; align-items: center; gap: 0.75rem; margin-top: 0.5rem;">
-                <input type="checkbox" id="featured" style="width: 20px; height: 20px; accent-color: var(--leo-blue);" />
-                <label for="featured" style="font-size: 0.875rem; font-weight: 700; cursor: pointer;">
-                  ⭐ Marcar como artículo destacado (se muestra arriba en portada y en Escribe)
+                <input type="checkbox" id="featured" style="width: 18px; height: 18px; accent-color: var(--leo-blue); cursor: pointer;" />
+                <label for="featured" style="font-size: 0.875rem; font-weight: 600; cursor: pointer; color: var(--text);">
+                  Destacar este artículo en la portada y cabecera de la sección
                 </label>
               </div>
 
-              <button type="submit" id="submit-btn" style="padding: 1rem 1.5rem; background: var(--leo-blue); color: #000; font-weight: 800; border: none; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.05em; cursor: pointer; transition: var(--t); margin-top: 0.5rem;">
-                🚀 Publicar / Guardar Cambios
+              <button type="submit" id="submit-btn" style="padding: 1.1rem 1.5rem; background: var(--leo-blue); color: #000; font-weight: 800; border: none; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.08em; cursor: pointer; transition: var(--t); margin-top: 0.5rem;">
+                Guardar publicación
               </button>
             </form>
           </div>
 
-          <!-- COLUMNA DERECHA: BARRA CON TODAS LAS NOTAS PUBLICADAS (CON ESTRELLITA Y EDICIÓN RÁPIDA) -->
+          <!-- COLUMNA DERECHA: BARRA EDITORIAL DE ARTÍCULOS PUBLICADOS -->
           <div>
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border);">
-              <h2 class="t-h3" style="font-size: 1.25rem; font-weight: 800; margin: 0;">📚 Notas Publicadas</h2>
-              <span id="articles-count" style="font-size: 0.75rem; font-weight: 700; background: var(--leo-blue); color: #000; padding: 0.2rem 0.6rem; border-radius: 12px;">0</span>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border);">
+              <h2 class="t-h3" style="font-size: 1.15rem; font-weight: 800; margin: 0; text-transform: uppercase; letter-spacing: 0.04em;">Entradas registradas</h2>
+              <span id="articles-count" style="font-size: 0.75rem; font-weight: 700; background: var(--leo-blue); color: #000; padding: 0.2rem 0.6rem; border-radius: 2px;">0</span>
             </div>
             
-            <p style="font-size: 0.75rem; color: var(--dim-gray); margin-bottom: 1rem;">
-              Tocá la estrellita <strong>⭐</strong> para elegir la nota destacada, o <strong>✏️ Editar</strong> para modificar su contenido o foto.
+            <p style="font-size: 0.75rem; color: var(--dim-gray); margin-bottom: 1.25rem; line-height: 1.4;">
+              Seleccione la estrella para marcar la publicación destacada en portada, o utilice los controles para editar o retirar contenidos.
             </p>
 
             <div id="articles-sidebar-list" style="display: flex; flex-direction: column; gap: 0.75rem; max-height: 75vh; overflow-y: auto; padding-right: 0.25rem;">
-              Cargando notas...
+              Cargando registros...
             </div>
           </div>
 
@@ -223,14 +243,14 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
     let currentArticles = [];
     let removeImageFlag = false;
 
-    // OJITO PARA MOSTRAR/OCULTAR CONTRASEÑA EN EL LOGIN
+    // Conmutador de la clave en login
     togglePasswordBtn?.addEventListener('click', () => {
       if (passwordInput.type === 'password') {
         passwordInput.type = 'text';
-        togglePasswordBtn.textContent = '🙈';
+        togglePasswordBtn.textContent = 'OCULTAR';
       } else {
         passwordInput.type = 'password';
-        togglePasswordBtn.textContent = '👁️';
+        togglePasswordBtn.textContent = 'MOSTRAR';
       }
     });
 
@@ -263,7 +283,7 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
       } else {
         if (loginAlert) {
           loginAlert.style.display = 'block';
-          loginAlert.textContent = '❌ Contraseña incorrecta. Verificá la clave del equipo.';
+          loginAlert.textContent = 'Credenciales no autorizadas. Verifique la clave ingresada.';
         }
       }
     });
@@ -273,7 +293,6 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
       showLoginScreen();
     });
 
-    // Formulario
     const dateInput = document.getElementById('publishedAt');
     if (dateInput) dateInput.value = new Date().toISOString().split('T')[0];
 
@@ -290,9 +309,9 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
     function showAlert(msg, isSuccess) {
       if (!statusAlert) return;
       statusAlert.style.display = 'block';
-      statusAlert.style.background = isSuccess ? '#d4edda' : '#f8d7da';
-      statusAlert.style.color = isSuccess ? '#155724' : '#721c24';
-      statusAlert.style.border = isSuccess ? '1px solid #c3e6cb' : '1px solid #f5c6cb';
+      statusAlert.style.background = isSuccess ? 'rgba(40, 167, 69, 0.1)' : 'rgba(220, 53, 69, 0.1)';
+      statusAlert.style.color = isSuccess ? '#155724' : '#dc3545';
+      statusAlert.style.borderColor = isSuccess ? 'rgba(40, 167, 69, 0.3)' : 'rgba(220, 53, 69, 0.3)';
       statusAlert.textContent = msg;
     }
 
@@ -304,7 +323,7 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
     function resetForm() {
       articleForm?.reset();
       if (editingDocId) editingDocId.value = '';
-      if (formModeTitle) formModeTitle.textContent = '➕ Crear nuevo artículo';
+      if (formModeTitle) formModeTitle.textContent = 'Nuevo artículo';
       if (cancelEditBtn) cancelEditBtn.style.display = 'none';
       if (imagePreviewContainer) imagePreviewContainer.style.display = 'none';
       if (dateInput) dateInput.value = new Date().toISOString().split('T')[0];
@@ -324,7 +343,7 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
         },
         body: file
       });
-      if (!res.ok) throw new Error('Error al subir la imagen');
+      if (!res.ok) throw new Error('Error al procesar la imagen enviada.');
       const data = await res.json();
       return {
         _type: 'image',
@@ -336,8 +355,8 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
       e.preventDefault();
 
       submitBtn.disabled = true;
-      submitBtn.textContent = '⏳ Procesando...';
-      showAlert('Guardando nota en la web...', true);
+      submitBtn.textContent = 'Guardando datos...';
+      showAlert('Enviando y actualizando publicación...', true);
 
       try {
         const isEditing = Boolean(editingDocId.value);
@@ -391,18 +410,18 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
         });
 
         if (res.ok) {
-          showAlert(isEditing ? '✅ ¡Artículo actualizado correctamente!' : '✅ ¡Artículo creado exitosamente!', true);
+          showAlert(isEditing ? 'Publicación actualizada correctamente.' : 'Artículo registrado y publicado correctamente.', true);
           resetForm();
           await loadArticlesList();
         } else {
           const errData = await res.json();
-          showAlert(`❌ Error al guardar: ${errData.error?.description || 'Ocurrió un error.'}`, false);
+          showAlert(`Error al guardar: ${errData.error?.description || 'Verifique los permisos de acceso.'}`, false);
         }
       } catch (err) {
-        showAlert(`❌ Error: ${err.message}`, false);
+        showAlert(`Error: ${err.message}`, false);
       } finally {
         submitBtn.disabled = false;
-        submitBtn.textContent = '🚀 Publicar / Guardar Cambios';
+        submitBtn.textContent = 'Guardar publicación';
       }
     });
 
@@ -459,29 +478,27 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
 
       container.innerHTML = currentArticles.map(art => {
         const isFeatured = Boolean(art.featured);
-        const starIcon = isFeatured ? '⭐' : '☆';
-        const starTitle = isFeatured ? 'Artículo destacado' : 'Hacer destacado';
         
         return `
-          <div style="background: var(--bg); padding: 0.85rem; border: 1px solid ${isFeatured ? 'var(--leo-blue)' : 'var(--border)'}; display: flex; flex-direction: column; gap: 0.5rem; position: relative;">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem;">
-              <button onclick="toggleStar('${art._id}', ${!isFeatured})" title="${starTitle}" style="background: transparent; border: none; font-size: 1.2rem; cursor: pointer; padding: 0;">
-                ${starIcon}
+          <div style="background: var(--bg); padding: 0.9rem 1rem; border: 1px solid ${isFeatured ? 'var(--leo-blue)' : 'var(--border)'}; display: flex; flex-direction: column; gap: 0.5rem; position: relative;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.75rem;">
+              <button onclick="toggleStar('${art._id}', ${!isFeatured})" title="${isFeatured ? 'Publicación destacada' : 'Marcar como destacada'}" style="background: transparent; border: none; font-size: 1.1rem; cursor: pointer; padding: 0; line-height: 1; color: ${isFeatured ? 'var(--leo-blue)' : 'var(--mid-gray)'};">
+                ${isFeatured ? '★' : '☆'}
               </button>
               <div style="flex: 1;">
-                <h4 style="font-size: 0.88rem; font-weight: 700; margin: 0 0 0.2rem; line-height: 1.25;">${art.title}</h4>
+                <h4 style="font-size: 0.875rem; font-weight: 700; margin: 0 0 0.25rem; line-height: 1.3; color: var(--text);">${art.title}</h4>
                 <span style="font-size: 0.72rem; color: var(--dim-gray); display: block;">
                   ${art.publication || 'Medio'} · ${art.publishedAt || ''}
                 </span>
               </div>
             </div>
 
-            <div style="display: flex; gap: 0.5rem; justify-content: flex-end; margin-top: 0.25rem; border-top: 1px solid var(--border); padding-top: 0.4rem;">
-              <button onclick="editArticle('${art._id}')" style="background: var(--soft-bg); border: 1px solid var(--border); padding: 0.3rem 0.6rem; font-size: 0.72rem; font-weight: 700; cursor: pointer;">
-                ✏️ Editar
+            <div style="display: flex; gap: 0.5rem; justify-content: flex-end; margin-top: 0.25rem; border-top: 1px solid var(--border); padding-top: 0.5rem;">
+              <button onclick="editArticle('${art._id}')" style="background: var(--soft-bg); border: 1px solid var(--border); padding: 0.35rem 0.75rem; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; cursor: pointer; color: var(--text);">
+                Editar
               </button>
-              <button onclick="deleteArticle('${art._id}')" style="background: #dc3545; color: white; border: none; padding: 0.3rem 0.6rem; font-size: 0.72rem; font-weight: 700; cursor: pointer; border-radius: 2px;">
-                🗑️ Eliminar
+              <button onclick="deleteArticle('${art._id}')" style="background: transparent; color: #dc3545; border: 1px solid rgba(220, 53, 69, 0.4); padding: 0.35rem 0.75rem; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; cursor: pointer;">
+                Eliminar
               </button>
             </div>
           </div>
@@ -512,7 +529,6 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
       });
 
       if (res.ok) {
-        // Actualizar visualmente la lista
         const art = currentArticles.find(a => a._id === id);
         if (art) {
           currentArticles.forEach(a => a.featured = false);
@@ -528,7 +544,7 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
 
       removeImageFlag = false;
       if (editingDocId) editingDocId.value = art._id;
-      if (formModeTitle) formModeTitle.textContent = `✏️ Editando: ${art.title}`;
+      if (formModeTitle) formModeTitle.textContent = `Editando entrada: ${art.title}`;
       if (cancelEditBtn) cancelEditBtn.style.display = 'inline-block';
 
       document.getElementById('title').value = art.title || '';
@@ -560,7 +576,7 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
     };
 
     window.deleteArticle = async function(id) {
-      if (!confirm('¿Estás seguro de eliminar este artículo?')) return;
+      if (!confirm('¿Confirma la eliminación permanente de esta entrada?')) return;
 
       const mutateUrl = `https://${projectId}.api.sanity.io/v2024-01-01/data/mutate/${dataset}`;
       const res = await fetch(mutateUrl, {
@@ -577,7 +593,7 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
         currentArticles = currentArticles.filter(a => a._id !== id);
         loadArticlesList();
       } else {
-        alert('Error al eliminar el artículo.');
+        alert('Ocurrió un inconveniente al eliminar la publicación.');
       }
     };
 

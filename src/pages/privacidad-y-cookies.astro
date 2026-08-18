@@ -6,16 +6,19 @@ import PageHero from '../components/PageHero.astro';
 <BaseLayout title="Privacidad y cookies · Leon Grosso" description="Información sobre privacidad, almacenamiento local, cookies y servicios externos de la web de Leon Grosso.">
   <PageHero kicker="Información legal" title="Privacidad y cookies" lede="Qué datos técnicos puede utilizar esta web, con qué finalidad y cómo administrar tus preferencias." />
   <section class="section"><div class="container legal-copy">
-    <p class="legal-updated">Última actualización: 17 de agosto de 2026.</p>
+    <p class="legal-updated">Última actualización: 18 de agosto de 2026.</p>
 
     <h2>1. Alcance y responsable</h2>
-    <p>Esta política se aplica a la web personal de Leon Grosso y a sus páginas públicas. El responsable editorial es el equipo de Leon Grosso. Las consultas sobre privacidad pueden realizarse mediante los canales oficiales enlazados en el pie del sitio. Antes del lanzamiento definitivo se incorporará un correo específico de privacidad.</p>
+    <p>Esta política se aplica a la web personal de Leon Grosso y a sus páginas públicas. El responsable editorial es el equipo de Leon Grosso. Las consultas sobre privacidad pueden realizarse mediante los canales oficiales enlazados en el pie del sitio.</p>
 
     <h2>2. Qué utiliza actualmente la web</h2>
-    <p>En su estado actual, la web no instala herramientas de analítica, publicidad ni seguimiento comercial. Utiliza almacenamiento local estrictamente necesario para recordar la elección de privacidad durante 180 días.</p>
+    <p>En su estado actual, la web no instala herramientas de analítica ni publicidad comercial. Utiliza almacenamiento local estrictamente necesario para recordar la elección de privacidad durante 180 días y autenticar el acceso privado de gestión editorial.</p>
     <div class="legal-table-wrap"><table class="legal-table">
       <thead><tr><th>Identificador</th><th>Tipo</th><th>Finalidad</th><th>Duración</th></tr></thead>
-      <tbody><tr><td><code>leo-cookie-consent-v1</code></td><td>Almacenamiento local necesario</td><td>Recordar las categorías aceptadas o rechazadas.</td><td>180 días</td></tr></tbody>
+      <tbody>
+        <tr><td><code>leo-cookie-consent-v1</code></td><td>Almacenamiento local necesario</td><td>Recordar las categorías de cookies aceptadas o rechazadas.</td><td>180 días</td></tr>
+        <tr><td><code>leo_admin_session</code></td><td>Almacenamiento local necesario</td><td>Mantener la sesión autenticada del equipo en el panel editorial.</td><td>Sesión de usuario</td></tr>
+      </tbody>
     </table></div>
 
     <h2>3. Categorías</h2>
@@ -26,8 +29,9 @@ import PageHero from '../components/PageHero.astro';
     <h3>Contenido externo y redes</h3>
     <p>Las futuras integraciones con Instagram, TikTok, X, Facebook, video u otros servicios pueden comunicar al proveedor la dirección IP, datos del navegador e interacción con el contenido. Esas conexiones quedarán bloqueadas hasta obtener consentimiento cuando técnicamente corresponda.</p>
 
-    <h2>4. Alojamiento y registros técnicos</h2>
-    <p>El sitio está alojado en Netlify. Como proveedor de infraestructura, Netlify puede procesar datos técnicos —por ejemplo, dirección IP, agente de usuario, fecha, hora y URL solicitada— para entregar el contenido, mantener la seguridad y diagnosticar errores. Ese tratamiento se rige también por la <a href="https://www.netlify.com/privacy/" target="_blank" rel="noopener noreferrer">política de privacidad de Netlify ↗</a>.</p>
+    <h2>4. Alojamiento y provisión de contenidos (Netlify & Sanity CMS)</h2>
+    <p>El sitio está alojado en Netlify como plataforma de infraestructura principal. Netlify puede procesar registros técnicos —como dirección IP, agente de usuario, fecha, hora y URL solicitada— para entregar el contenido estático, mantener la seguridad y diagnosticar errores. Este tratamiento se rige por la <a href="https://www.netlify.com/privacy/" target="_blank" rel="noopener noreferrer">política de privacidad de Netlify ↗</a>.</p>
+    <p>Para la entrega dinámica y actualización de los artículos editoriales, la web utiliza <strong>Sanity CMS</strong> y su red global de distribución de contenidos (Sanity CDN). Las peticiones técnicas enviadas a Sanity se limitan a la recuperación pública de textos e imágenes publicados por el equipo. Sanity no instala cookies de seguimiento publicitario ni elabora perfiles de navegación de visitantes. La política de protección de datos se encuentra disponible en la <a href="https://www.sanity.io/legal/privacy" target="_blank" rel="noopener noreferrer">declaración de privacidad de Sanity ↗</a>.</p>
 
     <h2>5. Enlaces externos</h2>
     <p>La web contiene enlaces a publicaciones, organismos y redes sociales. Al seguirlos, la persona abandona este sitio y se aplican las políticas del servicio de destino. Un enlace común no instala por sí mismo las cookies del sitio enlazado.</p>
