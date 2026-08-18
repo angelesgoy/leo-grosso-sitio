@@ -534,6 +534,11 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
 
     // ACCIÓN INTERACTIVA AL TOCAR LA ESTRELLA (★) CON CAMBIO VISUAL EN 0 MILISEGUNDOS
     window.toggleStar = async function(id, setFeatured) {
+      // Guardar cuáles estaban destacadas ANTES de actualizar el estado local
+      const previouslyFeatured = currentArticles
+        .filter(art => art.featured && art._id !== id)
+        .map(art => art._id);
+
       // 1. FEEDBACK VISUAL INSTANTÁNEO EN EL NAVEGADOR
       currentArticles.forEach(art => {
         art.featured = (art._id === id) ? setFeatured : false;
@@ -545,29 +550,37 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
         featuredCheck.checked = setFeatured;
       }
 
-      // 2. ENVIAR MUTACIONES EN SEGUNDO PLANO A SANITY
+      // 2. ENVIAR TODAS LAS MUTACIONES EN UN SOLO LOTE A SANITY
       try {
-        if (setFeatured) {
-          await unsetOtherFeatured(id);
+        const mutations = [];
+
+        // Desactivar todas las que antes estaban destacadas
+        if (previouslyFeatured.length > 0) {
+          previouslyFeatured.forEach(otherId => {
+            mutations.push({ patch: { id: otherId, set: { featured: false } } });
+          });
         }
+
+        // Activar/desactivar la seleccionada
+        mutations.push({ patch: { id, set: { featured: setFeatured } } });
 
         const apiBase = getApiBase();
         const mutateUrl = `${apiBase}/v2024-01-01/data/mutate/${dataset}`;
         await fetch(mutateUrl, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify({
-            mutations: [{
-              patch: {
-                id: id,
-                set: { featured: setFeatured }
-              }
-            }]
-          })
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+          body: JSON.stringify({ mutations })
         });
+
+        // Disparar reconstrucción del sitio en Netlify si hay un Build Hook configurado
+        const buildHook = window.__NETLIFY_BUILD_HOOK__;
+        if (buildHook) {
+          fetch(buildHook, { method: 'POST' }).catch(() => {});
+          showAlert('Destacado actualizado. Netlify está reconstruyendo el sitio (2-3 min)...', true);
+        } else {
+          showAlert('Destacado actualizado en la base de datos.', true);
+        }
+
       } catch (e) {
         // En caso de fallo de red, recargar estado servidor
         loadArticlesList();
