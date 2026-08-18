@@ -2,7 +2,8 @@ export type Article = {
   id: string;
   title: string;
   publication: string;
-  year: string;
+  date: string;
+  displayDate: string;
   author: string;
   excerpt: string;
   url: string;

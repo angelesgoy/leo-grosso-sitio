@@ -27,6 +27,20 @@ test('todos los contenidos tienen autor, procedencia y categoría de interfaz', 
   });
 });
 
+test('conserva las fechas editoriales verificadas de los artículos', () => {
+  const articles = getFeed().filter((item) => item.source === 'article');
+  assert.deepEqual(articles.map(({ publishedAt, displayDate }) => [publishedAt, displayDate]), [
+    ['2026-03-08', '08/03/2026'],
+    ['2026-01-11', '11/01/2026'],
+    ['2025-12-21', '21/12/2025'],
+    ['2025-12-07', '07/12/2025'],
+    ['2025-11-23', '23/11/2025'],
+    ['2025-11-02', '02/11/2025'],
+    ['2025-10-26', '26/10/2025'],
+    ['2025-10-19', '19/10/2025']
+  ]);
+});
+
 test('elimina entradas repetidas por URL canónica aunque tengan distinto ID', () => {
   const original = getFeed()[0];
   const duplicate = { ...original, id: 'otra-fuente-misma-nota' };

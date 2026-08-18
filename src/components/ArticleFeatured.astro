@@ -9,7 +9,7 @@ const { article } = Astro.props;
         : <span class="hero-photo-label">Retrato · 4:5</span>}
     </div>
     <div>
-      <div class="meta">Artículo destacado · {article.publication} · {article.year}</div>
+      <div class="meta">Artículo destacado · {article.publication} · <time datetime={article.date}>{article.displayDate}</time></div>
       <h3>{article.title}</h3>
       <div class="article-author">{article.author}</div>
       <p class="excerpt">{article.excerpt}</p>

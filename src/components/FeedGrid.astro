@@ -12,7 +12,7 @@ const { items } = Astro.props as { items: ContentItem[] };
           : <span class="feed-item-media-label">Imagen · 16:10</span>}
       </div>
       <div class="feed-item-body">
-        <div class="feed-item-meta"><span>{item.source.toUpperCase()}</span><span class="sep">·</span><span>{item.displayDate}</span></div>
+        <div class="feed-item-meta"><span>{item.source.toUpperCase()}</span><span class="sep">·</span><time datetime={item.publishedAt}>{item.displayDate}</time></div>
         <h3 class="feed-item-title">{item.title}</h3>
         <p class="feed-item-excerpt">{item.excerpt}</p>
         {item.externalUrl && <div class="feed-link"><a href={item.externalUrl} target="_blank" rel="noopener noreferrer" class="link-arrow">Leer nota <span class="arrow">↗</span></a></div>}
@@ -28,7 +28,7 @@ const { items } = Astro.props as { items: ContentItem[] };
       {!item.verified && <span class="feed-item-placeholder">Integración pendiente</span>}
       <div class="feed-item-meta">
         <span>{item.sourceLabel}</span>
-        {item.displayDate && <><span class="sep">·</span><span>{item.displayDate}</span></>}
+        {item.displayDate && <><span class="sep">·</span><time datetime={item.publishedAt}>{item.displayDate}</time></>}
       </div>
       <h3 class="feed-item-title">{item.title}</h3>
       <p class="feed-item-excerpt">{item.excerpt}</p>

@@ -5,7 +5,7 @@ const { articles } = Astro.props as { articles: Article[] };
 <div class="articles-list">
   {articles.map((article) => (
     <article class="article-row reveal">
-      <div class="date">{article.year}</div>
+      <time class="date" datetime={article.date}>{article.displayDate}</time>
       <div class="author">{article.author}</div>
       <div class="title">{article.title}</div>
       <div class="pub">{article.publication}</div>
