@@ -6,16 +6,16 @@ const token = import.meta.env.SANITY_API_TOKEN || 'sk806I9qenm35RbkEJX0XlX4VSndF
 const teamPassword = 'WebEquipoGrosso2026';
 ---
 
-<BaseLayout title="Acceso Equipo · Leon Grosso" description="Panel privado de gestión para el equipo de prensa.">
+<BaseLayout title="Panel de Gestión · Leon Grosso" description="Panel iterativo de gestión de notas para el equipo de prensa.">
   
-  <!-- PANTALLA 1: LOGIN CON CLAVE SIMPLE DE EQUIPO -->
+  <!-- PANTALLA 1: LOGIN SEGURO DE EQUIPO -->
   <section id="login-section" class="section" style="min-height: 70vh; display: flex; align-items: center;">
     <div class="container" style="max-width: 460px;">
       <div style="background: var(--soft-bg); padding: 2.5rem; border: 1px solid var(--border); text-align: center;">
         <span class="kicker">Área Privada</span>
         <h1 class="t-section" style="margin: 0.75rem 0 0.5rem; font-size: 1.75rem;">Acceso Equipo</h1>
         <p class="t-body" style="font-size: 0.875rem; color: var(--dim-gray); margin-bottom: 2rem;">
-          Ingresá la contraseña del equipo para administrar las notas de la web.
+          Ingresá la contraseña del equipo para gestionar los artículos de la web.
         </p>
 
         <div id="login-alert" style="display: none; padding: 0.75rem; margin-bottom: 1.25rem; background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; font-size: 0.85rem; font-weight: 600;"></div>
@@ -39,14 +39,14 @@ const teamPassword = 'WebEquipoGrosso2026';
     </div>
   </section>
 
-  <!-- PANTALLA 2: FORMULARIO DE CARGA SIMPLIFICADO -->
+  <!-- PANTALLA 2: DASHBOARD ITERATIVO EN 2 COLUMNAS -->
   <div id="admin-panel-content" style="display: none;">
-    <section class="page-hero">
-      <div class="container" style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem;">
+    <section class="page-hero" style="padding-bottom: 1.5rem;">
+      <div class="container" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
         <div>
-          <span class="kicker">Gestión de Prensa</span>
-          <h1 class="t-page page-title">Publicar Artículo<span class="title-dot">.</span></h1>
-          <p class="page-hero-lede">Formulario simplificado para cargar o eliminar notas de la web.</p>
+          <span class="kicker">Gestión Editorial</span>
+          <h1 class="t-page page-title" style="margin-bottom: 0.25rem;">Panel de Artículos<span class="title-dot">.</span></h1>
+          <p class="page-hero-lede" style="font-size: 0.95rem;">Cargá, editá, cambiá fotos y destacá notas en tiempo real.</p>
         </div>
         <button id="logout-btn" style="padding: 0.5rem 1rem; background: transparent; border: 1px solid var(--border); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; cursor: pointer; color: var(--dim-gray);">
           🔒 Cerrar sesión
@@ -54,84 +54,136 @@ const teamPassword = 'WebEquipoGrosso2026';
       </div>
     </section>
 
-    <section class="section">
-      <div class="container" style="max-width: 800px;">
+    <section class="section" style="padding-top: 2rem;">
+      <div class="container">
         
+        <!-- ALERTA DE ESTADO GLOBAL -->
         <div id="status-alert" style="display: none; padding: 1rem 1.5rem; margin-bottom: 2rem; border-radius: 4px; font-weight: 600;"></div>
 
-        <form id="article-form" style="display: flex; flex-direction: column; gap: 1.5rem; background: var(--soft-bg); padding: 2rem; border: 1px solid var(--border);">
+        <!-- GRID DE 2 COLUMNAS: FORMULARIO A LA IZQUIERDA + BARRA DE NOTAS A LA DERECHA -->
+        <div style="display: grid; grid-template-columns: 7fr 5fr; gap: 2.5rem; align-items: start;" class="admin-grid">
           
+          <!-- COLUMNA IZQUIERDA: FORMULARIO DE CREACIÓN / EDICIÓN -->
           <div>
-            <label style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; color: var(--text);">
-              Título del artículo *
-            </label>
-            <input type="text" id="title" required placeholder="Ej: A las armas las carga el narco" style="width: 100%; padding: 0.85rem 1rem; border: 1px solid var(--border); font-size: 1rem; background: var(--bg); color: var(--text);" />
-          </div>
-
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
-            <div>
-              <label style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; color: var(--text);">
-                Medio / Diario *
-              </label>
-              <input type="text" id="publication" required value="El Cohete a la Luna" style="width: 100%; padding: 0.85rem 1rem; border: 1px solid var(--border); font-size: 1rem; background: var(--bg); color: var(--text);" />
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border);">
+              <h2 id="form-mode-title" class="t-h3" style="font-size: 1.25rem; font-weight: 800; margin: 0;">➕ Crear nuevo artículo</h2>
+              <button id="cancel-edit-btn" style="display: none; background: transparent; border: none; color: var(--leo-blue); font-size: 0.8125rem; font-weight: 700; cursor: pointer; text-decoration: underline;">
+                ✖ Cancelar edición
+              </button>
             </div>
-            <div>
-              <label style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; color: var(--text);">
-                Fecha de publicación *
-              </label>
-              <input type="date" id="publishedAt" required style="width: 100%; padding: 0.85rem 1rem; border: 1px solid var(--border); font-size: 1rem; background: var(--bg); color: var(--text);" />
+
+            <form id="article-form" style="display: flex; flex-direction: column; gap: 1.25rem; background: var(--soft-bg); padding: 1.75rem; border: 1px solid var(--border);">
+              
+              <input type="hidden" id="editing-doc-id" value="" />
+
+              <div>
+                <label style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.4rem; color: var(--text);">
+                  Título del artículo *
+                </label>
+                <input type="text" id="title" required placeholder="Ej: A las armas las carga el narco" style="width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--border); font-size: 0.95rem; background: var(--bg); color: var(--text);" />
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div>
+                  <label style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.4rem; color: var(--text);">
+                    Medio / Diario *
+                  </label>
+                  <input type="text" id="publication" required value="El Cohete a la Luna" style="width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--border); font-size: 0.95rem; background: var(--bg); color: var(--text);" />
+                </div>
+                <div>
+                  <label style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.4rem; color: var(--text);">
+                    Fecha de publicación *
+                  </label>
+                  <input type="date" id="publishedAt" required style="width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--border); font-size: 0.95rem; background: var(--bg); color: var(--text);" />
+                </div>
+              </div>
+
+              <div>
+                <label style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.4rem; color: var(--text);">
+                  Autor / Coautores *
+                </label>
+                <input type="text" id="authors" required value="Leonardo Grosso" placeholder="Ej: Leonardo Grosso + Vanina Pasik" style="width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--border); font-size: 0.95rem; background: var(--bg); color: var(--text);" />
+              </div>
+
+              <div>
+                <label style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.4rem; color: var(--text);">
+                  Bajada / Resumen *
+                </label>
+                <textarea id="excerpt" rows="3" required placeholder="Breve resumen del artículo..." style="width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--border); font-size: 0.95rem; background: var(--bg); color: var(--text); resize: vertical;"></textarea>
+              </div>
+
+              <div>
+                <label style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.4rem; color: var(--text);">
+                  URL externa a la nota original *
+                </label>
+                <input type="url" id="externalUrl" required placeholder="https://www.elcohetealaluna.com/..." style="width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--border); font-size: 0.95rem; background: var(--bg); color: var(--text);" />
+              </div>
+
+              <!-- GESTIÓN DE IMAGEN CON VISTA PREVIA Y BOTÓN DE QUITAR -->
+              <div style="border-top: 1px dashed var(--border); padding-top: 1rem;">
+                <label style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.4rem; color: var(--text);">
+                  Fotografía del artículo
+                </label>
+
+                <!-- Vista previa si existe foto -->
+                <div id="image-preview-container" style="display: none; align-items: center; gap: 1rem; margin-bottom: 0.75rem; background: var(--bg); padding: 0.5rem; border: 1px solid var(--border);">
+                  <img id="image-preview" src="" alt="Vista previa" style="width: 60px; height: 60px; object-fit: cover;" />
+                  <div style="flex: 1;">
+                    <span style="font-size: 0.75rem; color: var(--dim-gray); display: block;">Foto actual asignada</span>
+                    <button type="button" id="remove-image-btn" style="background: transparent; border: none; color: #dc3545; font-size: 0.75rem; font-weight: 700; cursor: pointer; padding: 0; margin-top: 0.2rem;">
+                      🗑️ Quitar foto
+                    </button>
+                  </div>
+                </div>
+
+                <input type="file" id="imageFile" accept="image/*" style="width: 100%; padding: 0.5rem; border: 1px dashed var(--border); background: var(--bg);" />
+                <span style="font-size: 0.7rem; color: var(--dim-gray); display: block; margin-top: 0.25rem;">
+                  Podés reemplazar la foto seleccionando un nuevo archivo de tu equipo.
+                </span>
+              </div>
+
+              <div style="display: flex; align-items: center; gap: 0.75rem; margin-top: 0.5rem;">
+                <input type="checkbox" id="featured" style="width: 20px; height: 20px; accent-color: var(--leo-blue);" />
+                <label for="featured" style="font-size: 0.875rem; font-weight: 700; cursor: pointer;">
+                  ⭐ Marcar como artículo destacado (se muestra arriba en portada y en Escribe)
+                </label>
+              </div>
+
+              <button type="submit" id="submit-btn" style="padding: 1rem 1.5rem; background: var(--leo-blue); color: #000; font-weight: 800; border: none; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.05em; cursor: pointer; transition: var(--t); margin-top: 0.5rem;">
+                🚀 Publicar / Guardar Cambios
+              </button>
+            </form>
+          </div>
+
+          <!-- COLUMNA DERECHA: BARRA CON TODAS LAS NOTAS PUBLICADAS (CON ESTRELLITA Y EDICIÓN RÁPIDA) -->
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border);">
+              <h2 class="t-h3" style="font-size: 1.25rem; font-weight: 800; margin: 0;">📚 Notas Publicadas</h2>
+              <span id="articles-count" style="font-size: 0.75rem; font-weight: 700; background: var(--leo-blue); color: #000; padding: 0.2rem 0.6rem; border-radius: 12px;">0</span>
+            </div>
+            
+            <p style="font-size: 0.75rem; color: var(--dim-gray); margin-bottom: 1rem;">
+              Tocá la estrellita <strong>⭐</strong> para elegir la nota destacada, o <strong>✏️ Editar</strong> para modificar su contenido o foto.
+            </p>
+
+            <div id="articles-sidebar-list" style="display: flex; flex-direction: column; gap: 0.75rem; max-height: 75vh; overflow-y: auto; padding-right: 0.25rem;">
+              Cargando notas...
             </div>
           </div>
 
-          <div>
-            <label style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; color: var(--text);">
-              Autor / Coautores *
-            </label>
-            <input type="text" id="authors" required value="Leonardo Grosso" placeholder="Ej: Leonardo Grosso + Vanina Pasik" style="width: 100%; padding: 0.85rem 1rem; border: 1px solid var(--border); font-size: 1rem; background: var(--bg); color: var(--text);" />
-          </div>
-
-          <div>
-            <label style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; color: var(--text);">
-              Bajada / Resumen *
-            </label>
-            <textarea id="excerpt" rows="3" required placeholder="Breve resumen del artículo que se mostrará en el listado..." style="width: 100%; padding: 0.85rem 1rem; border: 1px solid var(--border); font-size: 1rem; background: var(--bg); color: var(--text); resize: vertical;"></textarea>
-          </div>
-
-          <div>
-            <label style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; color: var(--text);">
-              URL externa a la nota original *
-            </label>
-            <input type="url" id="externalUrl" required placeholder="https://www.elcohetealaluna.com/..." style="width: 100%; padding: 0.85rem 1rem; border: 1px solid var(--border); font-size: 1rem; background: var(--bg); color: var(--text);" />
-          </div>
-
-          <div>
-            <label style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; color: var(--text);">
-              Imagen del artículo (Opcional)
-            </label>
-            <input type="file" id="imageFile" accept="image/*" style="width: 100%; padding: 0.5rem; border: 1px dashed var(--border); background: var(--bg);" />
-          </div>
-
-          <div style="display: flex; align-items: center; gap: 0.75rem; margin-top: 0.5rem;">
-            <input type="checkbox" id="featured" style="width: 20px; height: 20px; accent-color: var(--leo-blue);" />
-            <label for="featured" style="font-size: 0.9375rem; font-weight: 600; cursor: pointer;">
-              ⭐ Marcar como artículo destacado (aparecerá arriba en portada y en Escribe)
-            </label>
-          </div>
-
-          <button type="submit" id="submit-btn" style="padding: 1.15rem 2rem; background: var(--leo-blue); color: #000; font-weight: 800; border: none; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.05em; cursor: pointer; transition: var(--t); margin-top: 1rem;">
-            🚀 Publicar Artículo en la Web
-          </button>
-        </form>
-
-        <!-- Lista de artículos publicados -->
-        <div style="margin-top: 4rem;">
-          <h2 class="t-h3" style="margin-bottom: 1.5rem;">Artículos Publicados</h2>
-          <div id="articles-manage-list">Cargando artículos...</div>
         </div>
 
       </div>
     </section>
   </div>
+
+  <style>
+    @media (max-width: 991px) {
+      .admin-grid {
+        grid-template-columns: 1fr !important;
+      }
+    }
+  </style>
 
   <script define:vars={{ projectId, dataset, token, teamPassword }}>
     const AUTH_SESSION_KEY = 'leo_admin_session';
@@ -141,6 +193,9 @@ const teamPassword = 'WebEquipoGrosso2026';
     const passwordInput = document.getElementById('password-input');
     const loginAlert = document.getElementById('login-alert');
     const logoutBtn = document.getElementById('logout-btn');
+
+    let currentArticles = [];
+    let removeImageFlag = false;
 
     function checkAuth() {
       const session = localStorage.getItem(AUTH_SESSION_KEY);
@@ -162,7 +217,6 @@ const teamPassword = 'WebEquipoGrosso2026';
       loadArticlesList();
     }
 
-    // Submit de Login
     loginForm?.addEventListener('submit', (e) => {
       e.preventDefault();
       const enteredPassword = passwordInput.value.trim();
@@ -177,19 +231,24 @@ const teamPassword = 'WebEquipoGrosso2026';
       }
     });
 
-    // Logout
     logoutBtn?.addEventListener('click', () => {
       localStorage.removeItem(AUTH_SESSION_KEY);
       showLoginScreen();
     });
 
-    // Formulario de carga
+    // Formulario
     const dateInput = document.getElementById('publishedAt');
     if (dateInput) dateInput.value = new Date().toISOString().split('T')[0];
 
     const articleForm = document.getElementById('article-form');
     const statusAlert = document.getElementById('status-alert');
     const submitBtn = document.getElementById('submit-btn');
+    const formModeTitle = document.getElementById('form-mode-title');
+    const cancelEditBtn = document.getElementById('cancel-edit-btn');
+    const editingDocId = document.getElementById('editing-doc-id');
+    const imagePreviewContainer = document.getElementById('image-preview-container');
+    const imagePreview = document.getElementById('image-preview');
+    const removeImageBtn = document.getElementById('remove-image-btn');
 
     function showAlert(msg, isSuccess) {
       if (!statusAlert) return;
@@ -199,6 +258,23 @@ const teamPassword = 'WebEquipoGrosso2026';
       statusAlert.style.border = isSuccess ? '1px solid #c3e6cb' : '1px solid #f5c6cb';
       statusAlert.textContent = msg;
     }
+
+    removeImageBtn?.addEventListener('click', () => {
+      removeImageFlag = true;
+      if (imagePreviewContainer) imagePreviewContainer.style.display = 'none';
+    });
+
+    function resetForm() {
+      articleForm?.reset();
+      if (editingDocId) editingDocId.value = '';
+      if (formModeTitle) formModeTitle.textContent = '➕ Crear nuevo artículo';
+      if (cancelEditBtn) cancelEditBtn.style.display = 'none';
+      if (imagePreviewContainer) imagePreviewContainer.style.display = 'none';
+      if (dateInput) dateInput.value = new Date().toISOString().split('T')[0];
+      removeImageFlag = false;
+    }
+
+    cancelEditBtn?.addEventListener('click', resetForm);
 
     async function uploadImage(file) {
       if (!file) return null;
@@ -223,22 +299,39 @@ const teamPassword = 'WebEquipoGrosso2026';
       e.preventDefault();
 
       submitBtn.disabled = true;
-      submitBtn.textContent = '⏳ Publicando...';
-      showAlert('Procesando y publicando artículo...', true);
+      submitBtn.textContent = '⏳ Procesando...';
+      showAlert('Guardando nota en la web...', true);
 
       try {
+        const isEditing = Boolean(editingDocId.value);
+        const docId = editingDocId.value || `article-${Date.now()}`;
         const title = document.getElementById('title').value.trim();
         const slugStr = title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
         const imageFile = document.getElementById('imageFile')?.files?.[0];
-        let imageAsset = null;
+        const isFeatured = document.getElementById('featured').checked;
 
+        let imageAsset = null;
         if (imageFile) {
           imageAsset = await uploadImage(imageFile);
         }
 
+        // Si es destacada, des-destacar las demás primero
+        if (isFeatured) {
+          await unsetOtherFeatured(docId);
+        }
+
+        const existingDoc = currentArticles.find(a => a._id === docId);
+
+        let finalImage = undefined;
+        if (imageAsset) {
+          finalImage = imageAsset;
+        } else if (!removeImageFlag && existingDoc?.image) {
+          finalImage = existingDoc.image;
+        }
+
         const doc = {
           _type: 'article',
-          _id: `article-${Date.now()}`,
+          _id: docId,
           title: title,
           slug: { _type: 'slug', current: slugStr },
           publication: document.getElementById('publication').value.trim(),
@@ -246,9 +339,9 @@ const teamPassword = 'WebEquipoGrosso2026';
           authors: document.getElementById('authors').value.trim(),
           excerpt: document.getElementById('excerpt').value.trim(),
           externalUrl: document.getElementById('externalUrl').value.trim(),
-          featured: document.getElementById('featured').checked,
+          featured: isFeatured,
           status: 'published',
-          ...(imageAsset ? { image: imageAsset } : {})
+          ...(finalImage ? { image: finalImage } : {})
         };
 
         const mutateUrl = `https://${projectId}.api.sanity.io/v2024-01-01/data/mutate/${dataset}`;
@@ -262,55 +355,170 @@ const teamPassword = 'WebEquipoGrosso2026';
         });
 
         if (res.ok) {
-          showAlert('✅ ¡Artículo publicado exitosamente! La web se actualizará en unos segundos.', true);
-          articleForm.reset();
-          if (dateInput) dateInput.value = new Date().toISOString().split('T')[0];
-          loadArticlesList();
+          showAlert(isEditing ? '✅ ¡Artículo actualizado correctamente!' : '✅ ¡Artículo creado exitosamente!', true);
+          resetForm();
+          await loadArticlesList();
         } else {
           const errData = await res.json();
-          showAlert(`❌ Error al publicar: ${errData.error?.description || 'Ocurrió un inconveniente al guardar.'}`, false);
+          showAlert(`❌ Error al guardar: ${errData.error?.description || 'Ocurrió un error.'}`, false);
         }
       } catch (err) {
         showAlert(`❌ Error: ${err.message}`, false);
       } finally {
         submitBtn.disabled = false;
-        submitBtn.textContent = '🚀 Publicar Artículo en la Web';
+        submitBtn.textContent = '🚀 Publicar / Guardar Cambios';
       }
     });
 
+    // Des-destacar otras notas
+    async function unsetOtherFeatured(currentId) {
+      const featuredArticles = currentArticles.filter(a => a.featured && a._id !== currentId);
+      if (featuredArticles.length === 0) return;
+
+      const mutations = featuredArticles.map(art => ({
+        patch: {
+          id: art._id,
+          set: { featured: false }
+        }
+      }));
+
+      const mutateUrl = `https://${projectId}.api.sanity.io/v2024-01-01/data/mutate/${dataset}`;
+      await fetch(mutateUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ mutations })
+      });
+    }
+
+    // Cargar la lista lateral de notas
     async function loadArticlesList() {
-      const container = document.getElementById('articles-manage-list');
+      const container = document.getElementById('articles-sidebar-list');
+      const countBadge = document.getElementById('articles-count');
       if (!container) return;
 
-      const query = encodeURIComponent(`*[_type == "article"] | order(publishedAt desc)`);
+      const query = encodeURIComponent(`*[_type == "article"] | order(publishedAt desc) {
+        _id, title, publication, publishedAt, authors, excerpt, externalUrl, featured, image
+      }`);
       const url = `https://${projectId}.api.sanity.io/v2024-01-01/data/query/${dataset}?query=${query}`;
 
       try {
         const res = await fetch(url);
         const json = await res.json();
-        const articles = json.result || [];
+        currentArticles = json.result || [];
 
-        if (articles.length === 0) {
-          container.innerHTML = '<p style="color: var(--dim-gray);">No hay artículos cargados en el CMS aún.</p>';
+        if (countBadge) countBadge.textContent = String(currentArticles.length);
+
+        if (currentArticles.length === 0) {
+          container.innerHTML = '<p style="color: var(--dim-gray); font-size: 0.875rem;">No hay artículos cargados aún.</p>';
           return;
         }
 
-        container.innerHTML = articles.map(art => `
-          <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; border-bottom: 1px solid var(--border); gap: 1rem;">
-            <div>
-              <strong>${art.featured ? '⭐ ' : ''}${art.title}</strong>
-              <div style="font-size: 0.75rem; color: var(--dim-gray);">${art.publication || ''} · ${art.publishedAt || ''}</div>
+        container.innerHTML = currentArticles.map(art => {
+          const isFeatured = Boolean(art.featured);
+          const starIcon = isFeatured ? '⭐' : '☆';
+          const starTitle = isFeatured ? 'Artículo destacado' : 'Hacer destacado';
+          
+          return `
+            <div style="background: var(--soft-bg); padding: 0.85rem; border: 1px solid ${isFeatured ? 'var(--leo-blue)' : 'var(--border)'}; display: flex; flex-direction: column; gap: 0.5rem; position: relative;">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem;">
+                <button onclick="toggleStar('${art._id}', ${!isFeatured})" title="${starTitle}" style="background: transparent; border: none; font-size: 1.2rem; cursor: pointer; padding: 0;">
+                  ${starIcon}
+                </button>
+                <div style="flex: 1;">
+                  <h4 style="font-size: 0.9rem; font-weight: 700; margin: 0 0 0.2rem; line-height: 1.25;">${art.title}</h4>
+                  <span style="font-size: 0.72rem; color: var(--dim-gray); display: block;">
+                    ${art.publication || 'Medio'} · ${art.publishedAt || ''}
+                  </span>
+                </div>
+              </div>
+
+              <div style="display: flex; gap: 0.5rem; justify-content: flex-end; margin-top: 0.25rem; border-top: 1px solid var(--border); padding-top: 0.4rem;">
+                <button onclick="editArticle('${art._id}')" style="background: var(--bg); border: 1px solid var(--border); padding: 0.3rem 0.6rem; font-size: 0.72rem; font-weight: 700; cursor: pointer;">
+                  ✏️ Editar
+                </button>
+                <button onclick="deleteArticle('${art._id}')" style="background: #dc3545; color: white; border: none; padding: 0.3rem 0.6rem; font-size: 0.72rem; font-weight: 700; cursor: pointer; border-radius: 2px;">
+                  🗑️ Eliminar
+                </button>
+              </div>
             </div>
-            <button onclick="deleteArticle('${art._id}')" style="background: #dc3545; color: white; border: none; padding: 0.5rem 0.85rem; font-size: 0.75rem; cursor: pointer; border-radius: 3px;">
-              Eliminar
-            </button>
-          </div>
-        `).join('');
+          `;
+        }).join('');
       } catch (err) {
-        container.innerHTML = '<p style="color: var(--dim-gray);">No se pudo cargar la lista de artículos.</p>';
+        container.innerHTML = '<p style="color: var(--dim-gray); font-size: 0.875rem;">Error al cargar las notas.</p>';
       }
     }
 
+    // Toggle de Estrellita (Marcar como destacado con 1 clic)
+    window.toggleStar = async function(id, setFeatured) {
+      if (setFeatured) {
+        await unsetOtherFeatured(id);
+      }
+
+      const mutateUrl = `https://${projectId}.api.sanity.io/v2024-01-01/data/mutate/${dataset}`;
+      const res = await fetch(mutateUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          mutations: [{
+            patch: {
+              id: id,
+              set: { featured: setFeatured }
+            }
+          }]
+        })
+      });
+
+      if (res.ok) {
+        loadArticlesList();
+      }
+    };
+
+    // Editar artículo (llena el formulario de la izquierda con los datos)
+    window.editArticle = function(id) {
+      const art = currentArticles.find(a => a._id === id);
+      if (!art) return;
+
+      removeImageFlag = false;
+      if (editingDocId) editingDocId.value = art._id;
+      if (formModeTitle) formModeTitle.textContent = `✏️ Editando: ${art.title}`;
+      if (cancelEditBtn) cancelEditBtn.style.display = 'inline-block';
+
+      document.getElementById('title').value = art.title || '';
+      document.getElementById('publication').value = art.publication || 'El Cohete a la Luna';
+      document.getElementById('publishedAt').value = art.publishedAt || '';
+      document.getElementById('authors').value = art.authors || 'Leonardo Grosso';
+      document.getElementById('excerpt').value = art.excerpt || '';
+      document.getElementById('externalUrl').value = art.externalUrl || '';
+      document.getElementById('featured').checked = Boolean(art.featured);
+
+      // Mostrar foto si la nota tiene
+      if (art.image) {
+        if (imagePreviewContainer) imagePreviewContainer.style.display = 'flex';
+        if (imagePreview) {
+          if (typeof art.image === 'string') {
+            imagePreview.src = art.image;
+          } else if (art.image.asset?._ref) {
+            const ref = art.image.asset._ref;
+            const match = ref.match(/^image-([a-fA-F0-9]+)-(\d+x\d+)-(\w+)$/);
+            if (match) {
+              imagePreview.src = `https://cdn.sanity.io/images/${projectId}/${dataset}/${match[1]}-${match[2]}.${match[3]}`;
+            }
+          }
+        }
+      } else {
+        if (imagePreviewContainer) imagePreviewContainer.style.display = 'none';
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    // Eliminar artículo
     window.deleteArticle = async function(id) {
       if (!confirm('¿Estás seguro de eliminar este artículo?')) return;
 
@@ -325,7 +533,7 @@ const teamPassword = 'WebEquipoGrosso2026';
       });
 
       if (res.ok) {
-        alert('Artículo eliminado.');
+        if (editingDocId.value === id) resetForm();
         loadArticlesList();
       } else {
         alert('Error al eliminar el artículo.');
