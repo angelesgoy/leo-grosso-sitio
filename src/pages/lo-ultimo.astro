@@ -11,24 +11,24 @@ const articles = await getArticles();
 const news = await getNews();
 const feed = await getFeed(articles, news);
 
-// 1. Resumen de Noticias para solapa TODO (1 destacada + 2 compactas = 3)
+// 1. Resumen de Noticias para solapa TODO (1 destacada + 3 compactas = 4)
 const newsRecords = createNewsRecords(news);
 const rawNews = newsRecords.map(normalizeLocalRecord);
 const featNews = rawNews.find((n) => n.featured) || rawNews[0];
 const otherNews = rawNews.filter((n) => n.id !== featNews?.id);
 const summaryNews = featNews ? [
   { ...featNews, featured: true },
-  ...otherNews.slice(0, 2).map((n) => ({ ...n, featured: false }))
+  ...otherNews.slice(0, 3).map((n) => ({ ...n, featured: false }))
 ] : [];
 
-// 2. Resumen de Artículos para solapa TODO (1 destacado + 2 compactos = 3)
+// 2. Resumen de Artículos para solapa TODO (1 destacado + 3 compactos = 4)
 const articleRecords = createArticleRecords(articles);
 const rawArticles = articleRecords.map(normalizeLocalRecord);
 const featArticle = rawArticles.find((a) => a.featured) || rawArticles[0];
 const otherArticles = rawArticles.filter((a) => a.id !== featArticle?.id);
 const summaryArticles = featArticle ? [
   { ...featArticle, featured: true },
-  ...otherArticles.slice(0, 2).map((a) => ({ ...a, featured: false }))
+  ...otherArticles.slice(0, 3).map((a) => ({ ...a, featured: false }))
 ] : [];
 
 // 3. Actividad y Redes para solapa TODO

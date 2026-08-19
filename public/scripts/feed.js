@@ -114,10 +114,10 @@ async function syncSanityFeed() {
       }
     }
 
-    // ── 3. LO ÚLTIMO: RESUMEN TODO (3 noticias + 3 artículos) ───────────────
+    // ── 3. LO ÚLTIMO: RESUMEN TODO (1 destacada + 3 compactas = 4) ─────────
     if (summaryNewsGrid) {
       const feat = newsOnly.find(n => n.featured) || newsOnly[0];
-      const others = newsOnly.filter(n => n.id !== feat?.id).slice(0, 2);
+      const others = newsOnly.filter(n => n.id !== feat?.id).slice(0, 3);
       const list = feat ? [feat, ...others] : [];
       if (list.length > 0) {
         summaryNewsGrid.innerHTML = list.map((item, idx) => renderCard(item, idx === 0)).join('');
@@ -126,7 +126,7 @@ async function syncSanityFeed() {
 
     if (summaryArticlesGrid) {
       const feat = articlesOnly.find(a => a.featured) || articlesOnly[0];
-      const others = articlesOnly.filter(a => a.id !== feat?.id).slice(0, 2);
+      const others = articlesOnly.filter(a => a.id !== feat?.id).slice(0, 3);
       const list = feat ? [feat, ...others] : [];
       if (list.length > 0) {
         summaryArticlesGrid.innerHTML = list.map((item, idx) => renderCard(item, idx === 0)).join('');
