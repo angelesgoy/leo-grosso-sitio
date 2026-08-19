@@ -222,10 +222,15 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
     // Contraseña guardada en memoria (nunca en localStorage ni en el HTML)
     let sessionPassword = '';
 
-    // ── CAPA SEGURA DE API ───────────────────────────────────────────────────
-    // Todas las escrituras van al servidor (Netlify Function), nunca directo a Sanity
+    // ── CAPA SEGURA DE API (Compatible con Cloudflare Pages y Netlify) ──────
+    function getApiEndpoint() {
+      return window.location.hostname.includes('netlify.app')
+        ? '/.netlify/functions/sanity-mutate'
+        : '/api/sanity-mutate';
+    }
+
     async function callMutate(mutations) {
-      return fetch('/.netlify/functions/sanity-mutate', {
+      return fetch(getApiEndpoint(), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ password: sessionPassword, action: 'mutate', mutations })
@@ -238,14 +243,15 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
       let binary = '';
       for (let i = 0; i < uint8.byteLength; i++) binary += String.fromCharCode(uint8[i]);
       const imageData = btoa(binary);
-      const res = await fetch('/.netlify/functions/sanity-mutate', {
+      const res = await fetch(getApiEndpoint(), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ password: sessionPassword, action: 'upload', contentType: file.type, imageData })
       });
       if (!res.ok) throw new Error('Error al subir imagen al servidor.');
       const data = await res.json();
-      return { _type: 'image', asset: { _type: 'reference', _ref: data.document._id } };
+      const docId = data.document?._id || data._id;
+      return { _type: 'image', asset: { _type: 'reference', _ref: docId } };
     }
 
     // Sanity público (solo lectura, sin token)
