@@ -7,6 +7,21 @@ export type Article = {
   author: string;
   excerpt: string;
   url: string;
+  image?: string;
+  imageAlt?: string;
+  featured?: boolean;
+};
+
+export type NewsItem = {
+  id: string;
+  title: string;
+  publication: string;
+  date: string;
+  displayDate: string;
+  excerpt: string;
+  url: string;
+  image?: string;
+  imageAlt?: string;
   featured?: boolean;
 };
 

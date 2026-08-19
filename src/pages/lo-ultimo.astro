@@ -5,12 +5,13 @@ import FeedGrid from '../components/FeedGrid.astro';
 import { getFeed } from '../services/content';
 
 const feed = await getFeed();
-const availableFilters = ['artículos', 'gestión', 'redes'].filter((filter) =>
+const allFilterCategories = ['noticias', 'artículos', 'gestión', 'redes'];
+const availableFilters = allFilterCategories.filter((filter) =>
   feed.some((item) => item.feedCategory === filter)
 );
 ---
-<BaseLayout title="Lo último · Leon Grosso" description="Actualidad de Leon Grosso: artículos, gestión, redes y actividad territorial.">
-  <PageHero kicker="Actualidad" title="Lo último" lede="Flujo público: artículos, gestión, redes y actividad territorial. Cuando se conecten las APIs oficiales, esta sección se alimentará automáticamente de mis cuentas verificadas." />
+<BaseLayout title="Lo último · Leon Grosso" description="Actualidad de Leon Grosso: noticias, artículos, gestión, redes y actividad territorial.">
+  <PageHero kicker="Actualidad" title="Lo último" lede="Flujo público de noticias, artículos de opinión, gestión pública y actividad territorial de Leon Grosso." />
   <section class="section"><div class="container">
     <div class="feed-filters" aria-label="Filtrar contenidos">
       {['todo', ...availableFilters].map((filter, index) => <button class:list={['filter-btn', { active: index === 0 }]} data-feed-filter={filter} aria-pressed={index === 0}>{filter.toUpperCase()}</button>)}

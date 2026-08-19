@@ -1,5 +1,5 @@
 import { data as fallbackData } from '../../data/content.js';
-import type { Article } from '../../types/content.ts';
+import type { Article, NewsItem } from '../../types/content.ts';
 
 const PROJECT_ID = (import.meta.env?.PUBLIC_SANITY_PROJECT_ID as string) || 'j4xtzihv';
 const DATASET = (import.meta.env?.PUBLIC_SANITY_DATASET as string) || 'production';
@@ -140,5 +140,73 @@ export async function getArticlesFromSanity(): Promise<Article[]> {
     });
   } catch (err) {
     return fallbackData.articles as Article[];
+  }
+}
+
+/**
+ * Consulta las noticias de prensa publicadas desde Sanity CMS.
+ * Si Sanity no tiene noticias aún, devuelve las noticias fallback locales.
+ */
+export async function getNewsFromSanity(): Promise<NewsItem[]> {
+  const fallbackNews = (fallbackData.news || []) as NewsItem[];
+  if (!PROJECT_ID || PROJECT_ID === 'demo') {
+    return fallbackNews;
+  }
+
+  const query = encodeURIComponent(
+    `*[_type == "news" && !(_id in path("drafts.**")) && (status == "published" || !defined(status))] | order(publishedAt desc) {
+      _id,
+      title,
+      "slug": slug.current,
+      publication,
+      publishedAt,
+      excerpt,
+      image,
+      externalUrl,
+      featured,
+      status
+    }`
+  );
+
+  const url = `https://${PROJECT_ID}.api.sanity.io/${API_VERSION}/data/query/${DATASET}?query=${query}`;
+
+  try {
+    const res = await fetch(url, {
+      headers: {
+        'Accept': 'application/json'
+      }
+    });
+
+    if (!res.ok) {
+      return fallbackNews;
+    }
+
+    const json = await res.json();
+    const rawNews = json.result || [];
+
+    if (!Array.isArray(rawNews) || rawNews.length === 0) {
+      return fallbackNews;
+    }
+
+    return rawNews.map((item: any) => {
+      const slugKey = typeof item.slug === 'string' ? item.slug : (item.slug?.current || item._id.replace(/^news-/, ''));
+      const imgData = buildSanityImageUrl(item.image);
+      const publishedDate = item.publishedAt ? item.publishedAt.split('T')[0] : '';
+
+      return {
+        id: slugKey,
+        title: item.title || '',
+        publication: item.publication || 'Medio',
+        date: publishedDate,
+        displayDate: formatDisplayDate(publishedDate),
+        excerpt: item.excerpt || '',
+        url: item.externalUrl || '',
+        image: imgData.url || (typeof item.image === 'string' ? item.image : '/images/principales/articulo-destacado.webp'),
+        imageAlt: imgData.alt || item.title,
+        featured: Boolean(item.featured)
+      };
+    });
+  } catch (err) {
+    return fallbackNews;
   }
 }

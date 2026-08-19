@@ -4,9 +4,10 @@ import { data as fallbackData } from '../data/content.js';
 const teamPassword = 'WebEquipoGrosso2026';
 const netlifyBuildHook = 'https://api.netlify.com/build_hooks/6a84d5aa629b44809436de94';
 const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
+const fallbackNewsJSON = JSON.stringify(fallbackData.news || []);
 ---
 
-<BaseLayout title="Administración Editorial · Leon Grosso" description="Panel privado de gestión de contenidos editoriales para el equipo de prensa.">
+<BaseLayout title="Administración Editorial · Leon Grosso" description="Panel privado de gestión de noticias y artículos para el equipo de prensa.">
   
   <!-- PANTALLA 1: LOGIN SEGURO CON DISEÑO INSTITUCIONAL -->
   <section id="login-section" class="section" style="min-height: 70vh; display: flex; align-items: center;">
@@ -55,17 +56,41 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
     </div>
   </section>
 
-  <!-- PANTALLA 2: DASHBOARD EDITORIAL INTERACTIVO EN TIEMPO REAL -->
+  <!-- PANTALLA 2: DASHBOARD EDITORIAL CON SOLAPAS -->
   <div id="admin-panel-content" style="display: none;">
     <section class="page-hero" style="padding-bottom: 1.5rem;">
       <div class="container" style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem;">
         <div>
           <span class="kicker">Administración</span>
-          <h1 class="t-page page-title" style="margin-bottom: 0.25rem;">Gestión de Artículos<span class="title-dot">.</span></h1>
-          <p class="page-hero-lede" style="font-size: 0.95rem; color: var(--dim-gray);">Carga, edición y administración de artículos editoriales en tiempo real.</p>
+          <h1 class="t-page page-title" style="margin-bottom: 0.25rem;">Panel Editorial<span class="title-dot">.</span></h1>
+          <p class="page-hero-lede" style="font-size: 0.95rem; color: var(--dim-gray);">Gestión en tiempo real de noticias en medios y artículos de opinión.</p>
         </div>
         <button id="logout-btn" style="padding: 0.6rem 1.25rem; background: transparent; border: 1px solid var(--border); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; cursor: pointer; color: var(--dim-gray); transition: var(--t);">
           Cerrar sesión
+        </button>
+      </div>
+    </section>
+
+    <!-- SELECTOR DE SOLAPAS (NOTICIAS VS ARTÍCULOS) -->
+    <section style="background: var(--bg); border-bottom: 1px solid var(--border); padding: 0.5rem 0;">
+      <div class="container" style="display: flex; gap: 1rem; align-items: center;">
+        <button
+          type="button"
+          id="tab-btn-news"
+          class="admin-tab active"
+          onclick="switchTab('news')"
+          style="padding: 0.85rem 1.5rem; background: var(--leo-blue); color: #000; font-weight: 800; font-size: 0.8125rem; text-transform: uppercase; letter-spacing: 0.08em; border: 1px solid var(--leo-blue); cursor: pointer; transition: all 0.2s ease;"
+        >
+          📰 NOTICIAS EN MEDIOS
+        </button>
+        <button
+          type="button"
+          id="tab-btn-article"
+          class="admin-tab"
+          onclick="switchTab('article')"
+          style="padding: 0.85rem 1.5rem; background: var(--soft-bg); color: var(--text); font-weight: 700; font-size: 0.8125rem; text-transform: uppercase; letter-spacing: 0.08em; border: 1px solid var(--border); cursor: pointer; transition: all 0.2s ease;"
+        >
+          ✍️ ARTÍCULOS / ESCRIBO
         </button>
       </div>
     </section>
@@ -82,29 +107,29 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
           <!-- COLUMNA IZQUIERDA: FORMULARIO EDITORIAL -->
           <div>
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border);">
-              <h2 id="form-mode-title" class="t-h3" style="font-size: 1.15rem; font-weight: 800; margin: 0; text-transform: uppercase; letter-spacing: 0.04em;">Nuevo artículo</h2>
+              <h2 id="form-mode-title" class="t-h3" style="font-size: 1.15rem; font-weight: 800; margin: 0; text-transform: uppercase; letter-spacing: 0.04em;">Nueva noticia</h2>
               <button id="cancel-edit-btn" style="display: none; background: transparent; border: none; color: var(--leo-blue); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; cursor: pointer; text-decoration: underline;">
                 Cancelar edición
               </button>
             </div>
 
-            <form id="article-form" style="display: flex; flex-direction: column; gap: 1.25rem; background: var(--soft-bg); padding: 2rem; border: 1px solid var(--border);">
+            <form id="editor-form" style="display: flex; flex-direction: column; gap: 1.25rem; background: var(--soft-bg); padding: 2rem; border: 1px solid var(--border);">
               
               <input type="hidden" id="editing-doc-id" value="" />
 
               <div>
-                <label for="title" style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.4rem; color: var(--text);">
-                  Título del artículo *
+                <label id="title-label" for="title" style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.4rem; color: var(--text);">
+                  Título de la noticia *
                 </label>
-                <input type="text" id="title" required placeholder="Ej: A las armas las carga el narco" style="width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--border); font-size: 0.95rem; background: var(--bg); color: var(--text);" />
+                <input type="text" id="title" required placeholder="Ej: Leonardo Grosso presentó proyecto sobre..." style="width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--border); font-size: 0.95rem; background: var(--bg); color: var(--text);" />
               </div>
 
               <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
                 <div>
-                  <label for="publication" style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.4rem; color: var(--text);">
-                    Medio o publicación *
+                  <label id="publication-label" for="publication" style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.4rem; color: var(--text);">
+                    Medio o portal de prensa *
                   </label>
-                  <input type="text" id="publication" required value="El Cohete a la Luna" style="width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--border); font-size: 0.95rem; background: var(--bg); color: var(--text);" />
+                  <input type="text" id="publication" required placeholder="Ej: Página/12, Infobae, Clarín" style="width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--border); font-size: 0.95rem; background: var(--bg); color: var(--text);" />
                 </div>
                 <div>
                   <label for="publishedAt" style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.4rem; color: var(--text);">
@@ -114,25 +139,26 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
                 </div>
               </div>
 
-              <div>
+              <!-- CAMPO DE AUTORÍA (SOLO VISIBLE EN ARTÍCULOS) -->
+              <div id="authors-group" style="display: none;">
                 <label for="authors" style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.4rem; color: var(--text);">
                   Autoría *
                 </label>
-                <input type="text" id="authors" required value="Leonardo Grosso" placeholder="Ej: Leonardo Grosso + Vanina Pasik" style="width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--border); font-size: 0.95rem; background: var(--bg); color: var(--text);" />
+                <input type="text" id="authors" value="Leonardo Grosso" placeholder="Ej: Leonardo Grosso + Vanina Pasik" style="width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--border); font-size: 0.95rem; background: var(--bg); color: var(--text);" />
               </div>
 
               <div>
                 <label for="excerpt" style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.4rem; color: var(--text);">
-                  Bajada / Resumen editorial *
+                  Resumen o copete *
                 </label>
-                <textarea id="excerpt" rows="3" required placeholder="Síntesis sustantiva del contenido..." style="width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--border); font-size: 0.95rem; background: var(--bg); color: var(--text); resize: vertical; line-height: 1.5;"></textarea>
+                <textarea id="excerpt" rows="3" required placeholder="Resumen breve o bajada del contenido..." style="width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--border); font-size: 0.95rem; background: var(--bg); color: var(--text); resize: vertical; line-height: 1.5;"></textarea>
               </div>
 
               <div>
                 <label for="externalUrl" style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.4rem; color: var(--text);">
-                  Enlace externo (URL de publicación original) *
+                  Enlace a la nota completa (URL externa) *
                 </label>
-                <input type="url" id="externalUrl" required placeholder="https://www.elcohetealaluna.com/..." style="width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--border); font-size: 0.95rem; background: var(--bg); color: var(--text);" />
+                <input type="url" id="externalUrl" required placeholder="https://www.pagina12.com.ar/..." style="width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--border); font-size: 0.95rem; background: var(--bg); color: var(--text);" />
               </div>
 
               <!-- GESTIÓN DE IMÁGENES -->
@@ -144,14 +170,9 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
                   </h4>
                   <ul style="font-size: 0.8125rem; line-height: 1.6; color: var(--dim-gray); padding-left: 1.1rem; margin: 0 0 0.75rem;">
                     <li><strong>Formato recomendado:</strong> WebP (preferido) o JPG/JPEG.</li>
-                    <li><strong>Proporción y resolución:</strong> 4:5 vertical (1200 × 1500 px) o 16:9 horizontal (1200 × 800 px).</li>
-                    <li><strong>Peso sugerido:</strong> Entre 80 KB y 250 KB (máximo absoluto 500 KB por archivo).</li>
+                    <li><strong>Proporción sugerida:</strong> 16:9 horizontal (1200 × 800 px) o 1:1 cuadrada.</li>
+                    <li><strong>Peso sugerido:</strong> Menor a 300 KB.</li>
                   </ul>
-                  <p style="font-size: 0.75rem; color: var(--dim-gray); margin: 0; line-height: 1.4;">
-                    Herramientas externas de compresión rápida:
-                    <a href="https://tinypng.com" target="_blank" rel="noopener noreferrer" style="color: var(--text); font-weight: 600; text-decoration: underline;">TinyPNG.com ↗</a> o
-                    <a href="https://squoosh.app" target="_blank" rel="noopener noreferrer" style="color: var(--text); font-weight: 600; text-decoration: underline;">Squoosh.app ↗</a>.
-                  </p>
                 </div>
 
                 <label style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.4rem; color: var(--text);">
@@ -162,7 +183,7 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
                 <div id="image-preview-container" style="display: none; align-items: center; gap: 1rem; margin-bottom: 0.75rem; background: var(--bg); padding: 0.75rem; border: 1px solid var(--border);">
                   <img id="image-preview" src="" alt="Vista previa" style="width: 56px; height: 56px; object-fit: cover;" />
                   <div style="flex: 1;">
-                    <span style="font-size: 0.75rem; color: var(--dim-gray); display: block;">Imagen asignada al artículo</span>
+                    <span style="font-size: 0.75rem; color: var(--dim-gray); display: block;">Imagen asignada</span>
                     <button type="button" id="remove-image-btn" style="background: transparent; border: none; color: #dc3545; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; cursor: pointer; padding: 0; margin-top: 0.25rem;">
                       Quitar imagen
                     </button>
@@ -174,8 +195,8 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
 
               <div style="display: flex; align-items: center; gap: 0.75rem; margin-top: 0.5rem;">
                 <input type="checkbox" id="featured" style="width: 18px; height: 18px; accent-color: var(--leo-blue); cursor: pointer;" />
-                <label for="featured" style="font-size: 0.875rem; font-weight: 600; cursor: pointer; color: var(--text);">
-                  Destacar este artículo en la portada y cabecera de la sección
+                <label id="featured-label" for="featured" style="font-size: 0.875rem; font-weight: 600; cursor: pointer; color: var(--text);">
+                  Destacar esta publicación en la cabecera
                 </label>
               </div>
 
@@ -185,18 +206,18 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
             </form>
           </div>
 
-          <!-- COLUMNA DERECHA: BARRA EDITORIAL DE ARTÍCULOS PUBLICADOS -->
+          <!-- COLUMNA DERECHA: BARRA EDITORIAL DE REGISTROS -->
           <div>
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border);">
-              <h2 class="t-h3" style="font-size: 1.15rem; font-weight: 800; margin: 0; text-transform: uppercase; letter-spacing: 0.04em;">Entradas registradas</h2>
-              <span id="articles-count" style="font-size: 0.75rem; font-weight: 700; background: var(--leo-blue); color: #000; padding: 0.2rem 0.6rem; border-radius: 2px;">0</span>
+              <h2 id="sidebar-title" class="t-h3" style="font-size: 1.15rem; font-weight: 800; margin: 0; text-transform: uppercase; letter-spacing: 0.04em;">Noticias registradas</h2>
+              <span id="items-count" style="font-size: 0.75rem; font-weight: 700; background: var(--leo-blue); color: #000; padding: 0.2rem 0.6rem; border-radius: 2px;">0</span>
             </div>
             
             <p style="font-size: 0.75rem; color: var(--dim-gray); margin-bottom: 1.25rem; line-height: 1.4;">
-              Hacé clic en la estrella <strong>★</strong> de cualquier fila para marcarla como la nota destacada principal al instante.
+              Hacé clic en la estrella <strong>★</strong> para marcar una publicación como destacada principal.
             </p>
 
-            <div id="articles-sidebar-list" style="display: flex; flex-direction: column; gap: 0.75rem; max-height: 75vh; overflow-y: auto; padding-right: 0.25rem;">
+            <div id="items-sidebar-list" style="display: flex; flex-direction: column; gap: 0.75rem; max-height: 75vh; overflow-y: auto; padding-right: 0.25rem;">
               Cargando registros...
             </div>
           </div>
@@ -215,14 +236,17 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
     }
   </style>
 
-  <script define:vars={{ teamPassword, netlifyBuildHook, fallbackArticlesJSON }}>
+  <script define:vars={{ teamPassword, netlifyBuildHook, fallbackArticlesJSON, fallbackNewsJSON }}>
     window.__NETLIFY_BUILD_HOOK__ = netlifyBuildHook;
     const AUTH_SESSION_KEY = 'leo_admin_session';
 
-    // Contraseña guardada en memoria (nunca en localStorage ni en el HTML)
+    let currentTab = 'news'; // 'news' | 'article'
+    let currentNews = [];
+    let currentArticles = [];
     let sessionPassword = '';
+    let removeImageFlag = false;
 
-    // ── CAPA SEGURA DE API (Compatible con Cloudflare Pages y Netlify) ──────
+    // ── CAPA SEGURA DE API ───────────────────────────────────────────────────
     function getApiEndpoint() {
       return window.location.hostname.includes('netlify.app')
         ? '/.netlify/functions/sanity-mutate'
@@ -254,7 +278,6 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
       return { _type: 'image', asset: { _type: 'reference', _ref: docId } };
     }
 
-    // Sanity público (solo lectura, sin token)
     const SANITY_PUBLIC_URL = 'https://j4xtzihv.api.sanity.io';
     const dataset = 'production';
 
@@ -278,8 +301,16 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
       image: art.image
     }));
 
-    let currentArticles = [];
-    let removeImageFlag = false;
+    const defaultFallbackNews = JSON.parse(fallbackNewsJSON).map(item => ({
+      _id: `news-${item.id}`,
+      title: item.title,
+      publication: item.publication,
+      publishedAt: item.date,
+      excerpt: item.excerpt,
+      externalUrl: item.url,
+      featured: Boolean(item.featured),
+      image: item.image
+    }));
 
     togglePasswordBtn?.addEventListener('click', () => {
       if (passwordInput.type === 'password') {
@@ -295,11 +326,9 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
       const session = localStorage.getItem(AUTH_SESSION_KEY);
       const savedPwd = sessionStorage.getItem('leo_admin_pwd');
       if (session === 'authenticated' && savedPwd) {
-        // Restaurar contraseña desde sessionStorage (persiste en el tab pero no en nuevas pestañas)
         sessionPassword = savedPwd;
         showAdminPanel();
       } else {
-        // Forzar re-login si no hay contraseña disponible
         localStorage.removeItem(AUTH_SESSION_KEY);
         showLoginScreen();
       }
@@ -313,7 +342,7 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
     function showAdminPanel() {
       if (loginSection) loginSection.style.display = 'none';
       if (adminContent) adminContent.style.display = 'block';
-      loadArticlesList();
+      loadAllData();
     }
 
     loginForm?.addEventListener('submit', (e) => {
@@ -321,7 +350,7 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
       const enteredPassword = passwordInput.value.trim();
       if (enteredPassword === teamPassword) {
         sessionPassword = enteredPassword;
-        sessionStorage.setItem('leo_admin_pwd', enteredPassword); // persiste en la pestaña actual
+        sessionStorage.setItem('leo_admin_pwd', enteredPassword);
         localStorage.setItem(AUTH_SESSION_KEY, 'authenticated');
         showAdminPanel();
       } else {
@@ -342,7 +371,7 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
     const dateInput = document.getElementById('publishedAt');
     if (dateInput) dateInput.value = new Date().toISOString().split('T')[0];
 
-    const articleForm = document.getElementById('article-form');
+    const editorForm = document.getElementById('editor-form');
     const statusAlert = document.getElementById('status-alert');
     const submitBtn = document.getElementById('submit-btn');
     const formModeTitle = document.getElementById('form-mode-title');
@@ -352,27 +381,86 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
     const imagePreview = document.getElementById('image-preview');
     const removeImageBtn = document.getElementById('remove-image-btn');
 
-    function showAlert(msg, isSuccess) {
+    const titleLabel = document.getElementById('title-label');
+    const publicationLabel = document.getElementById('publication-label');
+    const authorsGroup = document.getElementById('authors-group');
+    const featuredLabel = document.getElementById('featured-label');
+    const sidebarTitle = document.getElementById('sidebar-title');
+
+    const tabBtnNews = document.getElementById('tab-btn-news');
+    const tabBtnArticle = document.getElementById('tab-btn-article');
+
+    function showAlert(msg, isSuccess = true) {
       if (!statusAlert) return;
       statusAlert.style.display = 'block';
-      statusAlert.style.background = isSuccess ? 'rgba(40, 167, 69, 0.1)' : 'rgba(220, 53, 69, 0.1)';
-      statusAlert.style.color = isSuccess ? '#155724' : '#dc3545';
-      statusAlert.style.borderColor = isSuccess ? 'rgba(40, 167, 69, 0.3)' : 'rgba(220, 53, 69, 0.3)';
+      statusAlert.style.background = isSuccess ? 'rgba(2, 185, 255, 0.1)' : 'rgba(220, 53, 69, 0.1)';
+      statusAlert.style.color = isSuccess ? 'var(--text)' : '#dc3545';
+      statusAlert.style.borderColor = isSuccess ? 'var(--leo-blue)' : 'rgba(220, 53, 69, 0.3)';
       statusAlert.textContent = msg;
     }
+
+    // ── CAMBIO DE SOLAPAS (NOTICIAS VS ARTÍCULOS) ───────────────────────────
+    window.switchTab = function(type) {
+      currentTab = type;
+      resetForm();
+
+      if (type === 'news') {
+        tabBtnNews.style.background = 'var(--leo-blue)';
+        tabBtnNews.style.color = '#000';
+        tabBtnNews.style.borderColor = 'var(--leo-blue)';
+        tabBtnArticle.style.background = 'var(--soft-bg)';
+        tabBtnArticle.style.color = 'var(--text)';
+        tabBtnArticle.style.borderColor = 'var(--border)';
+
+        formModeTitle.textContent = 'Nueva noticia';
+        titleLabel.textContent = 'Título de la noticia *';
+        publicationLabel.textContent = 'Medio o portal de prensa *';
+        document.getElementById('publication').placeholder = 'Ej: Página/12, Infobae, Clarín';
+        document.getElementById('publication').value = '';
+        authorsGroup.style.display = 'none';
+        featuredLabel.textContent = 'Destacar esta noticia en Lo Último';
+        sidebarTitle.textContent = 'Noticias registradas';
+      } else {
+        tabBtnArticle.style.background = 'var(--leo-blue)';
+        tabBtnArticle.style.color = '#000';
+        tabBtnArticle.style.borderColor = 'var(--leo-blue)';
+        tabBtnNews.style.background = 'var(--soft-bg)';
+        tabBtnNews.style.color = 'var(--text)';
+        tabBtnNews.style.borderColor = 'var(--border)';
+
+        formModeTitle.textContent = 'Nuevo artículo de opinión';
+        titleLabel.textContent = 'Título del artículo *';
+        publicationLabel.textContent = 'Medio o publicación *';
+        document.getElementById('publication').placeholder = 'Ej: El Cohete a la Luna';
+        document.getElementById('publication').value = 'El Cohete a la Luna';
+        authorsGroup.style.display = 'block';
+        document.getElementById('authors').value = 'Leonardo Grosso';
+        featuredLabel.textContent = 'Destacar este artículo en Escribo y portada';
+        sidebarTitle.textContent = 'Artículos registrados';
+      }
+
+      renderSidebarList();
+    };
 
     removeImageBtn?.addEventListener('click', () => {
       removeImageFlag = true;
       if (imagePreviewContainer) imagePreviewContainer.style.display = 'none';
+      if (imagePreview) imagePreview.src = '';
+      const fileInput = document.getElementById('imageFile');
+      if (fileInput) fileInput.value = '';
     });
 
     function resetForm() {
-      articleForm?.reset();
+      if (editorForm) editorForm.reset();
       if (editingDocId) editingDocId.value = '';
-      if (formModeTitle) formModeTitle.textContent = 'Nuevo artículo';
+      if (formModeTitle) formModeTitle.textContent = currentTab === 'news' ? 'Nueva noticia' : 'Nuevo artículo de opinión';
       if (cancelEditBtn) cancelEditBtn.style.display = 'none';
       if (imagePreviewContainer) imagePreviewContainer.style.display = 'none';
       if (dateInput) dateInput.value = new Date().toISOString().split('T')[0];
+      if (currentTab === 'article') {
+        document.getElementById('publication').value = 'El Cohete a la Luna';
+        document.getElementById('authors').value = 'Leonardo Grosso';
+      }
       removeImageFlag = false;
     }
 
@@ -383,7 +471,8 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
       return callUpload(file);
     }
 
-    articleForm?.addEventListener('submit', async (e) => {
+    // ── GUARDAR PUBLICACIÓN (NOTICIA O ARTÍCULO) ─────────────────────────────
+    editorForm?.addEventListener('submit', async (e) => {
       e.preventDefault();
 
       submitBtn.disabled = true;
@@ -392,7 +481,7 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
 
       try {
         const isEditing = Boolean(editingDocId.value);
-        const docId = editingDocId.value || `article-${Date.now()}`;
+        const docId = editingDocId.value || `${currentTab}-${Date.now()}`;
         const title = document.getElementById('title').value.trim();
         const slugStr = title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
         const imageFile = document.getElementById('imageFile')?.files?.[0];
@@ -403,11 +492,8 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
           imageAsset = await uploadImage(imageFile);
         }
 
-        if (isFeatured) {
-          await unsetOtherFeatured(docId);
-        }
-
-        const existingDoc = currentArticles.find(a => a._id === docId);
+        const currentList = currentTab === 'news' ? currentNews : currentArticles;
+        const existingDoc = currentList.find(a => a._id === docId);
 
         let finalImage = undefined;
         if (imageAsset) {
@@ -417,34 +503,39 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
         }
 
         const doc = {
-          _type: 'article',
+          _type: currentTab,
           _id: docId,
           title: title,
           slug: { _type: 'slug', current: slugStr },
           publication: document.getElementById('publication').value.trim(),
           publishedAt: document.getElementById('publishedAt').value,
-          authors: document.getElementById('authors').value.trim(),
           excerpt: document.getElementById('excerpt').value.trim(),
           externalUrl: document.getElementById('externalUrl').value.trim(),
           featured: isFeatured,
           status: 'published',
+          ...(currentTab === 'article' ? { authors: document.getElementById('authors').value.trim() } : {}),
           ...(finalImage ? { image: finalImage } : {})
         };
 
-        const res = await callMutate([{ createOrReplace: doc }]);
+        const mutations = [];
+        if (isFeatured) {
+          const others = currentList.filter(a => a.featured && a._id !== docId);
+          others.forEach(o => mutations.push({ patch: { id: o._id, set: { featured: false } } }));
+        }
+        mutations.push({ createOrReplace: doc });
+
+        const res = await callMutate(mutations);
 
         if (res.ok) {
-          showAlert(isEditing ? 'Publicación actualizada correctamente.' : 'Artículo registrado y publicado correctamente.', true);
+          showAlert(isEditing ? 'Publicación actualizada correctamente.' : 'Publicación registrada y publicada correctamente en Sanity.', true);
           resetForm();
-          await loadArticlesList();
+          await loadAllData();
 
           const buildHook = window.__NETLIFY_BUILD_HOOK__;
-          if (buildHook) {
-            fetch(buildHook, { method: 'POST' }).catch(() => {});
-          }
+          if (buildHook) fetch(buildHook, { method: 'POST' }).catch(() => {});
         } else {
-          const errData = await res.json();
-          showAlert(`Error al guardar: ${errData.error || errData.message || 'Verifique los permisos de acceso.'}`, false);
+          const errData = await res.json().catch(() => ({}));
+          showAlert(`Error al guardar: ${errData.error || 'Verifique los permisos.'}`, false);
         }
       } catch (err) {
         showAlert(`Error: ${err.message}`, false);
@@ -454,36 +545,27 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
       }
     });
 
-    async function unsetOtherFeatured(currentId) {
-      const featuredArticles = currentArticles.filter(a => a.featured && a._id !== currentId);
-      if (featuredArticles.length === 0) return;
-
-      const mutations = featuredArticles.map(art => ({
-        patch: {
-          id: art._id,
-          set: { featured: false }
-        }
-      }));
-
-      await callMutate(mutations);
-    }
-
-    // CARGAR Y RENDERIZAR LA LISTA LATERAL CON RESPUESTA VISUAL INSTANTÁNEA
+    // ── RENDERIZAR LISTA LATERAL SEGÚN SOLAPA ────────────────────────────────
     function renderSidebarList() {
-      const container = document.getElementById('articles-sidebar-list');
-      const countBadge = document.getElementById('articles-count');
+      const container = document.getElementById('items-sidebar-list');
+      const countBadge = document.getElementById('items-count');
       if (!container) return;
 
-      if (countBadge) countBadge.textContent = String(currentArticles.length);
+      const items = currentTab === 'news' ? currentNews : currentArticles;
+      if (countBadge) countBadge.textContent = String(items.length);
 
-      container.innerHTML = currentArticles.map(art => {
+      if (items.length === 0) {
+        container.innerHTML = `<div style="padding: 1rem; color: var(--dim-gray); font-size: 0.85rem;">No hay ${currentTab === 'news' ? 'noticias' : 'artículos'} cargados todavía.</div>`;
+        return;
+      }
+
+      container.innerHTML = items.map(art => {
         const isFeatured = Boolean(art.featured);
         
         return `
           <div style="background: ${isFeatured ? 'rgba(2, 185, 255, 0.05)' : 'var(--bg)'}; padding: 0.9rem 1rem; border: 1px solid ${isFeatured ? 'var(--leo-blue)' : 'var(--border)'}; display: flex; flex-direction: column; gap: 0.5rem; position: relative; transition: all 0.2s ease;">
             <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.75rem;">
               
-              <!-- BOTÓN DE ESTRELLA INTERACTIVA CON FEEDBACK VISUAL INMEDIATO -->
               <button 
                 onclick="toggleStar('${art._id}', ${!isFeatured})" 
                 title="${isFeatured ? 'Publicación destacada' : 'Marcar como destacada'}" 
@@ -506,10 +588,10 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
             </div>
 
             <div style="display: flex; gap: 0.5rem; justify-content: flex-end; margin-top: 0.25rem; border-top: 1px solid var(--border); padding-top: 0.5rem;">
-              <button onclick="editArticle('${art._id}')" style="background: var(--soft-bg); border: 1px solid var(--border); padding: 0.35rem 0.75rem; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; cursor: pointer; color: var(--text);">
+              <button onclick="editItem('${art._id}')" style="background: var(--soft-bg); border: 1px solid var(--border); padding: 0.35rem 0.75rem; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; cursor: pointer; color: var(--text);">
                 Editar
               </button>
-              <button onclick="deleteArticle('${art._id}')" style="background: transparent; color: #dc3545; border: 1px solid rgba(220, 53, 69, 0.4); padding: 0.35rem 0.75rem; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; cursor: pointer;">
+              <button onclick="deleteItem('${art._id}')" style="background: transparent; color: #dc3545; border: 1px solid rgba(220, 53, 69, 0.4); padding: 0.35rem 0.75rem; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; cursor: pointer;">
                 Eliminar
               </button>
             </div>
@@ -518,9 +600,10 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
       }).join('');
     }
 
-    async function loadArticlesList() {
-      const query = encodeURIComponent(`*[_type == "article"] | order(publishedAt desc) {
-        _id, title, publication, publishedAt, authors, excerpt, externalUrl, featured, image
+    // ── CARGAR NOTICIAS Y ARTÍCULOS DESDE SANITY ────────────────────────────
+    async function loadAllData() {
+      const query = encodeURIComponent(`*[_type in ["article", "news"] && !(_id in path("drafts.**"))] | order(publishedAt desc) {
+        _id, _type, title, publication, publishedAt, authors, excerpt, externalUrl, featured, image
       }`);
       const url = `${SANITY_PUBLIC_URL}/v2024-01-01/data/query/${dataset}?query=${query}`;
 
@@ -528,31 +611,32 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
         const res = await fetch(url);
         if (res.ok) {
           const json = await res.json();
-          const apiArticles = json.result || [];
-          if (apiArticles.length > 0) {
-            currentArticles = apiArticles;
-          } else {
-            currentArticles = defaultFallbackArticles;
-          }
+          const allItems = json.result || [];
+          currentNews = allItems.filter(i => i._type === 'news');
+          currentArticles = allItems.filter(i => i._type === 'article');
+
+          if (currentArticles.length === 0) currentArticles = defaultFallbackArticles;
+          if (currentNews.length === 0) currentNews = defaultFallbackNews;
         } else {
           currentArticles = defaultFallbackArticles;
+          currentNews = defaultFallbackNews;
         }
       } catch (err) {
         currentArticles = defaultFallbackArticles;
+        currentNews = defaultFallbackNews;
       }
 
       renderSidebarList();
     }
 
-    // ACCIÓN INTERACTIVA AL TOCAR LA ESTRELLA (★) CON CAMBIO VISUAL EN 0 MILISEGUNDOS
+    // ── ACCIÓN DE ESTRELLA (★) ──────────────────────────────────────────────
     window.toggleStar = async function(id, setFeatured) {
-      // Guardar cuáles estaban destacadas ANTES de actualizar el estado local
-      const previouslyFeatured = currentArticles
+      const currentList = currentTab === 'news' ? currentNews : currentArticles;
+      const previouslyFeatured = currentList
         .filter(art => art.featured && art._id !== id)
         .map(art => art._id);
 
-      // 1. FEEDBACK VISUAL INSTANTÁNEO EN EL NAVEGADOR
-      currentArticles.forEach(art => {
+      currentList.forEach(art => {
         art.featured = (art._id === id) ? setFeatured : false;
       });
       renderSidebarList();
@@ -562,10 +646,8 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
         featuredCheck.checked = setFeatured;
       }
 
-      // 2. ENVIAR TODAS LAS MUTACIONES EN UN SOLO LOTE A SANITY VÍA SERVIDOR
       try {
         const mutations = [];
-
         if (previouslyFeatured.length > 0) {
           previouslyFeatured.forEach(otherId => {
             mutations.push({ patch: { id: otherId, set: { featured: false } } });
@@ -574,36 +656,40 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
         mutations.push({ patch: { id, set: { featured: setFeatured } } });
 
         const res = await callMutate(mutations);
-
         if (!res.ok) {
-          // La API devolvió un error — revertir UI y mostrar el error real
           const errData = await res.json().catch(() => ({}));
-          showAlert(`Error al guardar en Sanity: ${errData.error || 'Error ' + res.status + '. Verificá la consola (F12).'}`, false);
-          await loadArticlesList(); // revertir al estado real del servidor
+          showAlert(`Error al guardar en Sanity: ${errData.error || 'Error ' + res.status}`, false);
+          await loadAllData();
           return;
         }
 
         showAlert('Destacado actualizado correctamente en Sanity.', true);
+        const buildHook = window.__NETLIFY_BUILD_HOOK__;
+        if (buildHook) fetch(buildHook, { method: 'POST' }).catch(() => {});
 
       } catch (e) {
         showAlert(`Error de conexión: ${e.message}`, false);
-        loadArticlesList();
+        loadAllData();
       }
     };
 
-    window.editArticle = function(id) {
-      const art = currentArticles.find(a => a._id === id);
+    // ── EDITAR ENTRADA ──────────────────────────────────────────────────────
+    window.editItem = function(id) {
+      const currentList = currentTab === 'news' ? currentNews : currentArticles;
+      const art = currentList.find(a => a._id === id);
       if (!art) return;
 
       removeImageFlag = false;
       if (editingDocId) editingDocId.value = art._id;
-      if (formModeTitle) formModeTitle.textContent = `Editando entrada: ${art.title}`;
+      if (formModeTitle) formModeTitle.textContent = `Editando: ${art.title}`;
       if (cancelEditBtn) cancelEditBtn.style.display = 'inline-block';
 
       document.getElementById('title').value = art.title || '';
-      document.getElementById('publication').value = art.publication || 'El Cohete a la Luna';
+      document.getElementById('publication').value = art.publication || '';
       document.getElementById('publishedAt').value = art.publishedAt || '';
-      document.getElementById('authors').value = art.authors || 'Leonardo Grosso';
+      if (currentTab === 'article') {
+        document.getElementById('authors').value = art.authors || 'Leonardo Grosso';
+      }
       document.getElementById('excerpt').value = art.excerpt || '';
       document.getElementById('externalUrl').value = art.externalUrl || '';
       document.getElementById('featured').checked = Boolean(art.featured);
@@ -628,21 +714,24 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    window.deleteArticle = async function(id) {
+    // ── ELIMINAR ENTRADA ────────────────────────────────────────────────────
+    window.deleteItem = async function(id) {
       if (!confirm('¿Confirma la eliminación permanente de esta entrada?')) return;
 
       try {
         const res = await callMutate([{ delete: { id } }]);
         if (res.ok) {
           if (editingDocId.value === id) resetForm();
-          currentArticles = currentArticles.filter(a => a._id !== id);
+          if (currentTab === 'news') {
+            currentNews = currentNews.filter(a => a._id !== id);
+          } else {
+            currentArticles = currentArticles.filter(a => a._id !== id);
+          }
           renderSidebarList();
 
+          showAlert('Entrada eliminada correctamente de Sanity.', true);
           const buildHook = window.__NETLIFY_BUILD_HOOK__;
-          if (buildHook) {
-            fetch(buildHook, { method: 'POST' }).catch(() => {});
-          }
-          showAlert('Entrada eliminada correctamente.', true);
+          if (buildHook) fetch(buildHook, { method: 'POST' }).catch(() => {});
         } else {
           showAlert('Ocurrió un inconveniente al eliminar la publicación.', false);
         }

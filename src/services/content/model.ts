@@ -1,6 +1,6 @@
-export const CONTENT_SOURCES = ['instagram', 'tiktok', 'x', 'facebook', 'article', 'press', 'activity', 'iduar'] as const;
+export const CONTENT_SOURCES = ['instagram', 'tiktok', 'x', 'facebook', 'article', 'news', 'press', 'activity', 'iduar'] as const;
 export const CONTENT_TYPES = ['post', 'video', 'article', 'news', 'management', 'activity', 'placeholder'] as const;
-export const FEED_CATEGORIES = ['artículos', 'gestión', 'redes'] as const;
+export const FEED_CATEGORIES = ['noticias', 'artículos', 'gestión', 'redes'] as const;
 export const EDITORIAL_STATUSES = ['automatic', 'reviewed', 'selected'] as const;
 export const INTEGRATION_STATUSES = ['active', 'manual', 'pending'] as const;
 
