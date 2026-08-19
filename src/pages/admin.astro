@@ -293,9 +293,14 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
 
     function checkAuth() {
       const session = localStorage.getItem(AUTH_SESSION_KEY);
-      if (session === 'authenticated') {
+      const savedPwd = sessionStorage.getItem('leo_admin_pwd');
+      if (session === 'authenticated' && savedPwd) {
+        // Restaurar contraseña desde sessionStorage (persiste en el tab pero no en nuevas pestañas)
+        sessionPassword = savedPwd;
         showAdminPanel();
       } else {
+        // Forzar re-login si no hay contraseña disponible
+        localStorage.removeItem(AUTH_SESSION_KEY);
         showLoginScreen();
       }
     }
@@ -315,7 +320,8 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
       e.preventDefault();
       const enteredPassword = passwordInput.value.trim();
       if (enteredPassword === teamPassword) {
-        sessionPassword = enteredPassword; // guardar en memoria para llamadas a la API
+        sessionPassword = enteredPassword;
+        sessionStorage.setItem('leo_admin_pwd', enteredPassword); // persiste en la pestaña actual
         localStorage.setItem(AUTH_SESSION_KEY, 'authenticated');
         showAdminPanel();
       } else {
@@ -327,7 +333,8 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
     });
 
     logoutBtn?.addEventListener('click', () => {
-      sessionPassword = ''; // limpiar de memoria
+      sessionPassword = '';
+      sessionStorage.removeItem('leo_admin_pwd');
       localStorage.removeItem(AUTH_SESSION_KEY);
       showLoginScreen();
     });
