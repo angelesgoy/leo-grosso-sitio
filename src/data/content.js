@@ -214,41 +214,7 @@ export const data = {
     }
   ],
 
-  news: [
-    {
-      id: "debate-ley-humedales-congreso",
-      title: "Leonardo Grosso impulsó el debate por la Ley de Humedales en el Congreso",
-      publication: "Página/12",
-      date: "2026-02-15",
-      displayDate: "15/02/2026",
-      excerpt: "El debate parlamentario sobre presupuestos mínimos para la protección ambiental y conservación de humedales en todo el territorio nacional.",
-      url: "https://www.pagina12.com.ar/",
-      image: "/images/principales/articulo-destacado.webp",
-      imageAlt: "Leonardo Grosso en el debate de comisión de Recursos Naturales",
-      featured: true
-    },
-    {
-      id: "gestion-iduar-entrega-escrituras",
-      title: "El IDUAR entregó escrituras y avanza con la regularización dominial en los barrios",
-      publication: "Infobae",
-      date: "2026-01-28",
-      displayDate: "28/01/2026",
-      excerpt: "En el marco del plan de hábitat y acceso al suelo, se entregaron escrituras definitivas a familias del conurbano.",
-      url: "https://www.infobae.com/",
-      image: "/images/articulos/ano-nuevo-vida-vieja.webp",
-      imageAlt: "Acto de entrega de escrituras y regularización urbana"
-    },
-    {
-      id: "seguridad-democratica-conurbano",
-      title: "Grosso: 'La seguridad democrática exige terminar con la complicidad en el territorio'",
-      publication: "El Destape",
-      date: "2025-12-10",
-      displayDate: "10/12/2025",
-      excerpt: "Entrevista sobre las políticas de persecución al narcotráfico, desarme y prevención social del delito en San Martín.",
-      url: "https://www.eldestapeweb.com/",
-      image: "/images/articulos/laberinto-violencia.webp",
-      imageAlt: "Leonardo Grosso en entrevista sobre seguridad y justicia"
-    }
-  ]
+  news: []
 };
+
 

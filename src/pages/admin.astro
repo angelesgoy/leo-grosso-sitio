@@ -301,16 +301,7 @@ const fallbackNewsJSON = JSON.stringify(fallbackData.news || []);
       image: art.image
     }));
 
-    const defaultFallbackNews = JSON.parse(fallbackNewsJSON).map(item => ({
-      _id: `news-${item.id}`,
-      title: item.title,
-      publication: item.publication,
-      publishedAt: item.date,
-      excerpt: item.excerpt,
-      externalUrl: item.url,
-      featured: Boolean(item.featured),
-      image: item.image
-    }));
+    const defaultFallbackNews = [];
 
     togglePasswordBtn?.addEventListener('click', () => {
       if (passwordInput.type === 'password') {
@@ -616,14 +607,14 @@ const fallbackNewsJSON = JSON.stringify(fallbackData.news || []);
           currentArticles = allItems.filter(i => i._type === 'article');
 
           if (currentArticles.length === 0) currentArticles = defaultFallbackArticles;
-          if (currentNews.length === 0) currentNews = defaultFallbackNews;
+          if (!currentNews) currentNews = [];
         } else {
           currentArticles = defaultFallbackArticles;
-          currentNews = defaultFallbackNews;
+          currentNews = [];
         }
       } catch (err) {
         currentArticles = defaultFallbackArticles;
-        currentNews = defaultFallbackNews;
+        currentNews = [];
       }
 
       renderSidebarList();
