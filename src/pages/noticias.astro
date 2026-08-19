@@ -2,51 +2,51 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import FeedGrid from '../components/FeedGrid.astro';
-import { getArticles } from '../services/content';
-import { createArticleRecords } from '../services/content/sources/articles';
+import { getNews } from '../services/content';
+import { createNewsRecords } from '../services/content/sources/news';
 import { normalizeLocalRecord } from '../services/content/normalize';
 
-const articles = await getArticles();
-const articleRecords = createArticleRecords(articles);
-const rawArticleItems = articleRecords.map(normalizeLocalRecord);
+const news = await getNews();
+const newsRecords = createNewsRecords(news);
+const rawNewsItems = newsRecords.map(normalizeLocalRecord);
 
-const featuredArticle = rawArticleItems.find((a) => a.featured) || rawArticleItems[0];
-const otherArticles = rawArticleItems.filter((a) => a.id !== featuredArticle?.id);
-const allArticleItems = featuredArticle ? [
-  { ...featuredArticle, featured: true },
-  ...otherArticles.map((a) => ({ ...a, featured: false }))
+const featuredNews = rawNewsItems.find((n) => n.featured) || rawNewsItems[0];
+const otherNews = rawNewsItems.filter((n) => n.id !== featuredNews?.id);
+const allNewsItems = featuredNews ? [
+  { ...featuredNews, featured: true },
+  ...otherNews.map((n) => ({ ...n, featured: false }))
 ] : [];
 ---
 
 <BaseLayout
-  title="Escribo · Leon Grosso"
-  description="Archivo completo de ensayos, columnas y análisis de Leon Grosso sobre seguridad democrática, violencia, narcomenudeo y territorio."
+  title="Noticias · Leon Grosso"
+  description="Archivo completo de noticias, notas de prensa y coberturas periodísticas sobre Leon Grosso en medios nacionales y locales."
 >
   <PageHero
-    kicker="Producción"
-    title="Escribo"
-    lede="Ensayos y análisis publicados principalmente en El Cohete a la Luna sobre violencia, narcomenudeo, homicidios, seguridad democrática y territorio."
+    kicker="Prensa y Medios"
+    title="Noticias"
+    lede="Coberturas periodísticas, entrevistas y publicaciones en medios de comunicación sobre Leon Grosso, su labor legislativa y territorial."
   />
 
   <section class="section">
     <div class="container">
-      {allArticleItems.length === 0 ? (
-        <div class="feed-empty">No hay artículos disponibles por el momento.</div>
+      {allNewsItems.length === 0 ? (
+        <div class="feed-empty">No hay noticias registradas por el momento.</div>
       ) : (
-        <FeedGrid id="escribe-portal-grid" items={allArticleItems} />
+        <FeedGrid id="news-portal-grid" items={allNewsItems} />
       )}
     </div>
   </section>
 
   <!-- SINCRONIZACIÓN EN TIEMPO REAL DESDE SANITY -->
   <script is:inline>
-    async function syncEscribePortal() {
-      const grid = document.getElementById('escribe-portal-grid');
+    async function syncNoticiasPortal() {
+      const grid = document.getElementById('news-portal-grid');
       if (!grid) return;
 
       try {
-        const query = encodeURIComponent(`*[_type == "article" && !(_id in path("drafts.**")) && (status == "published" || !defined(status))] | order(publishedAt desc) {
-          _id, title, publication, publishedAt, authors, excerpt, image, externalUrl, featured
+        const query = encodeURIComponent(`*[_type == "news" && !(_id in path("drafts.**")) && (status == "published" || !defined(status))] | order(publishedAt desc) {
+          _id, title, publication, publishedAt, excerpt, image, externalUrl, featured
         }`);
         const res = await fetch(`https://j4xtzihv.api.sanity.io/v2024-01-01/data/query/production?query=${query}`);
         if (!res.ok) return;
@@ -70,7 +70,7 @@ const allArticleItems = featuredArticle ? [
           return {
             id: item._id,
             title: item.title,
-            publication: item.publication || 'El Cohete a la Luna',
+            publication: item.publication || 'Medio',
             date: item.publishedAt || '',
             displayDate: displayDate,
             excerpt: item.excerpt || '',
@@ -80,14 +80,14 @@ const allArticleItems = featuredArticle ? [
           };
         });
 
-        const featured = formatted.find((a) => a.featured) || formatted[0];
-        const others = formatted.filter((a) => a.id !== featured.id);
+        const featured = formatted.find((n) => n.featured) || formatted[0];
+        const others = formatted.filter((n) => n.id !== featured.id);
         const sorted = featured ? [featured, ...others] : formatted;
 
         grid.innerHTML = sorted.map((item, idx) => {
           if (idx === 0) {
             return `
-              <article class="feed-item featured" data-feed-item data-feed-groups="artículos">
+              <article class="feed-item featured" data-feed-item data-feed-groups="noticias">
                 <div class="feed-item-media">
                   ${item.image 
                     ? `<img src="${item.image}" alt="${item.title}" width="1920" height="1200" loading="lazy" decoding="async" />` 
@@ -95,31 +95,31 @@ const allArticleItems = featuredArticle ? [
                 </div>
                 <div class="feed-item-body">
                   <div class="feed-item-meta">
-                    <span>ARTÍCULO · ${item.publication.toUpperCase()}</span>
+                    <span>NOTICIA · ${item.publication.toUpperCase()}</span>
                     ${item.displayDate ? `<span class="sep">·</span><time datetime="${item.date}">${item.displayDate}</time>` : ''}
                   </div>
                   <h3 class="feed-item-title">${item.title}</h3>
                   <p class="feed-item-excerpt">${item.excerpt}</p>
-                  ${item.url && item.url !== '#' ? `<div class="feed-link"><a href="${item.url}" target="_blank" rel="noopener noreferrer" class="link-arrow">Leer nota <span class="arrow">↗</span></a></div>` : ''}
+                  ${item.url && item.url !== '#' ? `<div class="feed-link"><a href="${item.url}" target="_blank" rel="noopener noreferrer" class="link-arrow">Leer noticia <span class="arrow">↗</span></a></div>` : ''}
                 </div>
               </article>
             `;
           }
 
           return `
-            <article class="feed-item span-4" data-feed-item data-feed-groups="artículos">
+            <article class="feed-item span-4" data-feed-item data-feed-groups="noticias">
               <div class="feed-item-media square">
                 ${item.image 
                   ? `<img src="${item.image}" alt="${item.title}" width="1200" height="1200" loading="lazy" decoding="async" />` 
                   : `<span class="feed-item-media-label">Imagen · 1:1</span>`}
               </div>
               <div class="feed-item-meta">
-                <span>ARTÍCULO · ${item.publication.toUpperCase()}</span>
+                <span>NOTICIA · ${item.publication.toUpperCase()}</span>
                 ${item.displayDate ? `<span class="sep">·</span><time datetime="${item.date}">${item.displayDate}</time>` : ''}
               </div>
               <h3 class="feed-item-title">${item.title}</h3>
               <p class="feed-item-excerpt">${item.excerpt}</p>
-              ${item.url && item.url !== '#' ? `<div class="feed-link"><a href="${item.url}" target="_blank" rel="noopener noreferrer" class="link-arrow">Ver <span class="arrow">↗</span></a></div>` : ''}
+              ${item.url && item.url !== '#' ? `<div class="feed-link"><a href="${item.url}" target="_blank" rel="noopener noreferrer" class="link-arrow">Leer noticia <span class="arrow">↗</span></a></div>` : ''}
             </article>
           `;
         }).join('');
@@ -129,6 +129,6 @@ const allArticleItems = featuredArticle ? [
       }
     }
 
-    syncEscribePortal();
+    syncNoticiasPortal();
   </script>
 </BaseLayout>

@@ -2,22 +2,125 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import FeedGrid from '../components/FeedGrid.astro';
-import { getFeed } from '../services/content';
+import { getArticles, getNews, getFeed } from '../services/content';
+import { createNewsRecords } from '../services/content/sources/news';
+import { createArticleRecords } from '../services/content/sources/articles';
+import { normalizeLocalRecord } from '../services/content/normalize';
 
-const feed = await getFeed();
-const allFilterCategories = ['noticias', 'artículos', 'gestión', 'redes'];
-const availableFilters = allFilterCategories.filter((filter) =>
-  feed.some((item) => item.feedCategory === filter)
-);
+const articles = await getArticles();
+const news = await getNews();
+const feed = await getFeed(articles, news);
+
+// 1. Resumen de Noticias para solapa TODO (1 destacada + 2 compactas = 3)
+const newsRecords = createNewsRecords(news);
+const rawNews = newsRecords.map(normalizeLocalRecord);
+const featNews = rawNews.find((n) => n.featured) || rawNews[0];
+const otherNews = rawNews.filter((n) => n.id !== featNews?.id);
+const summaryNews = featNews ? [
+  { ...featNews, featured: true },
+  ...otherNews.slice(0, 2).map((n) => ({ ...n, featured: false }))
+] : [];
+
+// 2. Resumen de Artículos para solapa TODO (1 destacado + 2 compactos = 3)
+const articleRecords = createArticleRecords(articles);
+const rawArticles = articleRecords.map(normalizeLocalRecord);
+const featArticle = rawArticles.find((a) => a.featured) || rawArticles[0];
+const otherArticles = rawArticles.filter((a) => a.id !== featArticle?.id);
+const summaryArticles = featArticle ? [
+  { ...featArticle, featured: true },
+  ...otherArticles.slice(0, 2).map((a) => ({ ...a, featured: false }))
+] : [];
+
+// 3. Actividad y Redes para solapa TODO
+const summarySocial = feed.filter((i) => ['gestión', 'redes'].includes(i.feedCategory)).slice(0, 3);
 ---
-<BaseLayout title="Lo último · Leon Grosso" description="Actualidad de Leon Grosso: noticias, artículos, gestión, redes y actividad territorial.">
-  <PageHero kicker="Actualidad" title="Lo último" lede="Flujo público de noticias, artículos de opinión, gestión pública y actividad territorial de Leon Grosso." />
-  <section class="section"><div class="container">
-    <div class="feed-filters" aria-label="Filtrar contenidos">
-      {['todo', ...availableFilters].map((filter, index) => <button class:list={['filter-btn', { active: index === 0 }]} data-feed-filter={filter} aria-pressed={index === 0}>{filter.toUpperCase()}</button>)}
+
+<BaseLayout
+  title="Lo último · Leon Grosso"
+  description="Actualidad de Leon Grosso: resumen de noticias, artículos de opinión, gestión pública y redes."
+>
+  <PageHero
+    kicker="Actualidad"
+    title="Lo último"
+    lede="Flujo público y resumen editorial de noticias de prensa, ensayos de autoría, gestión y redes de Leon Grosso."
+  />
+
+  <section class="section">
+    <div class="container">
+      
+      <!-- BOTONES DE FILTRO SUPERIOR -->
+      <div class="feed-filters" aria-label="Filtrar contenidos" style="margin-bottom: 2.5rem;">
+        <button class="filter-btn active" data-feed-filter="todo" aria-pressed="true">TODO</button>
+        <button class="filter-btn" data-feed-filter="noticias" aria-pressed="false">NOTICIAS</button>
+        <button class="filter-btn" data-feed-filter="artículos" aria-pressed="false">ARTÍCULOS</button>
+        <button class="filter-btn" data-feed-filter="gestión" aria-pressed="false">GESTIÓN</button>
+        <button class="filter-btn" data-feed-filter="redes" aria-pressed="false">REDES</button>
+      </div>
+
+      <!-- VISTA 1: RESUMEN ESTRUCTURADO EN SECCIONES (SOLAPA TODO) -->
+      <div id="todo-structured-view" style="display: flex; flex-direction: column; gap: 4rem;">
+        
+        <!-- BLOQUE RESUMEN NOTICIAS -->
+        {summaryNews.length > 0 && (
+          <div>
+            <div class="sec-head" style="margin-bottom: 1.5rem;">
+              <div class="sec-head-title">
+                <span class="kicker">Prensa y Medios</span>
+                <h2 class="t-section" style="font-size: 1.5rem; margin: 0.25rem 0 0;">Últimas Noticias</h2>
+              </div>
+              <a href="/noticias/" class="sec-head-link">Ver portal de noticias →</a>
+            </div>
+            <FeedGrid id="summary-news-grid" items={summaryNews} />
+          </div>
+        )}
+
+        <!-- BLOQUE RESUMEN ARTÍCULOS -->
+        {summaryArticles.length > 0 && (
+          <div>
+            <div class="sec-head" style="margin-bottom: 1.5rem;">
+              <div class="sec-head-title">
+                <span class="kicker">Producción</span>
+                <h2 class="t-section" style="font-size: 1.5rem; margin: 0.25rem 0 0;">Artículos y Ensayos</h2>
+              </div>
+              <a href="/escribe/" class="sec-head-link">Ver todos los artículos →</a>
+            </div>
+            <FeedGrid id="summary-articles-grid" items={summaryArticles} />
+          </div>
+        )}
+
+        <!-- BLOQUE RESUMEN ACTIVIDAD Y REDES -->
+        {summarySocial.length > 0 && (
+          <div>
+            <div class="sec-head" style="margin-bottom: 1.5rem;">
+              <div class="sec-head-title">
+                <span class="kicker">Actividad</span>
+                <h2 class="t-section" style="font-size: 1.5rem; margin: 0.25rem 0 0;">Gestión y Redes</h2>
+              </div>
+            </div>
+            <FeedGrid items={summarySocial} />
+          </div>
+        )}
+
+      </div>
+
+      <!-- VISTA 2: VISTA FILTRADA (NOTICIAS, ARTÍCULOS, GESTIÓN, REDES) -->
+      <div id="category-filtered-view" style="display: none;">
+        <div id="filtered-feed-grid" class="feed-grid">
+          <!-- Se inyecta dinámicamente según la categoría activa -->
+        </div>
+
+        <!-- BANNER DE ENLACE A ARCHIVO HISTÓRICO COMPLETO -->
+        <div id="archive-redirect-banner" style="margin-top: 3rem; padding: 2rem; background: var(--soft-bg); border: 1px solid var(--border); text-align: center; display: none;">
+          <h3 id="archive-banner-title" style="font-size: 1.15rem; font-weight: 700; margin: 0 0 0.5rem;">¿Buscás publicaciones anteriores?</h3>
+          <p id="archive-banner-sub" style="font-size: 0.875rem; color: var(--dim-gray); margin: 0 0 1.25rem;">Accedé al archivo histórico completo y cronológico.</p>
+          <a id="archive-banner-link" href="/noticias/" style="display: inline-block; padding: 0.75rem 1.5rem; background: var(--leo-blue); color: #000; font-weight: 800; font-size: 0.8125rem; text-transform: uppercase; letter-spacing: 0.08em; text-decoration: none;">
+            Ver archivo completo →
+          </a>
+        </div>
+      </div>
+
     </div>
-    <p id="feed-status" class="visually-hidden" aria-live="polite">{feed.length} contenidos visibles</p>
-    <FeedGrid items={feed} />
-  </div></section>
+  </section>
+
   <script is:inline src="/scripts/feed.js"></script>
 </BaseLayout>
