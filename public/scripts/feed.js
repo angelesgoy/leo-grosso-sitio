@@ -94,20 +94,20 @@ async function syncSanityFeed() {
       `;
     }
 
-    // ── 1. HOME: NOTICIAS (1 destacada + 2 compactas = 3) ───────────────────
+    // ── 1. HOME: NOTICIAS (1 destacada + 3 compactas = 4) ───────────────────
     if (homeNewsGrid) {
       const feat = newsOnly.find(n => n.featured) || newsOnly[0];
-      const others = newsOnly.filter(n => n.id !== feat?.id).slice(0, 2);
+      const others = newsOnly.filter(n => n.id !== feat?.id).slice(0, 3);
       const list = feat ? [feat, ...others] : [];
       if (list.length > 0) {
         homeNewsGrid.innerHTML = list.map((item, idx) => renderCard(item, idx === 0)).join('');
       }
     }
 
-    // ── 2. HOME: ARTÍCULOS (1 destacado + 2 compactos = 3) ─────────────────
+    // ── 2. HOME: ARTÍCULOS (1 destacado + 3 compactos = 4) ─────────────────
     if (homeArticlesGrid) {
       const feat = articlesOnly.find(a => a.featured) || articlesOnly[0];
-      const others = articlesOnly.filter(a => a.id !== feat?.id).slice(0, 2);
+      const others = articlesOnly.filter(a => a.id !== feat?.id).slice(0, 3);
       const list = feat ? [feat, ...others] : [];
       if (list.length > 0) {
         homeArticlesGrid.innerHTML = list.map((item, idx) => renderCard(item, idx === 0)).join('');
