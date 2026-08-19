@@ -559,29 +559,27 @@ const fallbackArticlesJSON = JSON.stringify(fallbackData.articles);
       try {
         const mutations = [];
 
-        // Desactivar todas las que antes estaban destacadas
         if (previouslyFeatured.length > 0) {
           previouslyFeatured.forEach(otherId => {
             mutations.push({ patch: { id: otherId, set: { featured: false } } });
           });
         }
-
-        // Activar/desactivar la seleccionada
         mutations.push({ patch: { id, set: { featured: setFeatured } } });
 
-        await callMutate(mutations);
+        const res = await callMutate(mutations);
 
-        // Disparar reconstrucción del sitio en Netlify si hay un Build Hook configurado
-        const buildHook = window.__NETLIFY_BUILD_HOOK__;
-        if (buildHook) {
-          fetch(buildHook, { method: 'POST' }).catch(() => {});
-          showAlert('Destacado actualizado. Netlify está reconstruyendo el sitio (2-3 min)...', true);
-        } else {
-          showAlert('Destacado actualizado en la base de datos.', true);
+        if (!res.ok) {
+          // La API devolvió un error — revertir UI y mostrar el error real
+          const errData = await res.json().catch(() => ({}));
+          showAlert(`Error al guardar en Sanity: ${errData.error || 'Error ' + res.status + '. Verificá la consola (F12).'}`, false);
+          await loadArticlesList(); // revertir al estado real del servidor
+          return;
         }
 
+        showAlert('Destacado actualizado correctamente en Sanity.', true);
+
       } catch (e) {
-        // En caso de fallo de red, recargar estado servidor
+        showAlert(`Error de conexión: ${e.message}`, false);
         loadArticlesList();
       }
     };
