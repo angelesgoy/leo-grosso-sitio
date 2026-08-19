@@ -1,24 +1,35 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import FeedGrid from '../components/FeedGrid.astro';
-import ArticleFeatured from '../components/ArticleFeatured.astro';
-import ArticleList from '../components/ArticleList.astro';
 import ProjectList from '../components/ProjectList.astro';
 import { data } from '../data/content.js';
 import { getArticles, getNews } from '../services/content';
 import { createNewsRecords } from '../services/content/sources/news';
+import { createArticleRecords } from '../services/content/sources/articles';
 import { normalizeLocalRecord } from '../services/content/normalize';
 
 const articles = await getArticles();
 const news = await getNews();
 
+// 1. Noticias para Home (la última/destacada como horizontal, siguientes en grilla compacta)
 const newsRecords = createNewsRecords(news);
-const newsItems = newsRecords.map(normalizeLocalRecord);
+const rawNewsItems = newsRecords.map(normalizeLocalRecord);
+const featuredNews = rawNewsItems.find(n => n.featured) || rawNewsItems[0];
+const otherNews = rawNewsItems.filter(n => n.id !== featuredNews?.id);
+const homeNewsItems = featuredNews ? [
+  { ...featuredNews, featured: true },
+  ...otherNews.slice(0, 3).map(n => ({ ...n, featured: false }))
+] : [];
 
-const featuredArticle = articles.find((article) => article.featured) || (articles.length > 0 ? articles[0] : null);
-const homeListArticles = featuredArticle
-  ? articles.filter((article) => article.id !== featuredArticle.id).slice(0, 3)
-  : articles.slice(0, 3);
+// 2. Artículos para Home (el último/destacado como horizontal, siguientes en grilla compacta)
+const articleRecords = createArticleRecords(articles);
+const rawArticleItems = articleRecords.map(normalizeLocalRecord);
+const featuredArticle = rawArticleItems.find(a => a.featured) || rawArticleItems[0];
+const otherArticles = rawArticleItems.filter(a => a.id !== featuredArticle?.id);
+const homeArticleItems = featuredArticle ? [
+  { ...featuredArticle, featured: true },
+  ...otherArticles.slice(0, 3).map(a => ({ ...a, featured: false }))
+] : [];
 ---
 
 <BaseLayout>
@@ -39,17 +50,19 @@ const homeListArticles = featuredArticle
     <div><a href="/sobre-mi/" class="link-arrow">Leer sobre mí <span class="arrow">→</span></a></div>
   </div></div></section>
 
-  <!-- SECCIÓN NOTICIAS EN MEDIOS (SEPARADA EXCLUSIVAMENTE PARA NOTICIAS) -->
-  <section class="section"><div class="container">
-    <div class="sec-head reveal">
-      <div class="sec-head-title">
-        <span class="kicker">Actualidad</span>
-        <h2 class="t-section section-title">Noticias</h2>
+  <!-- SECCIÓN NOTICIAS EN MEDIOS (DESTACADA HORIZONTAL + COMPACTAS) -->
+  {homeNewsItems.length > 0 && (
+    <section class="section"><div class="container">
+      <div class="sec-head reveal">
+        <div class="sec-head-title">
+          <span class="kicker">Actualidad</span>
+          <h2 class="t-section section-title">Noticias</h2>
+        </div>
+        <a href="/lo-ultimo/" class="sec-head-link">Ver todas las noticias →</a>
       </div>
-      <a href="/lo-ultimo/" class="sec-head-link">Ver todas las noticias →</a>
-    </div>
-    <FeedGrid id="home-news-grid" items={newsItems.slice(0, 3)} />
-  </div></section>
+      <FeedGrid id="home-news-grid" items={homeNewsItems} />
+    </div></section>
+  )}
 
   <section class="sanmartin-block"><div class="container"><div class="sanmartin-grid reveal">
     <div><span class="kicker">Territorio</span><h2 class="sanmartin-title section-title">SAN<br />MARTÍN</h2></div>
@@ -57,18 +70,19 @@ const homeListArticles = featuredArticle
     <a href="/san-martin/" class="sanmartin-link">Ver San Martín →</a>
   </div></div></section>
 
-  <!-- SECCIÓN ESCRIBO (SEPARADA EXCLUSIVAMENTE PARA ENSAYOS Y ARTÍCULOS PROPIOS) -->
-  <section class="section"><div class="container">
-    <div class="sec-head reveal">
-      <div class="sec-head-title">
-        <span class="kicker">Producción</span>
-        <h2 class="t-section section-title">Escribo</h2>
+  <!-- SECCIÓN ESCRIBO (DESTACADA HORIZONTAL + COMPACTAS) -->
+  {homeArticleItems.length > 0 && (
+    <section class="section"><div class="container">
+      <div class="sec-head reveal">
+        <div class="sec-head-title">
+          <span class="kicker">Producción</span>
+          <h2 class="t-section section-title">Escribo</h2>
+        </div>
+        <a href="/escribe/" class="sec-head-link">Ver todos los textos →</a>
       </div>
-      <a href="/escribe/" class="sec-head-link">Ver todos los textos →</a>
-    </div>
-    {featuredArticle && <ArticleFeatured article={featuredArticle} />}
-    {homeListArticles.length > 0 && <ArticleList articles={homeListArticles} />}
-  </div></section>
+      <FeedGrid id="home-articles-grid" items={homeArticleItems} />
+    </div></section>
+  )}
 
   <section class="section surface-soft"><div class="container">
     <div class="grid-60-40 reveal"><div><span class="kicker">Archivo legislativo</span><h2 class="t-section section-title">12 años<br />en Diputados</h2></div><div><p class="t-body copy-spaced">2011 — 2023. Hitos curados en ambiente, Derechos Humanos, economía popular, hábitat y seguridad democrática.</p><a href="/trayectoria/" class="link-arrow">Explorar trayectoria <span class="arrow">→</span></a></div></div>
@@ -82,5 +96,4 @@ const homeListArticles = featuredArticle
 
   <!-- SINCRONIZACIÓN EN TIEMPO REAL CON SCRIPTS ESTÁTICOS PUBLICOS -->
   <script is:inline src="/scripts/feed.js"></script>
-  <script is:inline src="/scripts/escribe-sync.js"></script>
 </BaseLayout>

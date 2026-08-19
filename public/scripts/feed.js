@@ -1,9 +1,10 @@
-// Sincronización en vivo del feed público desde Sanity CMS (Noticias y Artículos separados o unificados según la página)
+// Sincronización en vivo del feed público desde Sanity CMS
 async function syncSanityFeed() {
   const homeNewsGrid = document.getElementById('home-news-grid');
+  const homeArticlesGrid = document.getElementById('home-articles-grid');
   const feedGrid = document.getElementById('feed-grid');
 
-  if (!homeNewsGrid && !feedGrid) return;
+  if (!homeNewsGrid && !homeArticlesGrid && !feedGrid) return;
 
   try {
     const query = encodeURIComponent(`*[_type in ["article", "news"] && !(_id in path("drafts.**")) && (status == "published" || !defined(status))] | order(publishedAt desc) {
@@ -49,86 +50,81 @@ async function syncSanityFeed() {
 
     const formattedAll = items.map(formatItem);
 
-    // ── 1. SI ESTAMOS EN EL HOME: CARGAR EXCLUSIVAMENTE NOTICIAS EN #home-news-grid ──
+    function renderCard(item, isFeatured) {
+      if (isFeatured) {
+        return `
+          <article class="feed-item featured" data-feed-item data-feed-groups="${item.category}">
+            <div class="feed-item-media">
+              ${item.image 
+                ? `<img src="${item.image}" alt="${item.title}" width="1920" height="1200" loading="lazy" decoding="async" />` 
+                : `<span class="feed-item-media-label">Imagen · 16:10</span>`}
+            </div>
+            <div class="feed-item-body">
+              <div class="feed-item-meta">
+                <span>${item.categoryLabel} · ${item.publication.toUpperCase()}</span>
+                ${item.displayDate ? `<span class="sep">·</span><time datetime="${item.date}">${item.displayDate}</time>` : ''}
+              </div>
+              <h3 class="feed-item-title">${item.title}</h3>
+              <p class="feed-item-excerpt">${item.excerpt}</p>
+              ${item.url && item.url !== '#' ? `<div class="feed-link"><a href="${item.url}" target="_blank" rel="noopener noreferrer" class="link-arrow">${item.type === 'news' ? 'Leer noticia' : 'Leer nota'} <span class="arrow">↗</span></a></div>` : ''}
+            </div>
+          </article>
+        `;
+      }
+
+      return `
+        <article class="feed-item span-4" data-feed-item data-feed-groups="${item.category}">
+          <div class="feed-item-media square">
+            ${item.image 
+              ? `<img src="${item.image}" alt="${item.title}" width="1200" height="1200" loading="lazy" decoding="async" />` 
+              : `<span class="feed-item-media-label">Imagen · 1:1</span>`}
+          </div>
+          <div class="feed-item-meta">
+            <span>${item.categoryLabel} · ${item.publication.toUpperCase()}</span>
+            ${item.displayDate ? `<span class="sep">·</span><time datetime="${item.date}">${item.displayDate}</time>` : ''}
+          </div>
+          <h3 class="feed-item-title">${item.title}</h3>
+          <p class="feed-item-excerpt">${item.excerpt}</p>
+          ${item.url && item.url !== '#' ? `<div class="feed-link"><a href="${item.url}" target="_blank" rel="noopener noreferrer" class="link-arrow">Ver <span class="arrow">↗</span></a></div>` : ''}
+        </article>
+      `;
+    }
+
+    // ── 1. HOME: SECCIÓN NOTICIAS (Primera horizontal destacada, siguientes en grilla) ──
     if (homeNewsGrid) {
       const newsOnly = formattedAll.filter(i => i.type === 'news');
-      const featuredNews = newsOnly.find(n => n.featured);
-      const regularNews = newsOnly.filter(n => !n.featured);
-      const sortedNews = (featuredNews ? [featuredNews, ...regularNews] : newsOnly).slice(0, 3);
+      const featuredNews = newsOnly.find(n => n.featured) || newsOnly[0];
+      const otherNews = newsOnly.filter(n => n.id !== featuredNews?.id).slice(0, 3);
+      const list = featuredNews ? [featuredNews, ...otherNews] : [];
 
-      if (sortedNews.length > 0) {
-        homeNewsGrid.innerHTML = sortedNews.map((item) => `
-          <article class="feed-item span-4" data-feed-item data-feed-groups="noticias">
-            <div class="feed-item-media square">
-              ${item.image 
-                ? `<img src="${item.image}" alt="${item.title}" width="1200" height="1200" loading="lazy" decoding="async" />` 
-                : `<span class="feed-item-media-label">Imagen · 1:1</span>`}
-            </div>
-            <div class="feed-item-meta">
-              <span>NOTICIA · ${item.publication.toUpperCase()}</span>
-              ${item.displayDate ? `<span class="sep">·</span><time datetime="${item.date}">${item.displayDate}</time>` : ''}
-            </div>
-            <h3 class="feed-item-title">${item.title}</h3>
-            <p class="feed-item-excerpt">${item.excerpt}</p>
-            ${item.url && item.url !== '#' ? `<div class="feed-link"><a href="${item.url}" target="_blank" rel="noopener noreferrer" class="link-arrow">Leer noticia <span class="arrow">↗</span></a></div>` : ''}
-          </article>
-        `).join('');
+      if (list.length > 0) {
+        homeNewsGrid.innerHTML = list.map((item, idx) => renderCard(item, idx === 0)).join('');
       }
     }
 
-    // ── 2. SI ESTAMOS EN /lo-ultimo/: CARGAR NOTICIAS Y ARTÍCULOS EN #feed-grid ──
+    // ── 2. HOME: SECCIÓN ESCRIBO (Primer artículo horizontal destacado, siguientes en grilla) ──
+    if (homeArticlesGrid) {
+      const articlesOnly = formattedAll.filter(i => i.type === 'article');
+      const featuredArticle = articlesOnly.find(a => a.featured) || articlesOnly[0];
+      const otherArticles = articlesOnly.filter(a => a.id !== featuredArticle?.id).slice(0, 3);
+      const list = featuredArticle ? [featuredArticle, ...otherArticles] : [];
+
+      if (list.length > 0) {
+        homeArticlesGrid.innerHTML = list.map((item, idx) => renderCard(item, idx === 0)).join('');
+      }
+    }
+
+    // ── 3. PÁGINA /lo-ultimo/: CARGAR TODOS Y GESTIONAR DESTACADO HORIZONTAL SEGÚN FILTRO ──
     if (feedGrid) {
-      const featuredItem = formattedAll.find(a => a.featured);
-      const regularItems = formattedAll.filter(a => !a.featured);
-      const sortedFeed = featuredItem ? [featuredItem, ...regularItems] : formattedAll;
+      const featuredItem = formattedAll.find(a => a.featured) || formattedAll[0];
+      const otherItems = formattedAll.filter(a => a.id !== featuredItem?.id);
+      const sortedFeed = featuredItem ? [featuredItem, ...otherItems] : formattedAll;
 
       // Remover artículos y noticias estáticos pre-renderizados
       const existingDynamicEls = [...feedGrid.querySelectorAll('[data-feed-groups*="artículos"], [data-feed-groups*="noticias"]')];
       existingDynamicEls.forEach(el => el.remove());
 
-      const newElementsHTML = sortedFeed.map((item, idx) => {
-        const isTopFeatured = item.featured || idx === 0;
-
-        if (isTopFeatured && idx === 0) {
-          return `
-            <article class="feed-item featured" data-feed-item data-feed-groups="${item.category}">
-              <div class="feed-item-media">
-                ${item.image 
-                  ? `<img src="${item.image}" alt="${item.title}" width="1920" height="1200" loading="lazy" decoding="async" />` 
-                  : `<span class="feed-item-media-label">Imagen · 16:10</span>`}
-              </div>
-              <div class="feed-item-body">
-                <div class="feed-item-meta">
-                  <span>${item.categoryLabel} · ${item.publication.toUpperCase()}</span>
-                  ${item.displayDate ? `<span class="sep">·</span><time datetime="${item.date}">${item.displayDate}</time>` : ''}
-                </div>
-                <h3 class="feed-item-title">${item.title}</h3>
-                <p class="feed-item-excerpt">${item.excerpt}</p>
-                ${item.url && item.url !== '#' ? `<div class="feed-link"><a href="${item.url}" target="_blank" rel="noopener noreferrer" class="link-arrow">${item.type === 'news' ? 'Leer noticia' : 'Leer nota'} <span class="arrow">↗</span></a></div>` : ''}
-              </div>
-            </article>
-          `;
-        }
-
-        return `
-          <article class="feed-item span-4" data-feed-item data-feed-groups="${item.category}">
-            <div class="feed-item-media square">
-              ${item.image 
-                ? `<img src="${item.image}" alt="${item.title}" width="1200" height="1200" loading="lazy" decoding="async" />` 
-                : `<span class="feed-item-media-label">Imagen · 1:1</span>`}
-            </div>
-            <div class="feed-item-meta">
-              <span>${item.categoryLabel} · ${item.publication.toUpperCase()}</span>
-              ${item.displayDate ? `<span class="sep">·</span><time datetime="${item.date}">${item.displayDate}</time>` : ''}
-            </div>
-            <h3 class="feed-item-title">${item.title}</h3>
-            <p class="feed-item-excerpt">${item.excerpt}</p>
-            ${item.url && item.url !== '#' ? `<div class="feed-link"><a href="${item.url}" target="_blank" rel="noopener noreferrer" class="link-arrow">${item.type === 'news' ? 'Leer noticia' : 'Ver'} <span class="arrow">↗</span></a></div>` : ''}
-          </article>
-        `;
-      }).join('');
-
-      feedGrid.insertAdjacentHTML('afterbegin', newElementsHTML);
+      feedGrid.insertAdjacentHTML('afterbegin', sortedFeed.map((item, idx) => renderCard(item, idx === 0)).join(''));
       updateFilterCounts();
     }
 
@@ -138,21 +134,41 @@ async function syncSanityFeed() {
 }
 
 function updateFilterCounts() {
-  const currentItems = [...document.querySelectorAll('[data-feed-item]')];
+  const currentItems = [...document.querySelectorAll('#feed-grid [data-feed-item]')];
+  if (currentItems.length === 0) return;
+
   const activeBtn = document.querySelector('[data-feed-filter].active');
   const filter = activeBtn ? activeBtn.dataset.feedFilter : 'todo';
   const liveRegion = document.getElementById('feed-status');
 
-  let visible = 0;
+  let visibleCount = 0;
+  let firstVisibleItem = null;
+
+  // Evaluamos visibilidad y limpiamos estado anterior
   currentItems.forEach((item) => {
     const groups = (item.dataset.feedGroups || '').split(' ');
-    // Si el filtro es 'todo', muestra todo (noticias, artículos, gestión, redes)
-    // Si es un filtro específico (ej: 'noticias' o 'artículos'), muestra estrictamente esa categoría
     const show = filter === 'todo' || groups.includes(filter);
     item.hidden = !show;
-    if (show) visible += 1;
+
+    // Reiniciamos clase a tarjeta compacta estándar (span-4)
+    item.classList.remove('featured');
+    item.classList.add('span-4');
+
+    if (show) {
+      visibleCount += 1;
+      if (!firstVisibleItem) {
+        firstVisibleItem = item;
+      }
+    }
   });
-  if (liveRegion) liveRegion.textContent = `${visible} contenidos visibles`;
+
+  // El primer elemento visible de la solapa activa se convierte en el DESTACADO HORIZONTAL
+  if (firstVisibleItem) {
+    firstVisibleItem.classList.remove('span-4');
+    firstVisibleItem.classList.add('featured');
+  }
+
+  if (liveRegion) liveRegion.textContent = `${visibleCount} contenidos visibles`;
 }
 
 const buttons = [...document.querySelectorAll('[data-feed-filter]')];
