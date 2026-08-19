@@ -1,8 +1,10 @@
 {
   "name": "leo-grosso-sitio",
+  "main": "worker.js",
   "compatibility_date": "2026-08-19",
   "compatibility_flags": ["nodejs_compat"],
   "assets": {
-    "directory": "./dist"
+    "directory": "./dist",
+    "binding": "ASSETS"
   }
 }
