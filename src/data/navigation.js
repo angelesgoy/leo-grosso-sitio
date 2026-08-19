@@ -14,7 +14,7 @@ export const mobileNavigation = [
 
 export const social = [
   { href: 'https://www.instagram.com/leon_grosso/', label: 'Instagram' },
-  { href: 'https://www.tiktok.com/@leo.grosso', label: 'TikTok' },
+  { href: 'https://www.tiktok.com/@leon_grosso', label: 'TikTok' },
   { href: 'https://x.com/Leonardo_Grosso', label: 'X' },
   { href: 'https://www.facebook.com/grossoleonardo/', label: 'Facebook' }
 ];

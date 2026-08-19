@@ -12,7 +12,7 @@ export const pendingSocialRecords: LocalContentRecord[] = [
     id: 'ph-tt', source: 'tiktok', type: 'placeholder', feedCategory: 'redes',
     title: 'FEED TikTok · PENDIENTE DE INTEGRACIÓN',
     excerpt: 'La integración del canal oficial está prevista en la capa de servicios.',
-    authorName: 'Leon Grosso', authorHandle: '@leo.grosso', verified: false,
+    authorName: 'Leon Grosso', authorHandle: '@leon_grosso', verified: false,
     editorialStatus: 'reviewed', integrationStatus: 'pending', provider: 'Configuración local'
   },
   {

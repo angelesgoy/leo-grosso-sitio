@@ -11,7 +11,7 @@ export type SourceDefinition = {
 
 export const sourceRegistry: Record<ContentSource, SourceDefinition> = {
   instagram: { id: 'instagram', label: 'Instagram · @leon_grosso', handle: '@leon_grosso', profileUrl: 'https://www.instagram.com/leon_grosso/', category: 'redes', integrationStatus: 'pending' },
-  tiktok: { id: 'tiktok', label: 'TikTok · @leo.grosso', handle: '@leo.grosso', profileUrl: 'https://www.tiktok.com/@leo.grosso', category: 'redes', integrationStatus: 'pending' },
+  tiktok: { id: 'tiktok', label: 'TikTok · @leon_grosso', handle: '@leon_grosso', profileUrl: 'https://www.tiktok.com/@leon_grosso', category: 'redes', integrationStatus: 'pending' },
   x: { id: 'x', label: 'X · @Leonardo_Grosso', handle: '@Leonardo_Grosso', profileUrl: 'https://x.com/Leonardo_Grosso', category: 'redes', integrationStatus: 'pending' },
   facebook: { id: 'facebook', label: 'Facebook · grossoleonardo', handle: 'grossoleonardo', profileUrl: 'https://www.facebook.com/grossoleonardo/', category: 'redes', integrationStatus: 'pending' },
   article: { id: 'article', label: 'Artículo', category: 'artículos', integrationStatus: 'manual' },
