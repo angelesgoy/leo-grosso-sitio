@@ -15,7 +15,9 @@ export const sourceRegistry: Record<ContentSource, SourceDefinition> = {
   x: { id: 'x', label: 'X · @Leonardo_Grosso', handle: '@Leonardo_Grosso', profileUrl: 'https://x.com/Leonardo_Grosso', category: 'redes', integrationStatus: 'pending' },
   facebook: { id: 'facebook', label: 'Facebook · grossoleonardo', handle: 'grossoleonardo', profileUrl: 'https://www.facebook.com/grossoleonardo/', category: 'redes', integrationStatus: 'pending' },
   article: { id: 'article', label: 'Artículo', category: 'artículos', integrationStatus: 'manual' },
+  news: { id: 'news', label: 'Noticia', category: 'noticias', integrationStatus: 'manual' },
   press: { id: 'press', label: 'Prensa', category: 'artículos', integrationStatus: 'manual' },
   activity: { id: 'activity', label: 'Actividad', category: 'gestión', integrationStatus: 'manual' },
   iduar: { id: 'iduar', label: 'IDUAR · Moreno', profileUrl: 'https://iduar.moreno.gob.ar/', category: 'gestión', integrationStatus: 'manual' }
 };
+
