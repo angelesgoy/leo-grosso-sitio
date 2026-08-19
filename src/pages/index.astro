@@ -5,10 +5,15 @@ import ArticleFeatured from '../components/ArticleFeatured.astro';
 import ArticleList from '../components/ArticleList.astro';
 import ProjectList from '../components/ProjectList.astro';
 import { data } from '../data/content.js';
-import { getArticles, getFeed } from '../services/content';
+import { getArticles, getNews } from '../services/content';
+import { createNewsRecords } from '../services/content/sources/news';
+import { normalizeLocalRecord } from '../services/content/normalize';
 
 const articles = await getArticles();
-const feed = await getFeed(articles);
+const news = await getNews();
+
+const newsRecords = createNewsRecords(news);
+const newsItems = newsRecords.map(normalizeLocalRecord);
 
 const featuredArticle = articles.find((article) => article.featured) || (articles.length > 0 ? articles[0] : null);
 const homeListArticles = featuredArticle
@@ -34,9 +39,16 @@ const homeListArticles = featuredArticle
     <div><a href="/sobre-mi/" class="link-arrow">Leer sobre mí <span class="arrow">→</span></a></div>
   </div></div></section>
 
+  <!-- SECCIÓN NOTICIAS EN MEDIOS (SEPARADA EXCLUSIVAMENTE PARA NOTICIAS) -->
   <section class="section"><div class="container">
-    <div class="sec-head reveal"><div class="sec-head-title"><span class="kicker">Actualidad</span><h2 class="t-section section-title">Lo último</h2></div><a href="/lo-ultimo/" class="sec-head-link">Ver todo →</a></div>
-    <FeedGrid items={feed.slice(0, 4)} />
+    <div class="sec-head reveal">
+      <div class="sec-head-title">
+        <span class="kicker">Actualidad</span>
+        <h2 class="t-section section-title">Noticias</h2>
+      </div>
+      <a href="/lo-ultimo/" class="sec-head-link">Ver todas las noticias →</a>
+    </div>
+    <FeedGrid id="home-news-grid" items={newsItems.slice(0, 3)} />
   </div></section>
 
   <section class="sanmartin-block"><div class="container"><div class="sanmartin-grid reveal">
@@ -45,8 +57,15 @@ const homeListArticles = featuredArticle
     <a href="/san-martin/" class="sanmartin-link">Ver San Martín →</a>
   </div></div></section>
 
+  <!-- SECCIÓN ESCRIBO (SEPARADA EXCLUSIVAMENTE PARA ENSAYOS Y ARTÍCULOS PROPIOS) -->
   <section class="section"><div class="container">
-    <div class="sec-head reveal"><div class="sec-head-title"><span class="kicker">Producción</span><h2 class="t-section section-title">Escribo</h2></div><a href="/escribe/" class="sec-head-link">Ver todos los textos →</a></div>
+    <div class="sec-head reveal">
+      <div class="sec-head-title">
+        <span class="kicker">Producción</span>
+        <h2 class="t-section section-title">Escribo</h2>
+      </div>
+      <a href="/escribe/" class="sec-head-link">Ver todos los textos →</a>
+    </div>
     {featuredArticle && <ArticleFeatured article={featuredArticle} />}
     {homeListArticles.length > 0 && <ArticleList articles={homeListArticles} />}
   </div></section>

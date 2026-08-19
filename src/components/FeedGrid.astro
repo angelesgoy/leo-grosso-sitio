@@ -1,38 +1,62 @@
 ---
 import type { ContentItem } from '../services/content';
-const { items } = Astro.props as { items: ContentItem[] };
+const { items, id = 'feed-grid' } = Astro.props as { items: ContentItem[]; id?: string };
 ---
 
-<div class="feed-grid" id="feed-grid">
-  {items.map((item) => item.featured ? (
-    <article class="feed-item featured" data-feed-item data-feed-groups={item.feedCategory}>
-      <div class="feed-item-media">
-        {item.media[0]
-          ? <img src={item.media[0].url} alt={item.media[0].alt || ''} width="1920" height="1200" loading="lazy" decoding="async" />
-          : <span class="feed-item-media-label">Imagen · 16:10</span>}
-      </div>
-      <div class="feed-item-body">
-        <div class="feed-item-meta"><span>{item.source.toUpperCase()}</span><span class="sep">·</span><time datetime={item.publishedAt}>{item.displayDate}</time></div>
+<div class="feed-grid" id={id}>
+  {items.map((item) => {
+    const isNews = item.feedCategory === 'noticias';
+    const isArticle = item.feedCategory === 'artículos';
+    const tagLabel = isNews ? 'NOTICIA' : (isArticle ? 'ARTÍCULO' : (item.sourceLabel || item.source.toUpperCase()));
+    const providerName = item.provenance?.provider || item.sourceLabel || '';
+
+    return item.featured ? (
+      <article class="feed-item featured" data-feed-item data-feed-groups={item.feedCategory}>
+        <div class="feed-item-media">
+          {item.media[0]
+            ? <img src={item.media[0].url} alt={item.media[0].alt || ''} width="1920" height="1200" loading="lazy" decoding="async" />
+            : <span class="feed-item-media-label">Imagen · 16:10</span>}
+        </div>
+        <div class="feed-item-body">
+          <div class="feed-item-meta">
+            <span>{tagLabel}{providerName ? ` · ${providerName.toUpperCase()}` : ''}</span>
+            {item.displayDate && <><span class="sep">·</span><time datetime={item.publishedAt}>{item.displayDate}</time></>}
+          </div>
+          <h3 class="feed-item-title">{item.title}</h3>
+          <p class="feed-item-excerpt">{item.excerpt}</p>
+          {item.externalUrl && (
+            <div class="feed-link">
+              <a href={item.externalUrl} target="_blank" rel="noopener noreferrer" class="link-arrow">
+                {isNews ? 'Leer noticia' : 'Leer nota'} <span class="arrow">↗</span>
+              </a>
+            </div>
+          )}
+        </div>
+      </article>
+    ) : (
+      <article class="feed-item span-4" data-feed-item data-feed-groups={item.feedCategory}>
+        {item.verified && (
+          <div class="feed-item-media square">
+            {item.media[0]
+              ? <img src={item.media[0].url} alt={item.media[0].alt || ''} width="1200" height="1200" loading="lazy" decoding="async" />
+              : <span class="feed-item-media-label">Imagen · 1:1</span>}
+          </div>
+        )}
+        {!item.verified && <span class="feed-item-placeholder">Integración pendiente</span>}
+        <div class="feed-item-meta">
+          <span>{tagLabel}{providerName ? ` · ${providerName.toUpperCase()}` : ''}</span>
+          {item.displayDate && <><span class="sep">·</span><time datetime={item.publishedAt}>{item.displayDate}</time></>}
+        </div>
         <h3 class="feed-item-title">{item.title}</h3>
         <p class="feed-item-excerpt">{item.excerpt}</p>
-        {item.externalUrl && <div class="feed-link"><a href={item.externalUrl} target="_blank" rel="noopener noreferrer" class="link-arrow">Leer nota <span class="arrow">↗</span></a></div>}
-      </div>
-    </article>
-  ) : (
-    <article class="feed-item span-4" data-feed-item data-feed-groups={item.feedCategory}>
-      {item.verified && <div class="feed-item-media square">
-        {item.media[0]
-          ? <img src={item.media[0].url} alt={item.media[0].alt || ''} width="1200" height="1200" loading="lazy" decoding="async" />
-          : <span class="feed-item-media-label">Imagen · 1:1</span>}
-      </div>}
-      {!item.verified && <span class="feed-item-placeholder">Integración pendiente</span>}
-      <div class="feed-item-meta">
-        <span>{item.sourceLabel}</span>
-        {item.displayDate && <><span class="sep">·</span><time datetime={item.publishedAt}>{item.displayDate}</time></>}
-      </div>
-      <h3 class="feed-item-title">{item.title}</h3>
-      <p class="feed-item-excerpt">{item.excerpt}</p>
-      {item.externalUrl && <div class="feed-link"><a href={item.externalUrl} target="_blank" rel="noopener noreferrer" class="link-arrow">Ver <span class="arrow">↗</span></a></div>}
-    </article>
-  ))}
+        {item.externalUrl && (
+          <div class="feed-link">
+            <a href={item.externalUrl} target="_blank" rel="noopener noreferrer" class="link-arrow">
+              Ver <span class="arrow">↗</span>
+            </a>
+          </div>
+        )}
+      </article>
+    );
+  })}
 </div>
